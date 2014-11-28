@@ -1,0 +1,28 @@
+@import 'menu';
+@import 'form';
+@import 'panel';
+
+
+#wrap{
+	margin-top: 55px;
+}
+
+.home,
+.home-register,
+.home-login{
+	background-image: url('../images/bg2.jpg');
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.home{
+	#wrap{
+		margin-top: 80px;
+	}
+}
+#head-index{
+	color: #FFF; 
+	margin-top: 150px;
+}
+

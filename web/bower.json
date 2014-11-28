@@ -1,0 +1,20 @@
+{
+  "name": "Komunity Store",
+  "version": "1.0.0",
+  "main": "index.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-resource": "~1.2.23",
+    "angular": "~1.2.23",
+    "angular-route": "~1.2.23",
+    "angular-http-auth": "latest",
+    "angular-ui-router": "latest",
+    "restangular": "latest"
+  }
+}

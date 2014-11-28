@@ -1,0 +1,22 @@
+.btn{
+	background-image: none !important;
+	-webkit-border-radius: 0px; 
+	border-radius: 0px; 
+	-webkit-box-shadow: none; 
+	box-shadow: none; 
+}
+
+.form-control{
+	-webkit-border-radius: 0px; 
+	border-radius: 0px; 
+}
+
+.has-error{
+	ul{
+		list-style-type: none;
+		padding-left: 0;
+		li{
+			list-style-type: none;
+		}
+	}
+}

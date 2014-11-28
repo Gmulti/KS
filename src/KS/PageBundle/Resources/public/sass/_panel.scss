@@ -1,0 +1,11 @@
+.panel{
+	-webkit-border-radius: 0px; 
+	border-radius: 0px; 
+}
+.panel-primary{
+	> .panel-heading{
+		-webkit-border-radius: 0px; 
+		border-radius: 0px; 
+		background-image: none;
+	}
+}

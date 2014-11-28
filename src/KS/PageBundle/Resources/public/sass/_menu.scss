@@ -1,0 +1,19 @@
+.navbar{
+	&.navbar-inverse{
+		background-image: none; 
+		background-color: #444; 
+		text-align: center;
+		.navbar-brand{
+			color: #FFF; 
+		}
+	}
+
+	ul.navbar-nav{
+		list-style-type: none;
+		li{
+			a{
+				color: #FFF; 
+			}
+		}
+	}
+}

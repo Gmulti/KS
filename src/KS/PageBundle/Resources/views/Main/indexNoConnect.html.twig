@@ -1,0 +1,18 @@
+{% extends '::base.html.twig' %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body %}
+	<div class="row">
+		<div class="col-sm-7">
+			<header id="head-index" lass="page-header">
+				<h2>Vous cherchez un bon plan ?</h2>
+				<h1>Komunity Store le trouve pour vous</h1>
+			</header>
+		</div>
+		<div class="col-sm-4">
+			{{ render(controller('KSUserBundle:Security:renderLoginForm')) }}
+			{{ render(controller('KSUserBundle:Registration:registerForm')) }}
+		</div>
+	</div>
+{% endblock %}
