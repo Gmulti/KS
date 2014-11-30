@@ -13,10 +13,12 @@ komunity_store_page:
     type:     annotation
     prefix:   /
 
+
 komunity_store_post:
-    resource: "@KSPostBundle/Controller/"
-    type:     annotation
-    prefix:   /
+    type:     rest
+    resource: KS\PostBundle\Controller\PostsController
+    prefix: /api/v1
+
 
 
 

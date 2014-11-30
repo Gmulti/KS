@@ -7,6 +7,8 @@ use KS\MediaBundle\Document\Image as Image;
 use KS\UserBundle\Document\User as User;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @MongoDB\Document
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
@@ -20,6 +22,10 @@ class Post
 
     /**
      * @MongoDB\String
+     * @Assert\Length(
+     *      max = "160"
+     * )
+     * @Assert\NotBlank()
      */
     protected $content;
 
@@ -38,10 +44,15 @@ class Post
      */
     protected $user;
 
-   /**
+    /**
      * @MongoDB\ReferenceMany(targetDocument="KS\UserBundle\Document\User", inversedBy="sharePosts")
      */
     protected $usersShared;
+
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="KS\UserBundle\Document\User", inversedBy="userLikes")
+     */
+    protected $likes;
 
     /**
      * @MongoDB\ReferenceMany(targetDocument="KS\PostBundle\Document\Comment", inversedBy="post")
@@ -300,5 +311,57 @@ class Post
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Set rating
+     *
+     * @param float $rating
+     * @return self
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return float $rating
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     * Add like
+     *
+     * @param KS\UserBundle\Document\User $like
+     */
+    public function addLike(\KS\UserBundle\Document\User $like)
+    {
+        $this->likes[] = $like;
+    }
+
+    /**
+     * Remove like
+     *
+     * @param KS\UserBundle\Document\User $like
+     */
+    public function removeLike(\KS\UserBundle\Document\User $like)
+    {
+        $this->likes->removeElement($like);
+    }
+
+    /**
+     * Get likes
+     *
+     * @return Doctrine\Common\Collections\Collection $likes
+     */
+    public function getLikes()
+    {
+        return $this->likes;
     }
 }

@@ -34,9 +34,9 @@ class UsersRegisterController extends FOSRestController
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
-     * @QueryParam(name="username", requirements="^\w+", default="", description="Username")
-     * @QueryParam(name="email", requirements="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", default="", description="Email")
-     * @QueryParam(name="password", requirements="\w+", default="", description="Mot de passe")
+     * @RequestParam(name="username", requirements="^\w+", default="", description="Username")
+     * @RequestParam(name="email", requirements="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", default="", description="Email")
+     * @RequestParam(name="password", requirements="\w+", default="", description="Mot de passe")
      *
      * @Post("/users/register")
      *
@@ -45,15 +45,6 @@ class UsersRegisterController extends FOSRestController
     public function registerUsersAction(ParamFetcher $params)
     {
     	$view = FOSView::create();
-
-        foreach ($params->all() as $criterionName => $criterionValue) {
-           	if(empty($criterionValue)){
-           		$view->setStatusCode(404);
-           		return $this->handleView($view);
-          	}            
-        }
-
-
 
         $user = new User();
         $user->setUsername($params->get('username'));

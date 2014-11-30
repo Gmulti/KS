@@ -64,6 +64,11 @@ class User extends BaseUser
      */
     protected $comments;
 
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="KS\PostBundle\Document\Post", inversedBy="likes")
+     */
+    protected $userLikes;
+
      /**
      * @MongoDB\Collection
      */
@@ -395,5 +400,35 @@ class User extends BaseUser
     public function getBirthday()
     {
         return $this->birthday;
+    }
+
+    /**
+     * Add userLike
+     *
+     * @param KS\PostBundle\Document\Post $userLike
+     */
+    public function addUserLike(\KS\PostBundle\Document\Post $userLike)
+    {
+        $this->userLikes[] = $userLike;
+    }
+
+    /**
+     * Remove userLike
+     *
+     * @param KS\PostBundle\Document\Post $userLike
+     */
+    public function removeUserLike(\KS\PostBundle\Document\Post $userLike)
+    {
+        $this->userLikes->removeElement($userLike);
+    }
+
+    /**
+     * Get userLikes
+     *
+     * @return Doctrine\Common\Collections\Collection $userLikes
+     */
+    public function getUserLikes()
+    {
+        return $this->userLikes;
     }
 }

@@ -17,14 +17,14 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\FOSRestController as RestController;
 
 
 /**
  *
  * @NamePrefix("api_v1_users_")
  */
-class UsersController extends FOSRestController
+class UsersController extends RestController
 {
 
 
@@ -39,7 +39,9 @@ class UsersController extends FOSRestController
     {	
         $view = FOSView::create();
 
-        $data = $this->get('doctrine_mongodb')->getRepository('KomunityStoreUserBundle:User')->findAll();
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSUserBundle:User')
+            ->findAll();
 
         if ($data) {
         	$view = $this->view($data, 200);
@@ -60,8 +62,9 @@ class UsersController extends FOSRestController
 
        
         $view = FOSView::create();
-        $data = $this->get('doctrine_mongodb')->getRepository('KomunityStoreUserBundle:User')
-                ->findOneByUsername($username);
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSUserBundle:User')
+            ->findOneByUsername($username);
 
         if ($data) {
             $view->setStatusCode(200)->setData($data);
@@ -91,8 +94,9 @@ class UsersController extends FOSRestController
      */
     public function deleteUserAction($username)
     {
-        $data = $this->get('doctrine_mongodb')->getRepository('KomunityStoreUserBundle:User')
-                ->findOneByUsername($username);
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSUserBundle:User')
+            ->findOneByUsername($username);
 
         $user = $this->get('security.context')->getToken()->getUser();
 
@@ -120,8 +124,9 @@ class UsersController extends FOSRestController
     public function getRoleAction($username){
 
         $view = FOSView::create();
-        $data = $this->get('doctrine_mongodb')->getRepository('KomunityStoreUserBundle:User')
-                ->findOneByUsername($username);
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSUserBundle:User')
+            ->findOneByUsername($username);
 
         if ($data) {
             $view->setStatusCode(200)->setData($data->getRoles());
@@ -142,8 +147,9 @@ class UsersController extends FOSRestController
      */
     public function getUsernameByTokenAction($token){
         $view = FOSView::create();
-        $data = $this->get('doctrine_mongodb')->getRepository('KomunityStoreServerBundle:AccessToken')
-                ->findOneByToken($token);
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSServerBundle:AccessToken')
+            ->findOneByToken($token);
 
         if ($data) {
             $view->setStatusCode(200)->setData($data->getUserId());
@@ -164,10 +170,14 @@ class UsersController extends FOSRestController
      */
     public function getRoleByTokenAction($token){
         $view = FOSView::create();
-        $data = $this->get('doctrine_mongodb')->getRepository('KomunityStoreServerBundle:AccessToken')
-                ->findOneByToken($token);
-        $data = $this->get('doctrine_mongodb')->getRepository('KomunityStoreServerBundle:AccessToken')
-                ->findOneByToken($data->getUserId());
+        
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSServerBundle:AccessToken')
+            ->findOneByToken($token);
+
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSServerBundle:AccessToken')
+            ->findOneByToken($data->getUserId());
 
 
         if ($data) {
