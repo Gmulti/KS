@@ -49,6 +49,7 @@ class UsersController extends RestController
         else{
             $view->setStatusCode(404);
         }
+        
         return $this->handleView($view);
     }
 

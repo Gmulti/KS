@@ -14,12 +14,21 @@ use KS\ServerBundle\User\OAuth2UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
+
 /**
  * @MongoDB\Document
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity(
  *      fields={"email", "username"},
  * )
+ *
+ * @Serializer\XmlRoot("user")
+ *
+ * @Hateoas\Relation("posts", href = "expr('/users/' ~ object.getUsername() ~ '/posts')")
+ * @Hateoas\Relation("sharePosts", href = "expr('/users/' ~ object.getUsername() ~ '/sharePosts')")
+ * @Hateoas\Relation("comments", href = "expr('/users/' ~ object.getUsername() ~ '/comments')")
  */
 class User extends BaseUser
 {
@@ -40,7 +49,6 @@ class User extends BaseUser
 
     /**
      * @MongoDB\Date
-     * @Assert\Date()
      */
     protected $birthday;
 

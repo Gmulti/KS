@@ -54,13 +54,7 @@ assetic:
 #         charset:  UTF8
 #     orm:
 #         auto_generate_proxy_classes: "%kernel.debug%"
-#         # auto_mapping: true
-#         entity_managers:
-#             default:
-#                 connection: default
-#                 mappings:
-#                     KSUserBundle: ~
-#                     KSPostBundle: ~
+#         auto_mapping: true
 
 # Swiftmailer Configuration
 swiftmailer:

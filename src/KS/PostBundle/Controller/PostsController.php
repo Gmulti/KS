@@ -31,7 +31,7 @@ class PostsController extends RestController
 {
 	
     /**
-     * Retourne la liste des utilisateurs
+     * Retourne la liste des posts
      *
      * @return FOSView
      * @Secure(roles="ROLE_USER")
@@ -41,7 +41,9 @@ class PostsController extends RestController
     {	
         $view = FOSView::create();
 
-        $data = $this->get('doctrine_mongodb')->getRepository('KSPostBundle:User')->findAll();
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSPostBundle:Post')
+            ->findAll();
 
         if ($data) {
         	$view = $this->view($data, 200);
@@ -49,14 +51,15 @@ class PostsController extends RestController
         else{
             $view->setStatusCode(404);
         }
+
         return $this->handleView($view);
     }
 
     /**
-     * Retourne la liste des utilisateurs
+     * Post un post
      *
-     * @RequestParam(name="content", default="", description="Content")
-     * @RequestParam(name="user", default="", description="User")
+     * @RequestParam(name="content", description="Content")
+     * @RequestParam(name="user", description="User")
      *
      * @return FOSView
      * @Secure(roles="ROLE_USER")
@@ -70,23 +73,30 @@ class PostsController extends RestController
             ->getRepository('KSUserBundle:User')
             ->findOneByUsername($params->get('user'));
 
-
-        $entity = new Post();
-        $entity->setUser($user);
-        $entity->setContent($params->get('content'));
-
-        $validator = $this->get('validator');
-        $errors = $validator->validate($entity);
-
-        if (count($errors) == 0) {
-
-            $dm = $this->get('doctrine_mongodb')->getManager();
-            $dm->persist($entity);
-            $dm->flush();
-            $view = $this->view($entity, 200);
+        if(!$user){
+            $view->setStatusCode(404);
         }
         else{
-            $view->setStatusCode(404);
+            $entity = new Post();
+            $entity->setUser($user);
+            $entity->setContent($params->get('content'));
+
+            $validator = $this->get('validator');
+            $errors = $validator->validate($entity);
+
+            if (count($errors) == 0) {
+
+                $dm = $this->get('doctrine_mongodb')->getManager();
+                $dm->persist($entity);
+                $user->addPost($entity);
+                $dm->flush();
+
+                
+                $view = $this->view($entity, 200);
+            }
+            else{
+                $view->setStatusCode(404);
+            }
         }
 
         return $this->handleView($view);   

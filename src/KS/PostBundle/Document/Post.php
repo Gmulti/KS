@@ -8,10 +8,18 @@ use KS\UserBundle\Document\User as User;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @MongoDB\Document
+ *
+ * 
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @Serializer\XmlRoot("post")
+ *
+ * @Hateoas\Relation("user", href = "expr('/users/' ~ object.getUser().getUsername())")
+ * @Hateoas\Relation("comments", href = "expr('/posts/' ~ object.getId() ~ '/comments')")
  */
 class Post
 {

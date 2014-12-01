@@ -66,7 +66,7 @@ class UsersRegisterController extends FOSRestController
 
         return $this->handleView($view);
 
-    } // "post_users"    [POST] /users/register
+    }
 
   
 
