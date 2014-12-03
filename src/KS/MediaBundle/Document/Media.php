@@ -8,11 +8,15 @@ use KS\UserBundle\Document\User as User;
 use KS\PostBundle\Document\Post as Post;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 /**
  * @MongoDB\Document
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @MongoDB\HasLifecycleCallbacks
  */
-class Image
+class Media
 {
     /**
      * @MongoDB\Id
@@ -25,14 +29,25 @@ class Image
     protected $name;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="KS\UserBundle\Document\User", mappedBy="images")
+     * @MongoDB\ReferenceOne(targetDocument="KS\UserBundle\Document\User", mappedBy="medias")
      */
     protected $user;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="KS\PostBundle\Document\Post", mappedBy="image")
+     * @MongoDB\ReferenceOne(targetDocument="KS\PostBundle\Document\Post", mappedBy="media", cascade={"persist"} )
      */
     protected $post;
+
+    /**
+     * @MongoDB\String
+     */
+    protected $path;
+
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    protected $file;
+
 
     /**
      * @var date $created
@@ -40,7 +55,7 @@ class Image
      * @MongoDB\Date
      * @Gedmo\Timestampable(on="create")
      */
-    private $created;
+    protected $created;
 
     /**
      * @var date $updated
@@ -48,14 +63,16 @@ class Image
      * @MongoDB\Date
      * @Gedmo\Timestampable
      */
-    private $updated;
+    protected $updated;
 
     /**
      * @var date $updated
      *
      * @MongoDB\Date
      */
-    private $deletedAt;
+    protected $deletedAt;
+
+    private $filenameForRemove;
 
     /**
      * Get id
@@ -111,27 +128,6 @@ class Image
         return $this->nom;
     }
 
-    /**
-     * Set user
-     *
-     * @param KS\MediaBundle\Document\User $user
-     * @return self
-     */
-    public function setUser(\KS\UserBundle\Document\User $user)
-    {
-        $this->user = $user;
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return KS\MediaBundle\Document\User $user
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
 
     /**
      * Set post
@@ -219,5 +215,117 @@ class Image
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+
+
+    public function getWebPath()
+    {
+        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+    }
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__ . '/../Resources/' . $this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        return 'public/images';
+    }
+
+
+     /**
+     * @MongoDB\PrePersist()
+     * @MongoDB\PreUpdate()
+     */
+    public function preUpload()
+    {
+        if (null !== $this->file) {
+            $this->path = sha1(uniqid(mt_rand(), true)). '.' .$this->file->guessExtension();
+        }
+    }
+
+    /**
+     * @MongoDB\PostPersist()
+     * @MongoDB\PostUpdate()
+     */
+    public function upload()
+    {
+        $this->file->move($this->getUploadRootDir(), $this->id . '.' . $this->file->guessExtension());
+
+        unset($this->file);
+    }
+
+    /**
+     * @MongoDB\PreRemove()
+     */
+    public function storeFilenameForRemove()
+    {
+        $this->filenameForRemove = $this->getAbsolutePath();
+    }
+
+
+    /**
+     * @MongoDB\PostRemove()
+     */
+    public function removeUpload()
+    {
+        if ($this->filenameForRemove) {
+            unlink($this->filenameForRemove);
+        }
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->id . '.' . $this->path;
+    }
+
+    /**
+     * Set user
+     *
+     * @param KS\UserBundle\Document\User $user
+     * @return self
+     */
+    public function setUser(\KS\UserBundle\Document\User $user)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return KS\UserBundle\Document\User $user
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set path
+     *
+     * @param string $path
+     * @return self
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+        return $this;
+    }
+
+    /**
+     * Get path
+     *
+     * @return string $path
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    public function setFile(UploadedFile $file){
+        $this->file = $file;
+        return $this;
     }
 }

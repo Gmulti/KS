@@ -3,7 +3,7 @@
 namespace KS\UserBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-use KS\MediaBundle\Document\Image as Image;
+use KS\MediaBundle\Document\Media as Media;
 use KS\PostBundle\Document\Post as Post;
 use FOS\UserBundle\Model\User as BaseUser;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -17,6 +17,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
 
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+
 /**
  * @MongoDB\Document
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
@@ -29,51 +32,62 @@ use Hateoas\Configuration\Annotation as Hateoas;
  * @Hateoas\Relation("posts", href = "expr('/users/' ~ object.getUsername() ~ '/posts')")
  * @Hateoas\Relation("sharePosts", href = "expr('/users/' ~ object.getUsername() ~ '/sharePosts')")
  * @Hateoas\Relation("comments", href = "expr('/users/' ~ object.getUsername() ~ '/comments')")
+ *
+ * @ExclusionPolicy("all") 
  */
 class User extends BaseUser
 {
     /**
      * @MongoDB\Id(strategy="auto")
+     * @Expose
      */
     protected $id;
 
     /**
      * @MongoDB\String
+     * @Expose
      */
     protected $lastname;
 
     /**
      * @MongoDB\String
+     * @Expose
      */
     protected $firstname;
 
     /**
      * @MongoDB\Date
+     * @Expose
      */
     protected $birthday;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="KS\MediaBundle\Document\Image", inversedBy="user")
+     * @MongoDB\ReferenceMany(targetDocument="KS\MediaBundle\Document\Media", inversedBy="user", cascade={"persist","remove"})
+     * @Expose
      */
-    protected $images;
+    protected $medias;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="KS\PostBundle\Document\Post", inversedBy="user")
+     * @MongoDB\ReferenceMany(targetDocument="KS\PostBundle\Document\Post", inversedBy="user", cascade={"persist","merge","refresh"})
+     * @Expose
      */
     protected $posts;
 
     /**
      * @MongoDB\ReferenceMany(targetDocument="KS\PostBundle\Document\Post", inversedBy="usersShared")
+     * @Expose
      */
     protected $sharePosts;
 
     /**
      * @MongoDB\ReferenceMany(targetDocument="KS\PostBundle\Document\Comment", inversedBy="user")
+     * @Expose
      */
     protected $comments;
 
     /**
      * @MongoDB\ReferenceMany(targetDocument="KS\PostBundle\Document\Post", inversedBy="likes")
+     * @Expose
      */
     protected $userLikes;
 
@@ -87,6 +101,7 @@ class User extends BaseUser
      *
      * @MongoDB\Date
      * @Gedmo\Timestampable(on="create")
+     * @Expose
      */
     private $created;
 
@@ -95,11 +110,13 @@ class User extends BaseUser
      *
      * @MongoDB\Date
      * @Gedmo\Timestampable
+     * @Expose
      */
     private $updated;
 
     /**
      * @MongoDB\Date
+     * @Expose
      */
     protected $deletedAt;
 
@@ -164,35 +181,6 @@ class User extends BaseUser
     }
 
 
-    /**
-     * Add image
-     *
-     * @param KS\MediaBundle\Document\Image $image
-     */
-    public function addImage(\KS\MediaBundle\Document\Image $image)
-    {
-        $this->images[] = $image;
-    }
-
-    /**
-     * Remove image
-     *
-     * @param KS\MediaBundle\Document\Image $image
-     */
-    public function removeImage(\KS\MediaBundle\Document\Image $image)
-    {
-        $this->images->removeElement($image);
-    }
-
-    /**
-     * Get images
-     *
-     * @return Doctrine\Common\Collections\Collection $images
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
 
     /**
      * Add post
@@ -438,5 +426,35 @@ class User extends BaseUser
     public function getUserLikes()
     {
         return $this->userLikes;
+    }
+
+    /**
+     * Add media
+     *
+     * @param KS\MediaBundle\Document\Media $media
+     */
+    public function addMedia(\KS\MediaBundle\Document\Media $media)
+    {
+        $this->medias[] = $media;
+    }
+
+    /**
+     * Remove media
+     *
+     * @param KS\MediaBundle\Document\Media $media
+     */
+    public function removeMedia(\KS\MediaBundle\Document\Media $media)
+    {
+        $this->medias->removeElement($media);
+    }
+
+    /**
+     * Get medias
+     *
+     * @return Doctrine\Common\Collections\Collection $medias
+     */
+    public function getMedias()
+    {
+        return $this->medias;
     }
 }

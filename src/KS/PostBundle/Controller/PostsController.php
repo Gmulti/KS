@@ -21,6 +21,7 @@ use FOS\RestBundle\Controller\FOSRestController as RestController;
 
 use KS\PostBundle\Form\Type\RegisterPostType;
 use KS\PostBundle\Document\Post;
+use KS\MediaBundle\Document\Media;
 
 
 /**
@@ -56,10 +57,39 @@ class PostsController extends RestController
     }
 
     /**
+     * Retourne un post
+     *
+     * @return FOSView
+     * @Secure(roles="ROLE_USER")
+     * @Route(requirements={"_format"="json|xml"})
+     * @QueryParam(name="id", description="Id")
+     *
+     */
+    public function getPostAction(ParamFetcher $params){
+
+        $view = FOSView::create();
+        $id = $params->get('id');
+
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSPostBundle:Post')
+            ->findOneById($id);
+
+        if ($data) {
+            $view = $this->view($data, 200);
+        }
+        else{
+            $view->setStatusCode(404);
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
      * Post un post
      *
      * @RequestParam(name="content", description="Content")
      * @RequestParam(name="user", description="User")
+     * @RequestParam(name="media", description="media")
      *
      * @return FOSView
      * @Secure(roles="ROLE_USER")
@@ -69,6 +99,10 @@ class PostsController extends RestController
 
         $view = FOSView::create();
 
+        $request = $this->getRequest();
+        $media = new Media();
+        $media->setFile($request->files->get('media'));
+
         $user = $this->get('doctrine_mongodb')
             ->getRepository('KSUserBundle:User')
             ->findOneByUsername($params->get('user'));
@@ -77,9 +111,11 @@ class PostsController extends RestController
             $view->setStatusCode(404);
         }
         else{
+
             $entity = new Post();
             $entity->setUser($user);
             $entity->setContent($params->get('content'));
+            $entity->setMedia($media);
 
             $validator = $this->get('validator');
             $errors = $validator->validate($entity);
@@ -88,7 +124,6 @@ class PostsController extends RestController
 
                 $dm = $this->get('doctrine_mongodb')->getManager();
                 $dm->persist($entity);
-                $user->addPost($entity);
                 $dm->flush();
 
                 

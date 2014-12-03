@@ -49,7 +49,7 @@ class UsersController extends RestController
         else{
             $view->setStatusCode(404);
         }
-        
+
         return $this->handleView($view);
     }
 
@@ -118,6 +118,7 @@ class UsersController extends RestController
     } // "delete_user"   [DELETE] /users/{slug}
 
     /**
+     * Récupère les roles d'un USER
      *
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
@@ -140,7 +141,7 @@ class UsersController extends RestController
     }
 
     /**
-     *
+     * Récupère l'username avec le token
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
      * @Get("/username/{token}")
@@ -153,7 +154,7 @@ class UsersController extends RestController
             ->findOneByToken($token);
 
         if ($data) {
-            $view->setStatusCode(200)->setData($data->getUserId());
+            $view->setStatusCode(200)->setData($data->getUsername());
         }
         else{
             $view->setStatusCode(404);
@@ -163,6 +164,7 @@ class UsersController extends RestController
     }
 
     /**
+     * Récupère les roles avec le token
      *
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})

@@ -3,7 +3,7 @@
 namespace KS\PostBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-use KS\MediaBundle\Document\Image as Image;
+use KS\MediaBundle\Document\Media as Media;
 use KS\UserBundle\Document\User as User;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -43,12 +43,12 @@ class Post
     protected $rating;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="KS\MediaBundle\Document\Image", mappedBy="post")
+     * @MongoDB\ReferenceOne(targetDocument="KS\MediaBundle\Document\Media", mappedBy="post", cascade={"persist","remove"})
      */
-    protected $image;
+    protected $media;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="KS\UserBundle\Document\User", mappedBy="posts")
+     * @MongoDB\ReferenceOne(targetDocument="KS\UserBundle\Document\User", mappedBy="posts", cascade={"persist","merge","refresh"})
      */
     protected $user;
 
@@ -56,6 +56,11 @@ class Post
      * @MongoDB\ReferenceMany(targetDocument="KS\UserBundle\Document\User", inversedBy="sharePosts")
      */
     protected $usersShared;
+
+    /**
+     * @MongoDB\ReferenceOne(targetDocument="KS\PostBundle\Document\Geolocation", mappedBy="posts")
+     */
+    protected $geolocation;
 
     /**
      * @MongoDB\ReferenceMany(targetDocument="KS\UserBundle\Document\User", inversedBy="userLikes")
@@ -126,28 +131,6 @@ class Post
     public function getContent()
     {
         return $this->content;
-    }
-
-    /**
-     * Set image
-     *
-     * @param KS\MediaBundle\Document\Image $image
-     * @return self
-     */
-    public function setImage(\KS\MediaBundle\Document\Image $image)
-    {
-        $this->image = $image;
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return KS\MediaBundle\Document\Image $image
-     */
-    public function getImage()
-    {
-        return $this->image;
     }
 
     /**
@@ -371,5 +354,49 @@ class Post
     public function getLikes()
     {
         return $this->likes;
+    }
+
+    /**
+     * Set geolocation
+     *
+     * @param KS\PostBundle\Document\Geolocation $geolocation
+     * @return self
+     */
+    public function setGeolocation(\KS\PostBundle\Document\Geolocation $geolocation)
+    {
+        $this->geolocation = $geolocation;
+        return $this;
+    }
+
+    /**
+     * Get geolocation
+     *
+     * @return KS\PostBundle\Document\Geolocation $geolocation
+     */
+    public function getGeolocation()
+    {
+        return $this->geolocation;
+    }
+
+    /**
+     * Set media
+     *
+     * @param KS\MediaBundle\Document\Media $media
+     * @return self
+     */
+    public function setMedia(\KS\MediaBundle\Document\Media $media)
+    {
+        $this->media = $media;
+        return $this;
+    }
+
+    /**
+     * Get media
+     *
+     * @return KS\MediaBundle\Document\Media $media
+     */
+    public function getMedia()
+    {
+        return $this->media;
     }
 }
