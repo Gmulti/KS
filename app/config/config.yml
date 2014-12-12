@@ -121,9 +121,13 @@ fos_elastica:
 
 fos_rest:
     param_fetcher_listener: true
+    body_converter:
+        enabled: false
 
 jms_serializer:
     metadata:
         directories:
             - { path: %kernel.root_dir%/Resources/FOSUserBundle/serializer, namespace_prefix: 'FOS\UserBundle' }
 
+sensio_framework_extra:
+    request: { converters: true }

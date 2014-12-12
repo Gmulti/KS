@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class VerifyController extends Controller
 {
-    /**rification purposes.
+    /**
      *
      * @Route("/oauth/verify", name="_verify_token")
      */

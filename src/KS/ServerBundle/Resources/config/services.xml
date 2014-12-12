@@ -88,11 +88,16 @@
            <argument type="service" id="oauth2.user_provider.class"/>
            <argument>%kernel.cache_dir%/security/nonces</argument>
         </service>
+        
+
+        <service id="oauth.verify" class="KS\ServerBundle\Controller\VerifyController"></service>
 
         <service id="oauth.security.authentication.listener" class="KS\ServerBundle\Security\Firewall\OAuthListener" public="false">
             <argument type="service" id="security.context"/>
             <argument type="service" id="security.authentication.manager" />
             <argument type="service" id="doctrine_mongodb"/>
+            <argument type="service" id="oauth.verify"/>
         </service>
+
     </services>
 </container>

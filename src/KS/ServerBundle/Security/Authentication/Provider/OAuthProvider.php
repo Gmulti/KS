@@ -31,22 +31,18 @@ class OAuthProvider implements AuthenticationProviderInterface
             $authenticatedToken->setUser($user);
 
             return $authenticatedToken;
-        }
+        }   
 
         throw new AuthenticationException('The OAuth authentication failed.');
     }
 
-    protected function validateDigest($token)
+    protected function validateDigest($expireToken)
     {
-        // $test = file_get_contents("http://api.komunitystore.dev/oauth/verify?access_token=" . $token);
-        // var_dump($test);
-        // if (time() - $expires->getTimeStamp() > 0) {
-        //     return false;
-        // }
 
+        if (time() - $expireToken->getTimeStamp() > 0) {
+            return false;
+        }
 
-
-        // return $digest === $expected;
         return true;
     }
 

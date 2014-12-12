@@ -19,7 +19,6 @@ use FOS\RestBundle\Controller\Annotations\Post as MethodPost;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController as RestController;
 
-use KS\PostBundle\Form\Type\RegisterPostType;
 use KS\PostBundle\Document\Post;
 use KS\MediaBundle\Document\Media;
 
@@ -47,7 +46,7 @@ class PostsController extends RestController
             ->findAll();
 
         if ($data) {
-        	$view = $this->view($data, 200);
+            $view = $this->view($data, 200);
         }
         else{
             $view->setStatusCode(404);
@@ -62,20 +61,15 @@ class PostsController extends RestController
      * @return FOSView
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
-     * @QueryParam(name="id", description="Id")
+     * @ParamConverter("post")
      *
      */
-    public function getPostAction(ParamFetcher $params){
+    public function getPostAction(Post $post){
 
         $view = FOSView::create();
-        $id = $params->get('id');
 
-        $data = $this->get('doctrine_mongodb')
-            ->getRepository('KSPostBundle:Post')
-            ->findOneById($id);
-
-        if ($data) {
-            $view = $this->view($data, 200);
+        if ($post) {
+            $view = $this->view($post, 200);
         }
         else{
             $view->setStatusCode(404);
@@ -87,13 +81,24 @@ class PostsController extends RestController
     /**
      * Post un post
      *
-     * @RequestParam(name="content", description="Content")
-     * @RequestParam(name="user", description="User")
-     * @RequestParam(name="media", description="media")
+     * @RequestParam(
+     *      name="content",
+     *      description="Content",
+     *      default=""
+     * )
+     * @RequestParam(
+     *      name="user",
+     *      description="User",
+     *      default=""
+     * )
+     * @RequestParam(
+     *      name="media",
+     *      description="media",
+     *      default=""
+     * )
      *
      * @return FOSView
      * @Secure(roles="ROLE_USER")
-     * @Route(requirements={"_format"="json|xml"})
      */
     public function postPostAction(ParamFetcher $params){
 

@@ -22,4 +22,5 @@ class TokenController extends Controller
 
         return $server->handleTokenRequest($this->get('oauth2.request'), $this->get('oauth2.response'));
     }
+
 }

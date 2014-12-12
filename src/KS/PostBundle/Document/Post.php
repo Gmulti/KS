@@ -18,7 +18,7 @@ use Hateoas\Configuration\Annotation as Hateoas;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @Serializer\XmlRoot("post")
  *
- * @Hateoas\Relation("user", href = "expr('/users/' ~ object.getUser().getUsername())")
+ * @Hateoas\Relation("user", href = "expr('/users/' ~ object.getUser() )")
  * @Hateoas\Relation("comments", href = "expr('/posts/' ~ object.getId() ~ '/comments')")
  */
 class Post
@@ -43,32 +43,53 @@ class Post
     protected $rating;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="KS\MediaBundle\Document\Media", mappedBy="post", cascade={"persist","remove"})
+     * @MongoDB\ReferenceOne(
+     *      targetDocument="KS\MediaBundle\Document\Media", 
+     *      mappedBy="post", 
+     *      cascade={"persist","remove"}
+     * )
      */
     protected $media;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="KS\UserBundle\Document\User", mappedBy="posts", cascade={"persist","merge","refresh"})
+     * @MongoDB\ReferenceOne(
+     *      targetDocument="KS\UserBundle\Document\User", 
+     *      mappedBy="posts", cascade={"persist","merge","refresh"}
+     * )
+     * @Assert\NotBlank()
+     * @Assert\Type(type="KS\UserBundle\Document\User")
      */
     protected $user;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="KS\UserBundle\Document\User", inversedBy="sharePosts")
+     * @MongoDB\ReferenceMany(
+     *      targetDocument="KS\UserBundle\Document\User", 
+     *      inversedBy="sharePosts"
+     * )
      */
     protected $usersShared;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="KS\PostBundle\Document\Geolocation", mappedBy="posts")
+     * @MongoDB\ReferenceOne(
+     *      targetDocument="KS\PostBundle\Document\Geolocation",
+     *      mappedBy="posts"
+     * )
      */
     protected $geolocation;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="KS\UserBundle\Document\User", inversedBy="userLikes")
+     * @MongoDB\ReferenceMany(
+     *      targetDocument="KS\UserBundle\Document\User",
+     *      inversedBy="userLikes"
+     * )
      */
     protected $likes;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="KS\PostBundle\Document\Comment", inversedBy="post")
+     * @MongoDB\ReferenceMany(
+     *      targetDocument="KS\PostBundle\Document\Comment",
+     *      inversedBy="post"
+     * )
      */
     protected $comments;
 
@@ -99,6 +120,7 @@ class Post
     public function __construct()
     {
         $this->usersShared = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->likes = 0;
     }
     
     /**

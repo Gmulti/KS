@@ -178,13 +178,51 @@ class UsersController extends RestController
             ->getRepository('KSServerBundle:AccessToken')
             ->findOneByToken($token);
 
-        $data = $this->get('doctrine_mongodb')
-            ->getRepository('KSServerBundle:AccessToken')
+        $user = $this->get('doctrine_mongodb')
+            ->getRepository('KSUserBundle:User')
             ->findOneByToken($data->getUserId());
 
 
+        if ($user) {
+            $view->setStatusCode(200)->setData($user->getRoles());
+        }
+        else{
+            $view->setStatusCode(404);
+        }
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * Supprime le token / Logout
+     *
+     * @Secure(roles="ROLE_USER")
+     * @Post("/logout")
+     *
+     */
+    public function logoutAction(){
+        $view = FOSView::create();
+
+        $request = $this->getRequest();
+        $regex = "/Bearer (.*)/";
+
+        if (preg_match($regex, $request->headers->get('authorization'), $matches) !== 1 ) {
+            $view->setStatusCode(404);
+        }
+
+        $token = $matches[1];
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSServerBundle:AccessToken')
+            ->findOneByToken($token);
+
+
         if ($data) {
-            $view->setStatusCode(200)->setData($data->getRoles());
+
+            $dm = $this->get('doctrine_mongodb')->getManager();
+            $dm->remove($data);
+            $dm->flush();
+
+            $view->setStatusCode(200);
         }
         else{
             $view->setStatusCode(404);

@@ -32,7 +32,7 @@ class OAuthListener implements ListenerInterface
 
         $token = $matches[1];
         $token = $this->mongo->getRepository('KSServerBundle:AccessToken')->findOneByToken($token);
-
+        
         try {
             $authToken = $this->authenticationManager->authenticate($token);
             $this->securityContext->setToken($authToken);
