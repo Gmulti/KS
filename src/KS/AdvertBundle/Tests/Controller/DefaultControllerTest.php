@@ -1,6 +1,6 @@
 <?php
 
-namespace KS\PubliciteBundle\Tests\Controller;
+namespace KS\AdvertBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

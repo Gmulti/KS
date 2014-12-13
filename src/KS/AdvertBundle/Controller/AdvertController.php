@@ -1,12 +1,12 @@
 <?php
 
-namespace KS\PubliciteBundle\Controller;
+namespace KS\AdvertBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-class PubliciteController extends Controller
+class AdvertController extends Controller
 {
     /**
      * @Route("/hello/{name}")

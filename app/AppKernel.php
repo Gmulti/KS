@@ -36,7 +36,7 @@ class AppKernel extends Kernel
             new KS\PostBundle\KSPostBundle(),
             new KS\PageBundle\KSPageBundle(),
             new KS\MediaBundle\KSMediaBundle(),
-            new KS\PubliciteBundle\KSPubliciteBundle(),
+            new KS\AdvertBundle\KSAdvertBundle(),
             new KS\ServerBundle\KSServerBundle(),
         );
 

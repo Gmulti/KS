@@ -1,7 +1,7 @@
-komunity_store_publicite:
-    resource: "@KSPubliciteBundle/Controller/"
+komunity_store_advert:
+    resource: "@KSAdvertBundle/Controller/"
     type:     annotation
-    prefix:   /pub
+    prefix:   /advert
 
 komunity_store_media:
     resource: "@KSMediaBundle/Controller/"
@@ -13,14 +13,10 @@ komunity_store_page:
     type:     annotation
     prefix:   /
 
-
 komunity_store_post:
     type:     rest
     resource: KS\PostBundle\Controller\PostsController
     prefix: /api/v1
-
-
-
 
 komunity_store_user:
     type:     rest
@@ -36,9 +32,6 @@ komunity_store_user_admin:
     type:     rest
     resource: KS\UserBundle\Controller\UsersAdminController
     prefix: /api/admin/v1
-
-
-
 
 oauth2_server:
     resource: "@KSServerBundle/Controller/"
