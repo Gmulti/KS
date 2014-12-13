@@ -31,7 +31,7 @@ class PostsController extends RestController
 {
 	
     /**
-     * Retourne la liste des posts
+     * Return a posts list
      *
      * @return FOSView
      * @Secure(roles="ROLE_USER")
@@ -56,7 +56,7 @@ class PostsController extends RestController
     }
 
     /**
-     * Retourne un post
+     * Return a post
      *
      * @return FOSView
      * @Secure(roles="ROLE_USER")
@@ -79,7 +79,7 @@ class PostsController extends RestController
     }
 
     /**
-     * Post un post
+     * Save a post
      *
      * @RequestParam(
      *      name="content",

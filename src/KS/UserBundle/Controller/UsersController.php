@@ -29,7 +29,7 @@ class UsersController extends RestController
 
 
     /**
-     * Retourne la liste des utilisateurs
+     * Return users list
      *
      * @return FOSView
      * @Secure(roles="ROLE_USER")
@@ -54,7 +54,7 @@ class UsersController extends RestController
     }
 
     /**
-     * Retourne un utilisateur
+     * Return a user
      *
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
@@ -118,7 +118,7 @@ class UsersController extends RestController
     } // "delete_user"   [DELETE] /users/{slug}
 
     /**
-     * Récupère les roles d'un USER
+     * Get user's roles
      *
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
@@ -141,7 +141,7 @@ class UsersController extends RestController
     }
 
     /**
-     * Récupère l'username avec le token
+     * Get username from token
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
      * @Get("/username/{token}")
@@ -164,7 +164,7 @@ class UsersController extends RestController
     }
 
     /**
-     * Récupère les roles avec le token
+     * Get roles from token
      *
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
@@ -194,7 +194,7 @@ class UsersController extends RestController
     }
 
     /**
-     * Supprime le token / Logout
+     * Delete token / logout
      *
      * @Secure(roles="ROLE_USER")
      * @Post("/logout")
