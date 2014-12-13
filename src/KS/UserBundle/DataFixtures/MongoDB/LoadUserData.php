@@ -6,7 +6,7 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use KS\UserBundle\Document\User;
 
-class LoadPostData implements FixtureInterface
+class LoadUserData implements FixtureInterface
 {
     /**
      * {@inheritDoc}
