@@ -20,6 +20,7 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController as RestController;
 
 use KS\PostBundle\Document\Post;
+use KS\PostBundle\Form\Type\PostType;
 use KS\MediaBundle\Document\Media;
 
 
@@ -78,68 +79,31 @@ class PostsController extends RestController
         return $this->handleView($view);
     }
 
+  
     /**
-     * Save a post
-     *
-     * @RequestParam(
-     *      name="content",
-     *      description="Content",
-     *      default=""
-     * )
-     * @RequestParam(
-     *      name="user",
-     *      description="User",
-     *      default=""
-     * )
-     * @RequestParam(
-     *      name="media",
-     *      description="media",
-     *      default=""
-     * )
+     * Edit a post
      *
      * @return FOSView
      * @Secure(roles="ROLE_USER")
      */
-    public function postPostAction(ParamFetcher $params){
+    public function postPostAction(Request $request){
 
         $view = FOSView::create();
 
-        $request = $this->getRequest();
-        $media = new Media();
-        $media->setFile($request->files->get('media'));
+        $newPost = $this->container->get('kspost.handler.user')->post(
+            $request
+        );
 
-        $user = $this->get('doctrine_mongodb')
-            ->getRepository('KSUserBundle:User')
-            ->findOneByUsername($params->get('user'));
+        if(null !== $newPost){
+             $view = $this->view($newPost, 200);
 
-        if(!$user){
-            $view->setStatusCode(404);
         }
         else{
-
-            $entity = new Post();
-            $entity->setUser($user);
-            $entity->setContent($params->get('content'));
-            $entity->setMedia($media);
-
-            $validator = $this->get('validator');
-            $errors = $validator->validate($entity);
-
-            if (count($errors) == 0) {
-
-                $dm = $this->get('doctrine_mongodb')->getManager();
-                $dm->persist($entity);
-                $dm->flush();
-
-                
-                $view = $this->view($entity, 200);
-            }
-            else{
-                $view->setStatusCode(404);
-            }
+            $view->setStatusCode(404,array('error' => '404'));
         }
 
-        return $this->handleView($view);   
+        return $this->handleView($view);      
+
     }
 
 }

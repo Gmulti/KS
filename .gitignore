@@ -21,3 +21,6 @@ go-pear.phar
 bower_components
 node_modules
 .sass_cache
+ngrok
+
+src/KS/MediaBundle/Resources/public/

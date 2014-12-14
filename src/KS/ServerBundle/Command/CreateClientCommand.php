@@ -25,7 +25,7 @@ class CreateClientCommand extends ContainerAwareCommand
     {
         $container = $this->getContainer();
         $clientManager = $container->get('oauth2.client_manager');
-;
+        
         try {
             $client = $clientManager->createClient(
                 $input->getArgument('identifier'),

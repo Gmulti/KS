@@ -2,5 +2,8 @@
 
 {% block body %}
 	Hello postbundle    
-adzad
+	{% if form %}
+		{{ form_errors(form) }}
+		{{ form_rest() }}
+	{% endif %}
 {% endblock %}

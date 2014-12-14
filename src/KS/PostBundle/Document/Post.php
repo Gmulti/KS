@@ -120,7 +120,8 @@ class Post
     public function __construct()
     {
         $this->usersShared = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->likes = 0;
+        $this->likes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -378,6 +379,7 @@ class Post
         return $this->likes;
     }
 
+
     /**
      * Set geolocation
      *
@@ -420,5 +422,9 @@ class Post
     public function getMedia()
     {
         return $this->media;
+    }
+
+    public function __toString(){
+        return $this->content;
     }
 }

@@ -1,0 +1,16 @@
+parameters:
+    kspost.post.class: KS\PostBundle\Document\Post
+
+services:
+    kspost.type.user_selector:
+        class: KS\PostBundle\Form\DataTransformer\UserTransformerType
+        arguments: ["@doctrine_mongodb"]
+        tags:
+            - { name: form.type, alias: user_selector }
+
+    kspost.handler.user:
+        class: KS\PostBundle\Handler\PostHandler
+        arguments:
+            - "@doctrine_mongodb"
+            - "%kspost.post.class%"
+            - "@form.factory"
