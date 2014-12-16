@@ -3,17 +3,15 @@
 namespace KS\PostBundle\Handler;
 
 use Symfony\Component\HttpFoundation\Request;
+use KS\PostBundle\Document\Post;
 
 interface PostHandlerInterface
 {
     /**
-     * Get a Post given the identifier
-     *
-     * @param int $id
      *
      * @return PostInterface
      */
-    public function get($id);
+    public function put(Request $request, Post $post);
 
     /**
      * Post Post, creates a new Post.
@@ -22,5 +20,5 @@ interface PostHandlerInterface
      *
      * @return PostInterface
      */
-    public function post(Request $parameters);
+    public function post(Request $request);
 }

@@ -24,6 +24,7 @@ class PostType extends AbstractType
     	$builder
     	    ->add('content')
     	    ->add('user', 'user_selector')
+            ->add('media','media_selector')
             ->add('rating')
     	;
         

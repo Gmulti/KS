@@ -8,6 +8,12 @@ services:
         tags:
             - { name: form.type, alias: user_selector }
 
+    kspost.type.media_selector:
+        class: KS\PostBundle\Form\DataTransformer\MediaTransformerType
+        arguments: ["@doctrine_mongodb"]
+        tags:
+            - { name: form.type, alias: media_selector }
+
     kspost.handler.user:
         class: KS\PostBundle\Handler\PostHandler
         arguments:

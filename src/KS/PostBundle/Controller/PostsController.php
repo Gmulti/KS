@@ -23,6 +23,7 @@ use KS\PostBundle\Document\Post;
 use KS\PostBundle\Form\Type\PostType;
 use KS\MediaBundle\Document\Media;
 
+// use KS\PostBundle
 
 /**
  *
@@ -30,7 +31,7 @@ use KS\MediaBundle\Document\Media;
  */
 class PostsController extends RestController
 {
-	
+    
     /**
      * Return a posts list
      *
@@ -38,8 +39,8 @@ class PostsController extends RestController
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
      */
-	public function getPostsAction()
-    {	
+    public function getPostsAction()
+    {   
         $view = FOSView::create();
 
         $data = $this->get('doctrine_mongodb')
@@ -81,7 +82,7 @@ class PostsController extends RestController
 
   
     /**
-     * Edit a post
+     * Create a post
      *
      * @return FOSView
      * @Secure(roles="ROLE_USER")
@@ -104,6 +105,24 @@ class PostsController extends RestController
 
         return $this->handleView($view);      
 
+    }
+
+    /**
+     * Edit a post
+     *
+     * @return FOSView
+     * @ParamConverter("post")
+     * @Secure(roles="ROLE_USER")
+     *
+     */
+    public function putPostAction(Request $request, Post $post){
+        
+        $updatePost = $this->container->get('kspost.handler.user')->put(
+            $request, $post
+        );
+
+        
+        die();
     }
 
 }

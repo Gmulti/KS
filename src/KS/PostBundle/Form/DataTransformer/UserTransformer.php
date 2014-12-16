@@ -27,6 +27,7 @@ class UserTransformer implements DataTransformerInterface
      */
     public function transform($username)
     {
+           var_dump($username);
         if (null === $username) {
             return "";
         }
@@ -37,6 +38,7 @@ class UserTransformer implements DataTransformerInterface
     public function reverseTransform($username)
     {
 
+        var_dump($username);
         if (!$username) {
             return null;
         }
