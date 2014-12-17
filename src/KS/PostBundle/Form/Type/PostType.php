@@ -4,6 +4,7 @@ namespace KS\PostBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -11,24 +12,31 @@ use Symfony\Component\Form\Extension\DataCollector\EventListener\DataCollectorLi
 
 use KS\PostBundle\Document\Post;
 use KS\PostBundle\Form\DataTransformer\UserTransformer;
+use KS\PostBundle\Form\EventListener\PostFieldListener;
 
 class PostType extends AbstractType
 {
 
+    private $formConfig = array();
+
+    public function __construct($formConfig = array()){
+        $this->formConfig = $formConfig;
+    }
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {	
 
-    	$builder
-    	    ->add('content')
-    	    ->add('user', 'user_selector')
-            ->add('media','media_selector')
-            ->add('rating')
-    	;
         
-    }
+        foreach ($this->formConfig as $key => $field) {
+            $category = isset($field['category']) ? $field['category'] : null;
+            $options = isset($field['options'])  ? $field['options']  : array();
+
+            $builder->add($key, $category, $options);
+        }
+
+    }   
 
     /**
      * {@inheritdoc}

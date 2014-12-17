@@ -11,7 +11,7 @@ interface PostHandlerInterface
      *
      * @return PostInterface
      */
-    public function put(Request $request, Post $post);
+    public function put(Post $post,Request $request);
 
     /**
      * Post Post, creates a new Post.

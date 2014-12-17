@@ -23,7 +23,6 @@ use KS\PostBundle\Document\Post;
 use KS\PostBundle\Form\Type\PostType;
 use KS\MediaBundle\Document\Media;
 
-// use KS\PostBundle
 
 /**
  *
@@ -91,7 +90,7 @@ class PostsController extends RestController
 
         $view = FOSView::create();
 
-        $newPost = $this->container->get('kspost.handler.user')->post(
+        $newPost = $this->container->get('kspost.handler.post')->post(
             $request
         );
 
@@ -107,22 +106,33 @@ class PostsController extends RestController
 
     }
 
+
+
     /**
      * Edit a post
      *
      * @return FOSView
-     * @ParamConverter("post")
      * @Secure(roles="ROLE_USER")
+     * @ParamConverter("post")
      *
      */
     public function putPostAction(Request $request, Post $post){
-        
-        $updatePost = $this->container->get('kspost.handler.user')->put(
-            $request, $post
+    
+        $view = FOSView::create();
+
+        $updatePost = $this->container->get('kspost.handler.post')->put(
+            $post, $request 
         );
 
-        
-        die();
+         if(null !== $updatePost){
+             $view = $this->view($updatePost, 200);
+
+        }
+        else{
+            $view->setStatusCode(404,array('error' => '404'));
+        }
+
+        return $this->handleView($view);   
     }
 
 }

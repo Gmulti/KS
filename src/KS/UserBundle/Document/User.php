@@ -62,13 +62,13 @@ class User extends BaseUser
     protected $birthday;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="KS\MediaBundle\Document\Media", inversedBy="user", cascade={"persist","remove"})
+     * @MongoDB\ReferenceMany(targetDocument="KS\MediaBundle\Document\Media", inversedBy="user", cascade={"all"})
      * @Expose
      */
     protected $medias;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="KS\PostBundle\Document\Post", inversedBy="user", cascade={"persist","merge","refresh"})
+     * @MongoDB\ReferenceMany(targetDocument="KS\PostBundle\Document\Post", inversedBy="user", cascade={"all"})
      * @Expose
      */
     protected $posts;
@@ -456,5 +456,9 @@ class User extends BaseUser
     public function getMedias()
     {
         return $this->medias;
+    }
+
+    public function __toString(){
+        return $this->getUsername();
     }
 }

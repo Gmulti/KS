@@ -30,17 +30,9 @@ class Post
 
     /**
      * @MongoDB\String
-     * @Assert\Length(
-     *      max = "160"
-     * )
-     * @Assert\NotBlank()
      */
     protected $content;
 
-    /**
-     * @MongoDB\Float
-     */
-    protected $rating;
 
     /**
      * @MongoDB\ReferenceOne(
@@ -54,7 +46,7 @@ class Post
     /**
      * @MongoDB\ReferenceOne(
      *      targetDocument="KS\UserBundle\Document\User", 
-     *      mappedBy="posts", cascade={"persist","merge","refresh"}
+     *      mappedBy="posts", cascade={"all"}
      * )
      * @Assert\NotBlank()
      * @Assert\Type(type="KS\UserBundle\Document\User")
@@ -93,6 +85,11 @@ class Post
      */
     protected $comments;
 
+    /**
+     * @MongoDB\Float
+     *
+     */
+    protected $price;
 
     /**
      * @var date $created
@@ -327,27 +324,6 @@ class Post
         return $this->comments;
     }
 
-    /**
-     * Set rating
-     *
-     * @param float $rating
-     * @return self
-     */
-    public function setRating($rating)
-    {
-        $this->rating = $rating;
-        return $this;
-    }
-
-    /**
-     * Get rating
-     *
-     * @return float $rating
-     */
-    public function getRating()
-    {
-        return $this->rating;
-    }
 
     /**
      * Add like
@@ -425,6 +401,6 @@ class Post
     }
 
     public function __toString(){
-        return $this->content;
+        return 'tretriuh';
     }
 }

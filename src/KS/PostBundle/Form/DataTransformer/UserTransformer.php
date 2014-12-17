@@ -14,6 +14,8 @@ class UserTransformer implements DataTransformerInterface
      */
     private $om;
 
+    private $username;
+
     /**
      * @param ObjectManager $om
      */
@@ -24,25 +26,32 @@ class UserTransformer implements DataTransformerInterface
 
     /**
      * @return string
+     * Object => String
      */
     public function transform($username)
-    {
-           var_dump($username);
+    {   
+
         if (null === $username) {
             return "";
         }
 
-        return $username;
+        return $this->username = $username->getUsername();
     }
 
+    /**
+     * String => Object
+     */
     public function reverseTransform($username)
     {
 
-        var_dump($username);
-        if (!$username) {
+        if (!$username && empty($this->username) ) {
             return null;
         }
+        elseif(!$username && !empty($this->username)){
+            $username = $this->username;
+        }
 
+         
         $username = $this->om
             ->getRepository('KSUserBundle:User')
             ->findOneByUsername($username);

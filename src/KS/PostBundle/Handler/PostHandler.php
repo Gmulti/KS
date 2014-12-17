@@ -21,41 +21,91 @@ class PostHandler implements PostHandlerInterface{
 	    $this->repository = $this->om->getRepository($this->entityClass);
 	}
 
-	private function getErrorMessages(\Symfony\Component\Form\Form $form) {      
-	    $errors = array();
-
-	        foreach ($form->getErrors() as $key => $error) {
-	            $errors[] = $error->getMessage();
-	        }   
-	   
-
-	    return $errors;
-	}
-
 	private function processForm(Post $post, Request $request, $method = "PUT"){
-
-
-
-		$form = $this->formFactory->create(new PostType(), $post, array('method' => $method));
-
+		
+		$form = $this->createForm($post, $request, $method);
 	    $form->handleRequest($request);
 
-	    var_dump($this->getErrorMessages($form));
-	    var_dump($form->getErrorsAsString());
 	    if ($form->isValid()) {
-	    	var_dump('valid');
-	    	die();
-	        $this->om->getManager()->persist($post);
-	        $this->om->getManager()->flush($post);
+
+	 		if ($method !== "PUT") {
+		 		$user = $post->getUser();
+		 		$user->addPost($post);
+
+		        $this->om->getManager()->persist($post);
+	 		}
+
+	        $this->om->getManager()->flush();
 
 	        return $post;
 	    }
 
-	    var_dump('fezfez');
+
 	    return null;
 	}
 
-    public function put(Request $request, Post $post){
+	private function createForm(Post $post, Request $request, $method){
+
+		if($method === "PUT"){
+			foreach ($request->request as $key => $value) {
+				$config[$key] = array(
+					'category' => $this->getCategoryField($key),
+					'options' => $this->getOptionsField($key),
+				);
+			}
+		}
+		else{
+			$config =  array(
+	            'user' => array(
+	            	'category' => $this->getCategoryField('user'),
+	            	'options' => $this->getOptionsField('user')
+	            ),
+	            'content' => array(
+	            	'category' => $this->getCategoryField('content'),
+	            	'options' => $this->getOptionsField('content')
+	            ),
+	            'media' => array(
+	            	'category' => $this->getCategoryField('media'),
+	            	'options' => $this->getOptionsField('media')
+	            )
+	        );
+		}
+
+		$form = $this->formFactory->create(new PostType($config), $post, array('method' => $method));
+
+		return $form;
+	}
+
+	private function getCategoryField($field){
+
+		switch ($field) {
+			case 'user':
+				$result = 'user_selector';
+				break;
+			case 'media':
+				$result = 'media_selector';
+				break;
+			default:
+				$result = null;
+				break;
+		}
+
+		return $result;
+	}
+
+	private function getOptionsField($field){
+
+		switch ($field) {
+			default:
+				$result = array();
+				break;
+		}
+
+		return $result;
+	}
+
+
+    public function put(Post $post, Request $request){
 
     	return $this->processForm($post, $request);
     }

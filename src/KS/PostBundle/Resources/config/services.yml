@@ -14,7 +14,7 @@ services:
         tags:
             - { name: form.type, alias: media_selector }
 
-    kspost.handler.user:
+    kspost.handler.post:
         class: KS\PostBundle\Handler\PostHandler
         arguments:
             - "@doctrine_mongodb"

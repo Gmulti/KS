@@ -7,6 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use KS\ServerBundle\Document\Client;
+use KS\PostBundle\Form\Type\PostType;
+use KS\PostBundle\Document\Post;
 
 class MainController extends Controller
 {
@@ -16,10 +18,7 @@ class MainController extends Controller
      */
     public function indexAction()
     {
-    	$scope = $this->get('doctrine_mongodb')
-        ->getRepository('KSUserBundle:User')
-        ->findOneByUsername("thomas");
-   
+    	
 
 //     	$user = new Client();
 //     	$user->addScope($scope);
