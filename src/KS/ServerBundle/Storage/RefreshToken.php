@@ -16,18 +16,15 @@ class RefreshToken implements RefreshTokenInterface
     
     public function getRefreshToken($refresh_token)
     {
-        $refreshToken = $this->mongo->getRepository('KSServerBundle:RefreshToken')->find($refresh_token);
+        $refreshToken = $this->mongo->getRepository('KSServerBundle:RefreshToken')->findOneByToken($refresh_token);
 
         if (!$refreshToken) {
             return null;
         }
 
-        // Get Client
-        $client = $refreshToken->getClient();
-
         return array(
             'refresh_token' => $refreshToken->getToken(),
-            'client_id' => $client->getClientId(),
+            'client_id' => $refreshToken->getClient(),
             'user_id' => $refreshToken->getUserId(),
             'expires' => $refreshToken->getExpires()->getTimestamp(),
             'scope' => $refreshToken->getScope()

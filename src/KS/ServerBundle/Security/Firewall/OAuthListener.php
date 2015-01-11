@@ -1,12 +1,12 @@
 <?php 
 namespace KS\ServerBundle\Security\Firewall;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
+use OAuth2\HttpFoundationBridge\Response;
 use KS\ServerBundle\Security\Document\AccessToken;
 
 class OAuthListener implements ListenerInterface
@@ -38,9 +38,8 @@ class OAuthListener implements ListenerInterface
             $this->securityContext->setToken($authToken);
 
         } catch (AuthenticationException $failed) {
-
             $response = new Response();
-            $response->setStatusCode(403);
+            $response->setError(401, 'token_expired', 'Token used has expired');
             $event->setResponse($response);
 
         }

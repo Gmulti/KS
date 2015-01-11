@@ -102,22 +102,22 @@ fos_user:
     firewall_name: main
     user_class: KS\UserBundle\Document\User
 
-fos_elastica:
-    clients:
-        default: { host: localhost, port: 9200 }
-    indexes:
-        search:
-            types:
-                user:
-                    mappings:
-                        name: ~
-                    persistence:
-                        driver: mongodb
-                        model: KS\UserBundle\Document\User
-                        provider: ~
-                        listener:
-                            immediate: ~
-                        finder: ~
+# fos_elastica:
+#     clients:
+#         default: { host: localhost, port: 9200 }
+#     indexes:
+#         search:
+#             types:
+#                 user:
+#                     mappings:
+#                         name: ~
+#                     persistence:
+#                         driver: mongodb
+#                         model: KS\UserBundle\Document\User
+#                         provider: ~
+#                         listener:
+#                             immediate: ~
+#                         finder: ~
 
 fos_rest:
     param_fetcher_listener: true

@@ -108,7 +108,7 @@ class Post
     private $updated;
 
     /**
-     * @var date $updated
+     * @var date $deletedAt
      *
      * @MongoDB\Date
      */
@@ -400,7 +400,29 @@ class Post
         return $this->media;
     }
 
+    /**
+     * Set updated
+     *
+     * @param date $updated
+     * @return self
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return date $price
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
     public function __toString(){
-        return 'tretriuh';
+        return $this->content;
     }
 }

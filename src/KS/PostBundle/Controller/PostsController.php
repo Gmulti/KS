@@ -37,20 +37,27 @@ class PostsController extends RestController
      * @return FOSView
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
+     *
+     * @QueryParam(name="offset", requirements="\d+", default="0", description="Offset posts")
+     * @QueryParam(name="limit", requirements="\d+", default="10", description="Limit posts")
+     *
      */
-    public function getPostsAction()
-    {   
+    public function getPostsAction(ParamFetcher $params)
+    {      
         $view = FOSView::create();
-
-        $data = $this->get('doctrine_mongodb')
-            ->getRepository('KSPostBundle:Post')
-            ->findAll();
+       
+        $data = $this->getPosts($params);
 
         if ($data) {
             $view = $this->view($data, 200);
         }
         else{
-            $view->setStatusCode(404);
+
+            $error = array(
+                'error' => 'Not found',
+                'error_description' => 'No users have found',
+            );
+            $view->setStatusCode(404, $errors);
         }
 
         return $this->handleView($view);
@@ -73,7 +80,11 @@ class PostsController extends RestController
             $view = $this->view($post, 200);
         }
         else{
-            $view->setStatusCode(404);
+            $error = array(
+                'error' => 'Not found',
+                'error_description' => 'User not found'
+            );
+            $view->setStatusCode(404, $error);
         }
 
         return $this->handleView($view);
@@ -124,8 +135,8 @@ class PostsController extends RestController
             $post, $request 
         );
 
-         if(null !== $updatePost){
-             $view = $this->view($updatePost, 200);
+        if(null !== $updatePost){
+            $view = $this->view($updatePost, 200);
 
         }
         else{
@@ -133,6 +144,46 @@ class PostsController extends RestController
         }
 
         return $this->handleView($view);   
+    }
+
+    /**
+     * Edit a post
+     *
+     * @return FOSView
+     * @Secure(roles="ROLE_USER")
+     * @ParamConverter("post")
+     *
+     */
+    public function deletePostAction(Post $post){
+    
+        $view = FOSView::create();
+
+        $deletePost = $this->container->get('kspost.handler.post')->delete(
+            $post 
+        );
+
+        if(null !== $deletePost){
+             $view = $this->view($deletePost, 200);
+
+        }
+        else{
+            $view->setStatusCode(404,array('error' => '404'));
+        }
+
+        return $this->handleView($view);   
+    }
+
+
+    private function getPosts(ParamFetcher $params){
+
+        $offset = $params->get('offset');
+        $limit = $params->get('limit');
+
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSPostBundle:Post')
+            ->findBy(array(), null, $limit, $offset);
+
+        return $data;
     }
 
 }

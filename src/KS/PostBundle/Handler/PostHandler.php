@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use KS\PostBundle\Form\Type\PostType;
 use KS\PostBundle\Document\Post;
+use FOS\RestBundle\Request\ParamFetcher;
+
+use KS\PostBundle\Exception\InvalidFormException;
 
 class PostHandler implements PostHandlerInterface{
 
@@ -41,7 +44,7 @@ class PostHandler implements PostHandlerInterface{
 	    }
 
 
-	    return null;
+		throw new InvalidFormException('Invalid submitted data', $form);
 	}
 
 	private function createForm(Post $post, Request $request, $method){
@@ -116,6 +119,21 @@ class PostHandler implements PostHandlerInterface{
 	    return $this->processForm($post, $request, 'POST');
     }
 
+    public function delete(Post $post){
+    	try {
+    		$user = $post->getUser();
+    		$user->removePost($post);
 
+    		$this->om->getManager()->persist($user);
+    		$this->om->getManager()->remove($post);
+    		$this->om->getManager()->flush();
+    	} catch (Exception $e) {
+    		return array(
+    			'error' => 'Delete error',
+    			'error_description' => ''
+    		);
+    	}
 
+    	// return $post;
+    }
 }
