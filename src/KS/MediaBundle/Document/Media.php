@@ -8,13 +8,31 @@ use KS\UserBundle\Document\User as User;
 use KS\PostBundle\Document\Post as Post;
 use Gedmo\Mapping\Annotation as Gedmo;
 
+use JMS\Serializer\Annotation as Serializer;
+
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+use Hateoas\Configuration\Annotation as Hateoas;
+
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\ExclusionPolicy;
 
 /**
  * @MongoDB\Document
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @Serializer\XmlRoot("media")
+ *
  * @MongoDB\HasLifecycleCallbacks
+ * @Hateoas\Relation("user", 
+ *     href = "expr('/users/' ~ object.getUser().getUsername() )",
+ * )
+ * @Hateoas\Relation("post", 
+ *     href = "expr('/posts/' ~ object.getPost().getId() )",
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getPost() === null)")
+ * )
+ *
+ * @ExclusionPolicy("all") 
  */
 class Media
 {
@@ -29,17 +47,32 @@ class Media
     protected $name;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="KS\UserBundle\Document\User", mappedBy="medias")
+     * @MongoDB\ReferenceOne(
+     *    targetDocument="KS\UserBundle\Document\User", 
+     *    mappedBy="medias",
+     *    cascade={"all"}
+     * )
      */
     protected $user;
 
     /**
-     * @MongoDB\ReferenceOne(targetDocument="KS\PostBundle\Document\Post", mappedBy="media", cascade={"persist"} )
+     * @MongoDB\ReferenceOne(
+     *    targetDocument="KS\PostBundle\Document\Post", 
+     *    mappedBy="media", 
+     *    cascade={"all"} 
+     * )
      */
     protected $post;
 
     /**
+     * @MongoDB\Boolean
+     * @Expose()
+     */
+    protected $userProfile;
+
+    /**
      * @MongoDB\String
+     * @Expose()
      */
     protected $path;
 
@@ -54,6 +87,7 @@ class Media
      *
      * @MongoDB\Date
      * @Gedmo\Timestampable(on="create")
+     * @Expose()
      */
     protected $created;
 
@@ -62,6 +96,7 @@ class Media
      *
      * @MongoDB\Date
      * @Gedmo\Timestampable
+     * @Expose()
      */
     protected $updated;
 
@@ -104,28 +139,6 @@ class Media
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set nom
-     *
-     * @param string $nom
-     * @return self
-     */
-    public function setNom($nom)
-    {
-        $this->nom = $nom;
-        return $this;
-    }
-
-    /**
-     * Get nom
-     *
-     * @return string $nom
-     */
-    public function getNom()
-    {
-        return $this->nom;
     }
 
 
@@ -220,7 +233,7 @@ class Media
 
     public function getWebPath()
     {
-        return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
+        return null === $this->path ? null : $this->getWebPathDir().'/'.$this->path;
     }
 
     protected function getUploadRootDir()
@@ -231,6 +244,10 @@ class Media
     protected function getUploadDir()
     {
         return 'public/images';
+    }
+
+    protected function getWebPathDir(){
+        return $_SERVER['HTTP_HOST'] . '/bundles/ksmedia/images';
     }
 
 
@@ -251,7 +268,7 @@ class Media
      */
     public function upload()
     {
-        $this->file->move($this->getUploadRootDir(), $this->id . '.' . $this->file->guessExtension());
+        $this->file->move($this->getUploadRootDir(), $this->path . '.' . $this->file->guessExtension());
 
         unset($this->file);
     }
@@ -277,7 +294,7 @@ class Media
 
     public function getAbsolutePath()
     {
-        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->id . '.' . $this->path;
+        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path . '.' . $this->file->guessExtension();
     }
 
     /**
@@ -327,5 +344,27 @@ class Media
     public function setFile(UploadedFile $file){
         $this->file = $file;
         return $this;
+    }
+
+    /**
+     * Set userProfile
+     *
+     * @param boolean $userProfile
+     * @return self
+     */
+    public function setUserProfile($userProfile)
+    {
+        $this->userProfile = $userProfile;
+        return $this;
+    }
+
+    /**
+     * Get userProfile
+     *
+     * @return boolean $userProfile
+     */
+    public function getUserProfile()
+    {
+        return $this->userProfile;
     }
 }

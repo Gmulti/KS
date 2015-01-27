@@ -32,9 +32,17 @@ class PostHandler implements PostHandlerInterface{
 	    if ($form->isValid()) {
 
 	 		if ($method !== "PUT") {
+
+	 			// Add post on user
 		 		$user = $post->getUser();
 		 		$user->addPost($post);
 
+		 		// Add media on user
+		 		$media = $post->getMedia();
+		 		if($media !== null):
+		 			$user->addMedia($media);
+		 		endif;
+		 		
 		        $this->om->getManager()->persist($post);
 	 		}
 
@@ -42,7 +50,6 @@ class PostHandler implements PostHandlerInterface{
 
 	        return $post;
 	    }
-
 
 		throw new InvalidFormException('Invalid submitted data', $form);
 	}

@@ -46,14 +46,15 @@ class PostsController extends RestController
     {      
         $view = FOSView::create();
        
-        $data = $this->getPosts($params);
+        $data = $this->getPostsWithParams($params);
 
         if ($data) {
             $view = $this->view($data, 200);
+            $view->setData($data);
         }
         else{
 
-            $error = array(
+            $errors = array(
                 'error' => 'Not found',
                 'error_description' => 'No users have found',
             );
@@ -69,8 +70,8 @@ class PostsController extends RestController
      * @return FOSView
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
-     * @ParamConverter("post")
      *
+     * @ParamConverter("post")
      */
     public function getPostAction(Post $post){
 
@@ -174,14 +175,14 @@ class PostsController extends RestController
     }
 
 
-    private function getPosts(ParamFetcher $params){
+    private function getPostsWithParams(ParamFetcher $params){
 
         $offset = $params->get('offset');
         $limit = $params->get('limit');
 
         $data = $this->get('doctrine_mongodb')
             ->getRepository('KSPostBundle:Post')
-            ->findBy(array(), null, $limit, $offset);
+            ->findBy(array(), array('updated' => 'DESC'), $limit, $offset);
 
         return $data;
     }

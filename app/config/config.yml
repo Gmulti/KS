@@ -79,6 +79,9 @@ doctrine_mongodb:
                 StofDoctrineExtensionsBundle: ~
                 KSUserBundle: ~
                 KSPostBundle: ~
+                KSMediaBundle: ~
+                KSAdvertBundle: ~
+                KSPageBundle: ~
             filters:
                 softdeleteable:
                     class: Gedmo\SoftDeleteable\Filter\ODM\SoftDeleteableFilter
@@ -131,3 +134,10 @@ jms_serializer:
 
 sensio_framework_extra:
     request: { converters: true }
+
+
+liip_imagine:
+    filter_sets:
+        user_profile:
+            filters:
+                relative_resize: { widen: 50 }

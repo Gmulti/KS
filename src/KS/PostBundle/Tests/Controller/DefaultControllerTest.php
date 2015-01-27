@@ -4,14 +4,14 @@ namespace KS\PostBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class DefaultControllerTest extends WebTestCase
+class PostsControllerTest extends WebTestCase
 {
-    public function testIndex()
+    public function testGetPosts()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/hello/Fabien');
+        $crawler = $client->request('GET', '/api/v1/posts.json');
+        $this->assertTrue($client->getResponse()->headers->contains('Content-Type', 'application/json'));
 
-        $this->assertTrue($crawler->filter('html:contains("Hello Fabien")')->count() > 0);
     }
 }

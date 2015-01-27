@@ -11,6 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
 
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+
 /**
  * @MongoDB\Document
  *
@@ -19,17 +22,27 @@ use Hateoas\Configuration\Annotation as Hateoas;
  * @Serializer\XmlRoot("post")
  *
  * @Hateoas\Relation("user", href = "expr('/users/' ~ object.getUser() )")
- * @Hateoas\Relation("comments", href = "expr('/posts/' ~ object.getId() ~ '/comments')")
+ * @Hateoas\Relation("comments", 
+ *     href = "expr('/posts/' ~ object.getId() ~ '/comments')",
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getComments() !== null)")
+ * )
+ * @Hateoas\Relation("media", 
+ *     href = "expr('/medias/' ~ object.getMedia().getId() ~ '/render' )",
+ *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getMedia() === null)")
+ * )
+ * @ExclusionPolicy("all") 
  */
 class Post
 {
     /**
      * @MongoDB\Id
+     * @Expose()
      */
     protected $id;
 
     /**
      * @MongoDB\String
+     * @Expose()
      */
     protected $content;
 
@@ -37,19 +50,22 @@ class Post
     /**
      * @MongoDB\ReferenceOne(
      *      targetDocument="KS\MediaBundle\Document\Media", 
-     *      mappedBy="post", 
-     *      cascade={"persist","remove"}
+     *      inversedBy="post", 
+     *      cascade={"all"}
      * )
+     * @Expose()
      */
     protected $media;
 
     /**
      * @MongoDB\ReferenceOne(
      *      targetDocument="KS\UserBundle\Document\User", 
-     *      mappedBy="posts", cascade={"all"}
+     *      mappedBy="posts", 
+     *      cascade={"all"}
      * )
      * @Assert\NotBlank()
      * @Assert\Type(type="KS\UserBundle\Document\User")
+     * @Expose()
      */
     protected $user;
 
@@ -66,6 +82,8 @@ class Post
      *      targetDocument="KS\PostBundle\Document\Geolocation",
      *      mappedBy="posts"
      * )
+     * @Assert\Type(type="KS\PostBundle\Document\Geolocation")
+     * @Expose()
      */
     protected $geolocation;
 
@@ -82,12 +100,14 @@ class Post
      *      targetDocument="KS\PostBundle\Document\Comment",
      *      inversedBy="post"
      * )
+     * @Gedmo\ReferenceIntegrity("nullify")
      */
     protected $comments;
 
     /**
      * @MongoDB\Float
      *
+     * @Expose()
      */
     protected $price;
 
@@ -96,6 +116,7 @@ class Post
      *
      * @MongoDB\Date
      * @Gedmo\Timestampable(on="create")
+     * @Expose()
      */
     private $created;
 
@@ -104,6 +125,7 @@ class Post
      *
      * @MongoDB\Date
      * @Gedmo\Timestampable
+     * @Expose()
      */
     private $updated;
 

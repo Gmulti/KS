@@ -23,5 +23,4 @@ interface PostHandlerInterface
      */
     public function post(Request $request);
 
-    public function get($params);
 }

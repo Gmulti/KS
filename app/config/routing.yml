@@ -3,15 +3,16 @@ komunity_store_advert:
     type:     annotation
     prefix:   /advert
 
-komunity_store_media:
-    resource: "@KSMediaBundle/Controller/"
-    type:     annotation
-    prefix:   /media
 
 komunity_store_page:
     resource: "@KSPageBundle/Controller/"
     type:     annotation
     prefix:   /
+
+komunity_store_media:
+    type:     rest
+    resource: KS\MediaBundle\Controller\MediasController
+    prefix: /api/v1
 
 komunity_store_post:
     type:     rest
@@ -37,3 +38,6 @@ oauth2_server:
     resource: "@KSServerBundle/Controller/"
     type:     annotation
     prefix:   /
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"

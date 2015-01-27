@@ -51,7 +51,6 @@ class UserTransformer implements DataTransformerInterface
             $username = $this->username;
         }
 
-         
         $username = $this->om
             ->getRepository('KSUserBundle:User')
             ->findOneByUsername($username);
@@ -62,6 +61,7 @@ class UserTransformer implements DataTransformerInterface
                 $username
             ));
         }
+         
 
         return $username;
     }

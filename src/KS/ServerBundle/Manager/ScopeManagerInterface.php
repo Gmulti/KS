@@ -2,7 +2,6 @@
 
 namespace KS\ServerBundle\Manager;
 
-use Doctrine\ORM\EntityManager;
 
 interface ScopeManagerInterface
 {

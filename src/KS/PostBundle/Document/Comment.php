@@ -24,11 +24,13 @@ class Comment
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="KS\PostBundle\Document\Post", mappedBy="comments")
+     * @Gedmo\ReferenceIntegrity("nullify")
      */
     protected $post;
 
     /**
      * @MongoDB\ReferenceOne(targetDocument="KS\UserBundle\Document\User", mappedBy="comments")
+     * @Gedmo\ReferenceIntegrity("nullify")
      */
    protected $user;
 

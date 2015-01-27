@@ -62,13 +62,21 @@ class User extends BaseUser
     protected $birthday;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="KS\MediaBundle\Document\Media", inversedBy="user", cascade={"all"})
+     * @MongoDB\ReferenceMany(
+     *     targetDocument="KS\MediaBundle\Document\Media", 
+     *     inversedBy="user", 
+     *     cascade={"all"}
+     * )
      * @Expose
      */
     protected $medias;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument="KS\PostBundle\Document\Post", inversedBy="user", cascade={"all"})
+     * @MongoDB\ReferenceMany(
+     *    targetDocument="KS\PostBundle\Document\Post", 
+     *    inversedBy="user", 
+     *    cascade={"all"}
+     * )
      * @Expose
      */
     protected $posts;
