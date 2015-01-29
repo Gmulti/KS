@@ -63,6 +63,13 @@ class UsersRegisterController extends FOSRestController
             $userManager->updateUser($user);
             $view->setStatusCode(200)->setData($user);
         } 
+        else{
+            $error = array(
+                'error' => 'user_already_exist',
+                'error_description' => $errors[0]->getMessage()
+            );
+            $view->setStatusCode(400)->setData($error);
+        }
 
         return $this->handleView($view);
 

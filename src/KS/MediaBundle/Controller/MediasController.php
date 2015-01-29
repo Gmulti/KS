@@ -34,18 +34,32 @@ class MediasController extends RestController
      * @return FOSView
      * @Secure(roles="ROLE_USER")
      * @ParamConverter("media")
+     * @QueryParam(name="thumbnail", requirements="([a-z]*[_][a-z]*)([a-z]*)", default="full", description="Limit posts")
      */
-    public function getMediasRenderAction(Media $media)
+    public function getMediasRenderAction(Media $media, ParamFetcher $params)
     {
         $view = FOSView::create();
 
+        $img = $this->get('liip_imagine.cache.manager')->getBrowserPath('erzr/test', $params->get('thumbnail'));
+        var_dump($img);
+        $this->container
+            ->get('liip_imagine.controller')
+                ->filterAction(
+                    $this->container->get('request'),          // http request
+                    $media->getWebPath(),      // original image you want to apply a filter to
+                    $params->get('thumbnail')             // filter defined in config.yml
+        );
+        die();
         if ($media) {
+            var_dump($media->getAbsolutePath());
+            die();
         	$url = $media->getWebPath();
+
             $view = $this->view($url, 200);
         }
         else{
             $error = array(
-                'error' => 'Not found',
+                'error' => 'not_found',
                 'error_description' => 'Media not found'
             );
             $view->setStatusCode(404, $error);
@@ -77,5 +91,17 @@ class MediasController extends RestController
         }
 
         return $this->handleView($view);
+    }
+
+     private function getMediaWithParams(ParamFetcher $params){
+
+        $offset = $params->get('width');
+        // $limit = $params->get('limit');
+
+        // $data = $this->get('doctrine_mongodb')
+        //     ->getRepository('KSPostBundle:Post')
+        //     ->findBy(array(), array('updated' => 'DESC'), $limit, $offset);
+
+        return $data;
     }
 }

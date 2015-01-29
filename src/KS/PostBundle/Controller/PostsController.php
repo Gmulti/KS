@@ -45,7 +45,7 @@ class PostsController extends RestController
     public function getPostsAction(ParamFetcher $params)
     {      
         $view = FOSView::create();
-       
+        
         $data = $this->getPostsWithParams($params);
 
         if ($data) {
@@ -55,7 +55,7 @@ class PostsController extends RestController
         else{
 
             $errors = array(
-                'error' => 'Not found',
+                'error' => 'not_found',
                 'error_description' => 'No users have found',
             );
             $view->setStatusCode(404, $errors);
@@ -82,7 +82,7 @@ class PostsController extends RestController
         }
         else{
             $error = array(
-                'error' => 'Not found',
+                'error' => 'not_found',
                 'error_description' => 'User not found'
             );
             $view->setStatusCode(404, $error);

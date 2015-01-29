@@ -34,6 +34,7 @@
         "friendsofsymfony/elastica-bundle": "3.0.*@dev",
 
         "liip/imagine-bundle": "dev-master",
+
         "phpunit/phpunit": "4.3.*",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "willdurand/hateoas-bundle": "~0.4",

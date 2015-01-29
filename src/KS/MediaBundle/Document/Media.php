@@ -294,7 +294,8 @@ class Media
 
     public function getAbsolutePath()
     {
-        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path . '.' . $this->file->guessExtension();
+
+        return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
 
     /**
