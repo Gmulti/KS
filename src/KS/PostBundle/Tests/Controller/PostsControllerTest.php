@@ -40,8 +40,10 @@ class PostsControllerTest extends WebTestCase
         $msg = json_decode($response->getContent(), true);
         $this->assertGreaterThanOrEqual(count($msg), 10);
 
+    }
 
-
+    public function testPostPost(){
+        
     }
 
 }

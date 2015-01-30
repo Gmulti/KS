@@ -36,26 +36,20 @@ class MediasController extends RestController
      * @ParamConverter("media")
      * @QueryParam(name="thumbnail", requirements="([a-z]*[_][a-z]*)([a-z]*)", default="full", description="Limit posts")
      */
-    public function getMediasRenderAction(Media $media, ParamFetcher $params)
+    public function getMediasUrlAction(Media $media, ParamFetcher $params)
     {
         $view = FOSView::create();
 
-        $img = $this->get('liip_imagine.cache.manager')->getBrowserPath('erzr/test', $params->get('thumbnail'));
-        var_dump($img);
-        $this->container
-            ->get('liip_imagine.controller')
-                ->filterAction(
-                    $this->container->get('request'),          // http request
-                    $media->getWebPath(),      // original image you want to apply a filter to
-                    $params->get('thumbnail')             // filter defined in config.yml
-        );
-        die();
-        if ($media) {
-            var_dump($media->getAbsolutePath());
-            die();
-        	$url = $media->getWebPath();
+      
 
-            $view = $this->view($url, 200);
+        if ($media) {
+            $imagemanagerResponse = $this->container
+                ->get('liip_imagine.controller')
+                ->filterAction($this->getRequest(), $media->getPathImagine(), $params->get('thumbnail'));
+         
+            $imagePath = $imagemanagerResponse->headers->get('location');
+            
+            $view = $this->view($imagePath, 200);
         }
         else{
             $error = array(

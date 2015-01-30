@@ -137,10 +137,10 @@ sensio_framework_extra:
 
 
 liip_imagine:
-    loaders:
-        default:
-            filesystem:
-                data_root: /bundles/ksmedia/images
+    # loaders:
+    #     default:
+    #         filesystem:
+    #             data_root: /bundles/ksmedia/images
     filter_sets:
         user_profile:
             quality: 75

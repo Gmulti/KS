@@ -236,6 +236,10 @@ class Media
         return null === $this->path ? null : $this->getWebPathDir().'/'.$this->path;
     }
 
+    public function getPathImagine(){
+        return null === $this->path ? null : $this->getBundlesPath() . '/' . $this->path;
+    }
+
     protected function getUploadRootDir()
     {
         return __DIR__ . '/../Resources/' . $this->getUploadDir();
@@ -247,7 +251,11 @@ class Media
     }
 
     protected function getWebPathDir(){
-        return $_SERVER['HTTP_HOST'] . '/bundles/ksmedia/images';
+        return $_SERVER['HTTP_HOST'] . $this->getBundlesPath();
+    }
+
+    protected function getBundlesPath(){
+        return '/bundles/ksmedia/images';
     }
 
 
