@@ -19,7 +19,6 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
  *
  * 
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @Serializer\XmlRoot("post")
  *
  * @Hateoas\Relation("user", href = "expr('users/' ~ object.getUser() )")
  * @Hateoas\Relation("comments", 
@@ -202,6 +201,13 @@ class Post
     {
         return $this->user;
     }
+
+    public function removeUser()
+    {
+        $this->user = null;
+        return $this;
+    }
+
 
     /**
      * Set url
@@ -448,6 +454,11 @@ class Post
     public function getMedia()
     {
         return $this->media;
+    }
+
+    public function removeMedia(){
+        $this->media = null;
+        return $this;
     }
 
     /**

@@ -45,7 +45,7 @@ class PostHandler implements PostHandlerInterface{
 		 			$user->addMedia($media);
 		 		endif;
 		 		
-		        $this->om->getManager()->persist($post);
+		        $this->om->getManager()->persist($user);
 	 		}
 
 	        $this->om->getManager()->flush();
@@ -70,12 +70,20 @@ class PostHandler implements PostHandlerInterface{
 		}
 		else{
 			foreach ($request->request as $key => $value) {
+
 				if(in_array($key, $this->postConfig)){
 					$config[$key] = array(
 						'category' => $this->getCategoryField($key),
 						'options' => $this->getOptionsField($key),
 					);
 				}
+			}
+	
+			if($request->files->get('media') instanceOf \Symfony\Component\HttpFoundation\File\UploadedFile ){
+				$config['media'] = array(
+					'category' => $this->getCategoryField('media'),
+					'options' => $this->getOptionsField('media'),
+				);
 			}
 		}
 
@@ -125,17 +133,36 @@ class PostHandler implements PostHandlerInterface{
     }
 
     public function delete(Post $post){
+
     	try {
     		$user = $post->getUser();
     		$user->removePost($post);
 
+    		$media = $post->getMedia();
+    		if(null !== $media){
+    			$user->removeMedia($media);
+    			$media->removePost();
+    			$media->removeUser();
+    		}
+    		
+			$post->removeMedia();
+    		$post->removeUser();
+
+    		// Update user
     		$this->om->getManager()->persist($user);
+    		$this->om->getManager()->flush();
+    	
+    		// Remove
+    		if(null !== $media){
+    			$this->om->getManager()->remove($media);
+    		}
     		$this->om->getManager()->remove($post);
     		$this->om->getManager()->flush();
+
     	} catch (Exception $e) {
     		return array(
-    			'error' => 'Delete error',
-    			'error_description' => ''
+    			'error' => 'exception',
+    			'error_description' => 'Delete error'
     		);
     	}
 

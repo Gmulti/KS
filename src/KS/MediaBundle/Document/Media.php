@@ -20,17 +20,10 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 
 /**
  * @MongoDB\Document
+ * @MongoDB\HasLifecycleCallbacks
+ *
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @Serializer\XmlRoot("media")
- *
- * @MongoDB\HasLifecycleCallbacks
- * @Hateoas\Relation("user", 
- *     href = "expr('/users/' ~ object.getUser().getUsername() )",
- * )
- * @Hateoas\Relation("post", 
- *     href = "expr('/posts/' ~ object.getPost().getId() )",
- *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getPost() === null)")
- * )
  *
  * @ExclusionPolicy("all") 
  */
@@ -38,11 +31,13 @@ class Media
 {
     /**
      * @MongoDB\Id
+     * @Expose()
      */
     protected $id;
 
     /**
      * @MongoDB\String
+     * @Expose()
      */
     protected $name;
 
@@ -52,15 +47,17 @@ class Media
      *    mappedBy="medias",
      *    cascade={"all"}
      * )
+     * @Expose()
      */
     protected $user;
 
     /**
      * @MongoDB\ReferenceOne(
      *    targetDocument="KS\PostBundle\Document\Post", 
-     *    mappedBy="media", 
+     *    inversedBy="media", 
      *    cascade={"all"} 
      * )
+     * @Expose()
      */
     protected $post;
 
@@ -72,7 +69,6 @@ class Media
 
     /**
      * @MongoDB\String
-     * @Expose()
      */
     protected $path;
 
@@ -162,6 +158,11 @@ class Media
     public function getPost()
     {
         return $this->post;
+    }
+
+    public function removePost(){
+        $this->post = null;
+        return $this;
     }
 
     /**
@@ -265,8 +266,9 @@ class Media
      */
     public function preUpload()
     {
+
         if (null !== $this->file) {
-            $this->path = sha1(uniqid(mt_rand(), true)). '.' .$this->file->guessExtension();
+            $this->path = sha1(uniqid(mt_rand(), true)). '.' .$this->file->getClientOriginalExtension();
         }
     }
 
@@ -276,8 +278,7 @@ class Media
      */
     public function upload()
     {
-        $this->file->move($this->getUploadRootDir(), $this->path . '.' . $this->file->guessExtension());
-
+        $this->file->move($this->getUploadRootDir(), $this->path);
         unset($this->file);
     }
 
@@ -326,6 +327,11 @@ class Media
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function removeUser(){
+        $this->user = null;
+        return $this;
     }
 
     /**

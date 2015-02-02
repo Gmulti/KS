@@ -37,12 +37,14 @@ class MediaTransformer implements DataTransformerInterface
 
     public function reverseTransform($file)
     {
+
     	if (!$file instanceOf UploadedFile) {
             return null;
         }
 
         $media = new Media();
         $media->setFile($file);
+
 
         return $media;
     }
