@@ -162,7 +162,7 @@ class PostsController extends RestController
         $deletePost = $this->container->get('kspost.handler.post')->delete(
             $post 
         );
-
+        
         if(null !== $deletePost){
              $view = $this->view($deletePost, 200);
 

@@ -22,6 +22,8 @@ class PostHandler implements PostHandlerInterface{
 	    $this->entityClass = $entityClass;
 	    $this->formFactory = $formFactory;
 	    $this->repository = $this->om->getRepository($this->entityClass);
+	    $this->postConfig = array('user','content','media','price','url');
+	    $this->putConfig  = array('content','media','price','url');
 	}
 
 	private function processForm(Post $post, Request $request, $method = "PUT"){
@@ -58,27 +60,23 @@ class PostHandler implements PostHandlerInterface{
 
 		if($method === "PUT"){
 			foreach ($request->request as $key => $value) {
-				$config[$key] = array(
-					'category' => $this->getCategoryField($key),
-					'options' => $this->getOptionsField($key),
-				);
+				if(in_array($key, $this->putConfig)){
+					$config[$key] = array(
+						'category' => $this->getCategoryField($key),
+						'options' => $this->getOptionsField($key),
+					);
+				}
 			}
 		}
 		else{
-			$config =  array(
-	            'user' => array(
-	            	'category' => $this->getCategoryField('user'),
-	            	'options' => $this->getOptionsField('user')
-	            ),
-	            'content' => array(
-	            	'category' => $this->getCategoryField('content'),
-	            	'options' => $this->getOptionsField('content')
-	            ),
-	            'media' => array(
-	            	'category' => $this->getCategoryField('media'),
-	            	'options' => $this->getOptionsField('media')
-	            )
-	        );
+			foreach ($request->request as $key => $value) {
+				if(in_array($key, $this->postConfig)){
+					$config[$key] = array(
+						'category' => $this->getCategoryField($key),
+						'options' => $this->getOptionsField($key),
+					);
+				}
+			}
 		}
 
 		$form = $this->formFactory->create(new PostType($config), $post, array('method' => $method));
