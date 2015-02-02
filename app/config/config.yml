@@ -123,6 +123,8 @@ fos_user:
 #                         finder: ~
 
 fos_rest:
+    routing_loader:
+        default_format: json
     param_fetcher_listener: true
     body_converter:
         enabled: false
@@ -137,12 +139,12 @@ sensio_framework_extra:
 
 
 liip_imagine:
-    # loaders:
-    #     default:
-    #         filesystem:
-    #             data_root: /bundles/ksmedia/images
     filter_sets:
-        user_profile:
+        user_profile_tile:
             quality: 75
             filters:
                 relative_resize: { widen: 50 }
+        image_post:
+            quality: 75
+            filters:
+                thumbnail: { size: [418, 418], mode: inset }

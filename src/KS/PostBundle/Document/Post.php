@@ -21,13 +21,13 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @Serializer\XmlRoot("post")
  *
- * @Hateoas\Relation("user", href = "expr('/users/' ~ object.getUser() )")
+ * @Hateoas\Relation("user", href = "expr('users/' ~ object.getUser() )")
  * @Hateoas\Relation("comments", 
- *     href = "expr('/posts/' ~ object.getId() ~ '/comments')",
+ *     href = "expr('posts/' ~ object.getId() ~ '/comments')",
  *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getComments() !== null)")
  * )
  * @Hateoas\Relation("media", 
- *     href = "expr('/medias/' ~ object.getMedia().getId() ~ '/render' )",
+ *     href = "expr('medias/' ~ object.getMedia().getId() ~ '/url' )",
  *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getMedia() === null)")
  * )
  * @ExclusionPolicy("all") 

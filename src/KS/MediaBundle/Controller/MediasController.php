@@ -40,14 +40,20 @@ class MediasController extends RestController
     {
         $view = FOSView::create();
 
-      
+        $thumbnail =  $params->get('thumbnail');
 
         if ($media) {
-            $imagemanagerResponse = $this->container
-                ->get('liip_imagine.controller')
-                ->filterAction($this->getRequest(), $media->getPathImagine(), $params->get('thumbnail'));
-         
-            $imagePath = $imagemanagerResponse->headers->get('location');
+
+            if('full' === $thumbnail){
+                 $imagePath = $media->getWebPath();
+            }
+            else{
+                $imagemanagerResponse = $this->container
+                    ->get('liip_imagine.controller')
+                    ->filterAction($this->getRequest(), $media->getPathImagine(), $thumbnail);
+                
+                $imagePath = $imagemanagerResponse->headers->get('location');
+            }
             
             $view = $this->view($imagePath, 200);
         }
@@ -89,7 +95,6 @@ class MediasController extends RestController
 
      private function getMediaWithParams(ParamFetcher $params){
 
-        $offset = $params->get('width');
         // $limit = $params->get('limit');
 
         // $data = $this->get('doctrine_mongodb')
