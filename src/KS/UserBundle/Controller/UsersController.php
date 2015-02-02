@@ -19,6 +19,7 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController as RestController;
 
+use KS\UserBundle\Document\User;
 
 /**
  *
@@ -59,19 +60,20 @@ class UsersController extends RestController
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
      */
-    public function getUserAction($username){
+    public function getUserAction(User $user){
 
        
         $view = FOSView::create();
-        $data = $this->get('doctrine_mongodb')
-            ->getRepository('KSUserBundle:User')
-            ->findOneByUsername($username);
 
-        if ($data) {
-            $view->setStatusCode(200)->setData($data);
+        if ($user) {
+            $view = $this->view($user, 200);
         }
         else{
-            $view->setStatusCode(404);
+            $error = array(
+                'error' => 'not_found',
+                'error_description' => 'User not found'
+            );
+            $view->setStatusCode(404, $error);
         }
 
         return $this->handleView($view);

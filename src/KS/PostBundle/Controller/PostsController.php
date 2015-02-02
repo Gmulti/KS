@@ -83,7 +83,7 @@ class PostsController extends RestController
         else{
             $error = array(
                 'error' => 'not_found',
-                'error_description' => 'User not found'
+                'error_description' => 'Post not found'
             );
             $view->setStatusCode(404, $error);
         }
@@ -111,7 +111,11 @@ class PostsController extends RestController
 
         }
         else{
-            $view->setStatusCode(404,array('error' => '404'));
+            $view->setStatusCode(404,array(
+                'error' => 'error_post', 
+                'error_description' => 'Erreur sur le traitement des données'
+                )
+            );
         }
 
         return $this->handleView($view);      
@@ -141,7 +145,11 @@ class PostsController extends RestController
 
         }
         else{
-            $view->setStatusCode(404,array('error' => '404'));
+            $view->setStatusCode(404,array(
+                'error' => 'error_put', 
+                'error_description' => 'Erreur sur le traitement des données'
+                )
+            );
         }
 
         return $this->handleView($view);   
