@@ -172,11 +172,11 @@ class PostsController extends RestController
         );
         
         if(null !== $deletePost){
-             $view = $this->view($deletePost, 200);
+             $view = $this->view($deletePost, 202);
 
         }
         else{
-            $view->setStatusCode(404,array('error' => '404'));
+            $view->setStatusCode(404,$deletePost);
         }
 
         return $this->handleView($view);   

@@ -59,6 +59,7 @@ class UsersController extends RestController
      *
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
+     * @ParamConverter("user")
      */
     public function getUserAction(User $user){
 
@@ -81,40 +82,67 @@ class UsersController extends RestController
     }
 
     /**
+     * Edit a user
      *
+     * @return FOSView
      * @Secure(roles="ROLE_USER")
-     * @Route(requirements={"_format"="json|xml"})
-     */
-    public function putUserAction($username)
-    {
-
-    } // "put_user"      [PUT] /users/{slug}
-
-    /**
+     * @ParamConverter("user")
      *
-     * @Secure(roles="ROLE_USER")
-     * @Route(requirements={"_format"="json|xml"})
      */
-    public function deleteUserAction($username)
-    {
-        $data = $this->get('doctrine_mongodb')
-            ->getRepository('KSUserBundle:User')
-            ->findOneByUsername($username);
+    public function putUserAction(Request $request, User $user){
+    
+        $view = FOSView::create();
 
-        $user = $this->get('security.context')->getToken()->getUser();
 
-        if($data->getId() == $user->getId()){
-            $dm = $this->get('doctrine_mongodb')->getManager();
-            $dm->remove($data);
-            $dm->flush();
+        if($this->isAccessToRequest($request, $user)){
+            $updateUser = $this->container->get('ksuser.handler.user')->put(
+                $user, $request 
+            );
 
-            $view = $this->view($data, 202);
-            return $this->handleView($view);
+            if(null !== $updateUser){
+                $view = $this->view($updateUser, 200);
+
+            }
+            else{
+                $view->setStatusCode(404,array(
+                    'error' => 'error_put', 
+                    'error_description' => 'Erreur sur le traitement des données'
+                    )
+                );
+            }
+        }
+        else{
+            $view->setStatusCode(401,array(
+                'error' => 'no_access', 
+                'error_description' => 'Unauthorized update user'
+                )
+            );
         }
 
-        $data = array('error', 'No user');
-        $view = $this->view($data, 404);
-        return $this->handleView($view);
+        return $this->handleView($view);   
+    }
+
+    /**
+     * @Route(requirements={"_format"="json|xml"})
+     * @ParamConverter("user")
+     */
+    public function deleteUserAction(User $user)
+    {
+        $view = FOSView::create();
+
+        $deleteUser = $this->container->get('ksuser.handler.user')->delete(
+            $user 
+        );
+        
+        if(null !== $deleteUser){
+             $view = $this->view($deleteUser, 202);
+
+        }
+        else{
+            $view->setStatusCode(404,$deleteUser);
+        }
+
+        return $this->handleView($view);   
 
 
     } // "delete_user"   [DELETE] /users/{slug}
@@ -122,7 +150,6 @@ class UsersController extends RestController
     /**
      * Get user's roles
      *
-     * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
      */
     public function getRoleAction($username){
@@ -151,9 +178,8 @@ class UsersController extends RestController
      */
     public function getUsernameByTokenAction($token){
         $view = FOSView::create();
-        $data = $this->get('doctrine_mongodb')
-            ->getRepository('KSServerBundle:AccessToken')
-            ->findOneByToken($token);
+      
+        $data = $this->getAccessTokenByTokenRequest($token);
 
         if ($data) {
             $view->setStatusCode(200)->setData($data->getUsername());
@@ -231,5 +257,42 @@ class UsersController extends RestController
         }
 
         return $this->handleView($view);
+    }
+
+    private function getTokenFromRequest(Request $request){
+        $request = $this->getRequest();
+        $regex = "/Bearer (.*)/";
+
+        if (preg_match($regex, $request->headers->get('authorization'), $matches) !== 1 ) {
+            return array(
+                'error' => 'no_token',
+                'error' => 'Token not found or is not valid'
+            );
+        }
+
+        return $matches[1];
+    }
+
+    private function getAccessTokenByTokenRequest($token){
+        return $this->get('doctrine_mongodb')
+            ->getRepository('KSServerBundle:AccessToken')
+            ->findOneByToken($token);
+    }
+
+    private function getTokenByUsername($username){
+        $data = $this->get('doctrine_mongodb')
+            ->getRepository('KSServerBundle:AccessToken')
+            ->findOneByUserId($username);
+
+        return $data;
+    }
+
+    private function isAccessToRequest($request, $user){
+
+        $token = $this->getTokenFromRequest($request);
+        $accessToken = $this->getAccessTokenByTokenRequest($token);
+
+        return ($accessToken->getUserId() === $user->getUsername() ) ? true : false;
+       
     }
 }

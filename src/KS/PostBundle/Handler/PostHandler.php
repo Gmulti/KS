@@ -57,7 +57,8 @@ class PostHandler implements PostHandlerInterface{
 	}
 
 	private function createForm(Post $post, Request $request, $method){
-
+		$config = array();
+		
 		if($method === "PUT"){
 			foreach ($request->request as $key => $value) {
 				if(in_array($key, $this->putConfig)){
@@ -161,11 +162,14 @@ class PostHandler implements PostHandlerInterface{
 
     	} catch (Exception $e) {
     		return array(
-    			'error' => 'exception',
+    			'error' => 'exception_delete',
     			'error_description' => 'Delete error'
     		);
     	}
 
-    	// return $post;
+    	return array(
+    		'success' => 'delete_success',
+    		'success_description' => 'Delete post with success'
+    	);
     }
 }

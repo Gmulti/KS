@@ -12,7 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
 use KS\ServerBundle\User\OAuth2UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique as MongoDBUnique;
 
 use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
@@ -23,9 +23,8 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 /**
  * @MongoDB\Document
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @UniqueEntity(
- *      fields={"email", "username"},
- * )
+ * @MongoDBUnique(fields="email")
+ * @MongoDBUnique(fields="username")
  *
  * @Serializer\XmlRoot("user")
  *
@@ -45,12 +44,14 @@ class User extends BaseUser
 
     /**
      * @MongoDB\String
+     * @Assert\Type(type="string", message="This {{ value }} is not a {{ type }} valid.")
      * @Expose
      */
     protected $lastname;
 
     /**
      * @MongoDB\String
+     * @Assert\Type(type="string", message="This {{ value }} is not a {{ type }} valid.")
      * @Expose
      */
     protected $firstname;

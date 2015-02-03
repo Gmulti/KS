@@ -1,6 +1,6 @@
 <?php
 
-namespace KS\PostBundle\Form\Type;
+namespace KS\UserBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Extension\DataCollector\EventListener\DataCollectorListener;
 
-class PostType extends AbstractType
+class UserType extends AbstractType
 {
 
     private $formConfig = array();
@@ -40,7 +40,7 @@ class PostType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class'      => 'KS\PostBundle\Document\Post',
+            'data_class'      => 'KS\UserBundle\Document\User',
             'csrf_protection' => false
         ));
 
