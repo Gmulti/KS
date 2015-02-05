@@ -173,12 +173,13 @@ class UsersController extends RestController
      * Get username from token
      * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
-     * @Get("/username/{token}")
+     * @Get("/username")
      *
      */
-    public function getUsernameByTokenAction($token){
+    public function getUsernameByTokenAction(Request $request){
         $view = FOSView::create();
       
+        $token = $this->getTokenFromRequest($request);
         $data = $this->getAccessTokenByTokenRequest($token);
 
         if ($data) {
