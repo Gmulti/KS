@@ -13,3 +13,7 @@ services:
             - "@doctrine_mongodb"
             - "%ksuser.user.class%"
             - "@form.factory"
+    ksuser.utils.usertoken:
+        class: KS\UserBundle\Utils\UserTokenUtils
+        arguments:
+            - "@doctrine_mongodb"

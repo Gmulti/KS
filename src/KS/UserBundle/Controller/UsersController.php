@@ -94,7 +94,7 @@ class UsersController extends RestController
         $view = FOSView::create();
 
 
-        if($this->isAccessToRequest($request, $user)){
+        if($this->container->get('ksuser.utils.usertoken')->isAccessToRequest($request, $user)){
             $updateUser = $this->container->get('ksuser.handler.user')->put(
                 $user, $request 
             );
@@ -179,8 +179,7 @@ class UsersController extends RestController
     public function getUsernameByTokenAction(Request $request){
         $view = FOSView::create();
       
-        $token = $this->getTokenFromRequest($request);
-        $data = $this->getAccessTokenByTokenRequest($token);
+        $data = $this->container->get('ksuser.utils.usertoken')->getAccessTokenByTokenRequest($request);
 
         if ($data) {
             $view->setStatusCode(200)->setData($data->getUsername());
@@ -231,15 +230,9 @@ class UsersController extends RestController
      */
     public function logoutAction(){
         $view = FOSView::create();
+        
+        $token = $this->container->get('ksuser.utils.usertoken')->getAccessTokenFromRequest($this->getRequest());
 
-        $request = $this->getRequest();
-        $regex = "/Bearer (.*)/";
-
-        if (preg_match($regex, $request->headers->get('authorization'), $matches) !== 1 ) {
-            $view->setStatusCode(404);
-        }
-
-        $token = $matches[1];
         $data = $this->get('doctrine_mongodb')
             ->getRepository('KSServerBundle:AccessToken')
             ->findOneByToken($token);
@@ -260,40 +253,5 @@ class UsersController extends RestController
         return $this->handleView($view);
     }
 
-    private function getTokenFromRequest(Request $request){
-        $request = $this->getRequest();
-        $regex = "/Bearer (.*)/";
-
-        if (preg_match($regex, $request->headers->get('authorization'), $matches) !== 1 ) {
-            return array(
-                'error' => 'no_token',
-                'error' => 'Token not found or is not valid'
-            );
-        }
-
-        return $matches[1];
-    }
-
-    private function getAccessTokenByTokenRequest($token){
-        return $this->get('doctrine_mongodb')
-            ->getRepository('KSServerBundle:AccessToken')
-            ->findOneByToken($token);
-    }
-
-    private function getTokenByUsername($username){
-        $data = $this->get('doctrine_mongodb')
-            ->getRepository('KSServerBundle:AccessToken')
-            ->findOneByUserId($username);
-
-        return $data;
-    }
-
-    private function isAccessToRequest($request, $user){
-
-        $token = $this->getTokenFromRequest($request);
-        $accessToken = $this->getAccessTokenByTokenRequest($token);
-
-        return ($accessToken->getUserId() === $user->getUsername() ) ? true : false;
-       
-    }
+    
 }

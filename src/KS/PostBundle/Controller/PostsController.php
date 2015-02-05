@@ -101,7 +101,9 @@ class PostsController extends RestController
     public function postPostAction(Request $request){
 
         $view = FOSView::create();
-
+        $user = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+        $request->request->set('user',$user);
+        
         $newPost = $this->container->get('kspost.handler.post')->post(
             $request
         );
