@@ -43,18 +43,18 @@ assetic:
         #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
 
 # Doctrine Configuration
-# doctrine:
-#     dbal:
-#         driver:   "%database_driver%"
-#         host:     "%database_host%"
-#         port:     "%database_port%"
-#         dbname:   "%database_name%"
-#         user:     "%database_user%"
-#         password: "%database_password%"
-#         charset:  UTF8
-#     orm:
-#         auto_generate_proxy_classes: "%kernel.debug%"
-#         auto_mapping: true
+doctrine:
+    dbal:
+        driver:   "%database_driver%"
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_mapping: true
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -65,45 +65,45 @@ swiftmailer:
     spool:     { type: memory }
 
 
-doctrine_mongodb:
-    default_database: gtd_it_komunity_store
-    connections:
-        default:
-            server: mongodb://localhost:27017
-            options: {}
-    document_managers:
-        default:
-            connection: 'default'
-            auto_mapping: true
-            mappings:
-                StofDoctrineExtensionsBundle: ~
-                KSUserBundle: ~
-                KSPostBundle: ~
-                KSMediaBundle: ~
-                KSAdvertBundle: ~
-                KSPageBundle: ~
-            filters:
-                softdeleteable:
-                    class: Gedmo\SoftDeleteable\Filter\ODM\SoftDeleteableFilter
-                    enabled: true
+# doctrine_mongodb:
+#     default_database: gtd_it_komunity_store
+#     connections:
+#         default:
+#             server: mongodb://localhost:27017
+#             options: {}
+#     document_managers:
+#         default:
+#             connection: 'default'
+#             auto_mapping: true
+#             mappings:
+#                 StofDoctrineExtensionsBundle: ~
+#                 KSUserBundle: ~
+#                 KSPostBundle: ~
+#                 KSMediaBundle: ~
+#                 KSAdvertBundle: ~
+#                 KSPageBundle: ~
+#             filters:
+#                 softdeleteable:
+#                     class: Gedmo\SoftDeleteable\Filter\ODM\SoftDeleteableFilter
+#                     enabled: true
 
-stof_doctrine_extensions:
-    default_locale: fr_FR
-    uploadable:
-        default_file_path:       %kernel.root_dir%/../web/uploads
-        mime_type_guesser_class: Stof\DoctrineExtensionsBundle\Uploadable\MimeTypeGuesserAdapter
-        default_file_info_class: Stof\DoctrineExtensionsBundle\Uploadable\UploadedFileInfo
-    mongodb:
-        default:
-            tree: true
-            timestampable: true
-            softdeleteable: true
+# stof_doctrine_extensions:
+#     default_locale: fr_FR
+#     uploadable:
+#         default_file_path:       %kernel.root_dir%/../web/uploads
+#         mime_type_guesser_class: Stof\DoctrineExtensionsBundle\Uploadable\MimeTypeGuesserAdapter
+#         default_file_info_class: Stof\DoctrineExtensionsBundle\Uploadable\UploadedFileInfo
+#     mongodb:
+#         default:
+#             tree: true
+#             timestampable: true
+#             softdeleteable: true
 
 
-fos_user:
-    db_driver: mongodb
-    firewall_name: main
-    user_class: KS\UserBundle\Document\User
+# fos_user:
+#     db_driver: orm
+#     firewall_name: main
+#     user_class: KS\UserBundle\Document\User
 
 # fos_elastica:
 #     clients:

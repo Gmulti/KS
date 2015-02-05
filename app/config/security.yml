@@ -15,19 +15,19 @@ security:
             pattern:    ^/api/v1
             stateless:  true
             anonymous: true  
-            oauth: true
+            # oauth: true
 
         api_public:
             pattern:    ^/api/public
             stateless:  true
             anonymous: true  
-            oauth: true
+            # oauth: true
 
-        api_admin:
-            pattern: ^/api/admin
-            stateless: true
-            anonymous: false
-            oauth: true
+        # api_admin:
+        #     pattern: ^/api/admin
+        #     stateless: true
+        #     anonymous: false
+            # oauth: true
 
     access_control:
         - { path: ^/api/v1, roles: ROLE_USER }
