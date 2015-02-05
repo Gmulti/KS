@@ -100,10 +100,10 @@ swiftmailer:
 #             softdeleteable: true
 
 
-# fos_user:
-#     db_driver: orm
-#     firewall_name: main
-#     user_class: KS\UserBundle\Document\User
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: KS\UserBundle\Entity\User
 
 # fos_elastica:
 #     clients:

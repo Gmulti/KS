@@ -2,18 +2,18 @@ parameters:
     ksuser.user.class: KS\UserBundle\Document\User
 
 services:
-    doctrine_mongo_db_param_converter:
-        class: Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter
-        arguments: ['@doctrine_mongodb']
-        tags:
-            - { name: request.param_converter, priority: -2, converter: doctrine_mongo_db_param_converter}
-    ksuser.handler.user:
-        class: KS\UserBundle\Handler\UserHandler
-        arguments:
-            - "@doctrine_mongodb"
-            - "%ksuser.user.class%"
-            - "@form.factory"
-    ksuser.utils.usertoken:
-        class: KS\UserBundle\Utils\UserTokenUtils
-        arguments:
-            - "@doctrine_mongodb"
+    # doctrine_mongo_db_param_converter:
+    #     class: Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter
+    #     arguments: ['@doctrine_mongodb']
+    #     tags:
+    #         - { name: request.param_converter, priority: -2, converter: doctrine_mongo_db_param_converter}
+    # ksuser.handler.user:
+    #     class: KS\UserBundle\Handler\UserHandler
+    #     arguments:
+    #         - "@doctrine_mongodb"
+    #         - "%ksuser.user.class%"
+    #         - "@form.factory"
+    # ksuser.utils.usertoken:
+    #     class: KS\UserBundle\Utils\UserTokenUtils
+    #     arguments:
+    #         - "@doctrine_mongodb"

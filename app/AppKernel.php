@@ -29,11 +29,11 @@ class AppKernel extends Kernel
             // new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
             // new FOS\ElasticaBundle\FOSElasticaBundle(),
-            // new FOS\UserBundle\FOSUserBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
             new FOS\RestBundle\FOSRestBundle(),
 
 
-            // new KS\UserBundle\KSUserBundle(),
+            new KS\UserBundle\KSUserBundle(),
             // new KS\PostBundle\KSPostBundle(),
             // new KS\PageBundle\KSPageBundle(),
             new KS\MediaBundle\KSMediaBundle(),
