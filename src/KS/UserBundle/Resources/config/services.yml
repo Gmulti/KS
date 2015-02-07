@@ -1,7 +1,13 @@
 parameters:
-    ksuser.user.class: KS\UserBundle\Document\User
+    ksuser.user.class: KS\UserBundle\Entity\User
 
 services:
+    oauth2.user_provider:
+        class: %oauth2.user_provider.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@security.encoder_factory"
+            - "@fos_user.user_manager"
     # doctrine_mongo_db_param_converter:
     #     class: Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\DoctrineParamConverter
     #     arguments: ['@doctrine_mongodb']
@@ -13,7 +19,7 @@ services:
     #         - "@doctrine_mongodb"
     #         - "%ksuser.user.class%"
     #         - "@form.factory"
-    # ksuser.utils.usertoken:
-    #     class: KS\UserBundle\Utils\UserTokenUtils
-    #     arguments:
-    #         - "@doctrine_mongodb"
+    ksuser.utils.usertoken:
+        class: KS\UserBundle\Utils\UserTokenUtils
+        arguments:
+            - "@doctrine.orm.entity_manager"

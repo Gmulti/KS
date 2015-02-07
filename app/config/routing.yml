@@ -14,30 +14,30 @@ komunity_store_media:
     resource: KS\MediaBundle\Controller\MediasController
     prefix: /api/public
 
-# komunity_store_post:
-#     type:     rest
-#     resource: KS\PostBundle\Controller\PostsController
-#     prefix: /api/v1
+komunity_store_post:
+    type:     rest
+    resource: KS\DealBundle\Controller\DealsController
+    prefix: /api/v1
 
-# komunity_store_user:
-#     type:     rest
-#     resource: KS\UserBundle\Controller\UsersController
-#     prefix: /api/v1
+komunity_store_user:
+    type:     rest
+    resource: KS\UserBundle\Controller\UsersController
+    prefix: /api/v1
 
-# komunity_store_user_public:
-#     type:     rest
-#     resource: KS\UserBundle\Controller\UsersRegisterController
-#     prefix: /api/public
+komunity_store_user_public:
+    type:     rest
+    resource: KS\UserBundle\Controller\UsersRegisterController
+    prefix: /api/public
 
-# komunity_store_user_admin:
-#     type:     rest
-#     resource: KS\UserBundle\Controller\UsersAdminController
-#     prefix: /api/admin/v1
+komunity_store_user_admin:
+    type:     rest
+    resource: KS\UserBundle\Controller\UsersAdminController
+    prefix: /api/admin/v1
 
-# oauth2_server:
-#     resource: "@KSServerBundle/Controller/"
-#     type:     annotation
-#     prefix:   /
+oauth2_server:
+    resource: "@OAuth2ServerBundle/Controller/"
+    type:     annotation
+    prefix:   /
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"

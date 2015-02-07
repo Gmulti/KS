@@ -1,0 +1,22 @@
+parameters:
+    ksdeal.deal.class: KS\DealBundle\Entity\Deal
+
+services:
+    ksdeal.type.user_selector:
+        class: KS\DealBundle\Form\DataTransformer\UserTransformerType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: user_selector }
+
+    ksdeal.type.media_selector:
+        class: KS\DealBundle\Form\DataTransformer\MediaTransformerType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: media_selector }
+
+    ksdeal.handler.deal:
+        class: KS\DealBundle\Handler\DealHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "%ksdeal.deal.class%"
+            - "@form.factory"

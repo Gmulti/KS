@@ -19,7 +19,7 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController as RestController;
 
-use KS\UserBundle\Document\User;
+use KS\UserBundle\Entity\User;
 
 /**
  *
@@ -40,7 +40,7 @@ class UsersController extends RestController
     {	
         $view = FOSView::create();
 
-        $data = $this->get('doctrine_mongodb')
+        $data = $this->getDoctrine()->getManager()
             ->getRepository('KSUserBundle:User')
             ->findAll();
 
@@ -155,7 +155,7 @@ class UsersController extends RestController
     public function getRoleAction($username){
 
         $view = FOSView::create();
-        $data = $this->get('doctrine_mongodb')
+        $data = $this->getDoctrine()->getManager()
             ->getRepository('KSUserBundle:User')
             ->findOneByUsername($username);
 
@@ -202,11 +202,11 @@ class UsersController extends RestController
     public function getRoleByTokenAction($token){
         $view = FOSView::create();
         
-        $data = $this->get('doctrine_mongodb')
+        $data = $this->getDoctrine()->getManager()
             ->getRepository('KSServerBundle:AccessToken')
             ->findOneByToken($token);
 
-        $user = $this->get('doctrine_mongodb')
+        $user = $this->getDoctrine()->getManager()
             ->getRepository('KSUserBundle:User')
             ->findOneByToken($data->getUserId());
 
@@ -233,16 +233,16 @@ class UsersController extends RestController
         
         $token = $this->container->get('ksuser.utils.usertoken')->getAccessTokenFromRequest($this->getRequest());
 
-        $data = $this->get('doctrine_mongodb')
+        $data = $this->getDoctrine()->getManager()
             ->getRepository('KSServerBundle:AccessToken')
             ->findOneByToken($token);
 
 
         if ($data) {
 
-            $dm = $this->get('doctrine_mongodb')->getManager();
-            $dm->remove($data);
-            $dm->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($data);
+            $em->flush();
 
             $view->setStatusCode(200);
         }

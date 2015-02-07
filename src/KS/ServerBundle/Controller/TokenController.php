@@ -4,11 +4,13 @@ namespace KS\ServerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use OAuth2\ServerBundle\Controller\TokenController as BaseController;
 
-class TokenController extends Controller
+class TokenController extends BaseController
 {
     /**
-     * @Route("/oauth/token", name="_token")
+     *
+     * @Route("/token", name="_token")
      */
     public function tokenAction()
     {
@@ -22,5 +24,4 @@ class TokenController extends Controller
 
         return $server->handleTokenRequest($this->get('oauth2.request'), $this->get('oauth2.response'));
     }
-
 }

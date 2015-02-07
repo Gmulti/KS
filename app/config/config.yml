@@ -65,39 +65,17 @@ swiftmailer:
     spool:     { type: memory }
 
 
-# doctrine_mongodb:
-#     default_database: gtd_it_komunity_store
-#     connections:
-#         default:
-#             server: mongodb://localhost:27017
-#             options: {}
-#     document_managers:
-#         default:
-#             connection: 'default'
-#             auto_mapping: true
-#             mappings:
-#                 StofDoctrineExtensionsBundle: ~
-#                 KSUserBundle: ~
-#                 KSPostBundle: ~
-#                 KSMediaBundle: ~
-#                 KSAdvertBundle: ~
-#                 KSPageBundle: ~
-#             filters:
-#                 softdeleteable:
-#                     class: Gedmo\SoftDeleteable\Filter\ODM\SoftDeleteableFilter
-#                     enabled: true
-
-# stof_doctrine_extensions:
-#     default_locale: fr_FR
-#     uploadable:
-#         default_file_path:       %kernel.root_dir%/../web/uploads
-#         mime_type_guesser_class: Stof\DoctrineExtensionsBundle\Uploadable\MimeTypeGuesserAdapter
-#         default_file_info_class: Stof\DoctrineExtensionsBundle\Uploadable\UploadedFileInfo
-#     mongodb:
-#         default:
-#             tree: true
-#             timestampable: true
-#             softdeleteable: true
+stof_doctrine_extensions:
+    default_locale: fr_FR
+    uploadable:
+        default_file_path:       %kernel.root_dir%/../web/uploads
+        mime_type_guesser_class: Stof\DoctrineExtensionsBundle\Uploadable\MimeTypeGuesserAdapter
+        default_file_info_class: Stof\DoctrineExtensionsBundle\Uploadable\UploadedFileInfo
+    orm:
+        default:
+            tree: true
+            timestampable: true
+            softdeleteable: true
 
 
 fos_user:

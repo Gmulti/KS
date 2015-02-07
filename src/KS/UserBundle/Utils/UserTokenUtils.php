@@ -4,17 +4,17 @@ namespace KS\UserBundle\Utils;
 
 use Symfony\Component\HttpFoundation\Request;
 
-use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
+use Doctrine\ORM\EntityManager;
 use KS\UserBundle\Document\User;
 
 
 class UserTokenUtils
 {
-    protected $om;
+    protected $em;
 
-    public function __construct(ManagerRegistry $om)
+    public function __construct(EntityManager $em)
     {
-        $this->om = $om;
+        $this->em = $em;
     }
 
     public function getTokenFromRequest(Request $request){
@@ -34,13 +34,13 @@ class UserTokenUtils
         
         $token = $this->getTokenFromRequest($request);
 
-        return $this->om
+        return $this->em
             ->getRepository('KSServerBundle:AccessToken')
             ->findOneByToken($token);
     }
 
     public function getTokenByUsername($username){
-        $data = $this->om
+        $data = $this->em
             ->getRepository('KSServerBundle:AccessToken')
             ->findOneByUserId($username);
 

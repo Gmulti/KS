@@ -7,18 +7,20 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use OAuth2\HttpFoundationBridge\Response;
-use KS\ServerBundle\Security\Document\AccessToken;
+use OAuth2\ServerBundle\Entity\AccessToken;
+
+use Doctrine\Common\Persistence\ObjectManager;
 
 class OAuthListener implements ListenerInterface
 {
     protected $securityContext;
     protected $authenticationManager;
 
-    public function __construct(SecurityContextInterface $securityContext, AuthenticationManagerInterface $authenticationManager, $mongo)
+    public function __construct(SecurityContextInterface $securityContext, AuthenticationManagerInterface $authenticationManager, ObjectManager $om)
     {
         $this->securityContext = $securityContext;
         $this->authenticationManager = $authenticationManager;
-        $this->mongo = $mongo;
+        $this->em = $om;
     }
 
     public function handle(GetResponseEvent $event)
@@ -31,17 +33,26 @@ class OAuthListener implements ListenerInterface
         }
 
         $token = $matches[1];
-        $token = $this->mongo->getRepository('KSServerBundle:AccessToken')->findOneByToken($token);
-        
-        try {
-            $authToken = $this->authenticationManager->authenticate($token);
-            $this->securityContext->setToken($authToken);
 
-        } catch (AuthenticationException $failed) {
+        $token = $this->em->getRepository('KSServerBundle:AccessToken')->findOneByToken($token);
+
+        if($token === null){
             $response = new Response();
-            $response->setError(401, 'token_expired', 'Token used has expired');
+            $response->setError(404, 'token_not_exist', 'Token not found');
             $event->setResponse($response);
-
         }
+        else{
+            try {
+                $authToken = $this->authenticationManager->authenticate($token);
+                $this->securityContext->setToken($authToken);
+
+            } catch (AuthenticationException $failed) {
+                $response = new Response();
+                $response->setError(401, 'token_expired', 'Token used has expired');
+                $event->setResponse($response);
+
+            }
+        }
+        
     }
 }

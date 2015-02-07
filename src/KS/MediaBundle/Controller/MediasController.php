@@ -19,8 +19,8 @@ use FOS\RestBundle\Controller\Annotations\Post as MethodPost;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController as RestController;
 
-use KS\PostBundle\Document\Post;
-use KS\MediaBundle\Document\Media;
+use KS\DealBundle\Entity\Deal;
+use KS\MediaBundle\Entity\Media;
 
 /**
  *

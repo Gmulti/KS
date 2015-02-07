@@ -21,24 +21,23 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            // new Doctrine\Bundle\MongoDBBundle\DoctrineMongoDBBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
-            // new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
-            // new FOS\ElasticaBundle\FOSElasticaBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new FOS\RestBundle\FOSRestBundle(),
+            new OAuth2\ServerBundle\OAuth2ServerBundle(),
 
 
             new KS\UserBundle\KSUserBundle(),
-            // new KS\PostBundle\KSPostBundle(),
+            new KS\DealBundle\KSDealBundle(),
             // new KS\PageBundle\KSPageBundle(),
             new KS\MediaBundle\KSMediaBundle(),
             new KS\AdvertBundle\KSAdvertBundle(),
-            // new KS\ServerBundle\KSServerBundle(),
+            new KS\ServerBundle\KSServerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

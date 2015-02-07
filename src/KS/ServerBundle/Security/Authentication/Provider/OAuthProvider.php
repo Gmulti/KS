@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\NonceExpiredException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use KS\ServerBundle\Document\AccessToken;
+use KS\ServerBundle\Entity\AccessToken;
 
 class OAuthProvider implements AuthenticationProviderInterface
 {
@@ -23,7 +23,6 @@ class OAuthProvider implements AuthenticationProviderInterface
 
     public function authenticate(TokenInterface $token)
     {
-
         $user = $this->userProvider->loadUserByUsername($token->getUserId());
 
         if ($user && $this->validateDigest($token->getExpires())) {
@@ -33,12 +32,12 @@ class OAuthProvider implements AuthenticationProviderInterface
             return $authenticatedToken;
         }   
 
+
         throw new AuthenticationException('The OAuth authentication failed.');
     }
 
     protected function validateDigest($expireToken)
-    {
-
+    {   
         if (time() - $expireToken->getTimeStamp() > 0) {
             return false;
         }
