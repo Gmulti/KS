@@ -137,7 +137,7 @@ class Media
      *
      * @return self
      */
-    public function setDeal(\KS\DealBundle\Document\Deal $deal)
+    public function setDeal(\KS\DealBundle\Entity\Deal $deal)
     {
         $this->deal = $deal;
         return $this;
@@ -146,7 +146,7 @@ class Media
     /**
      * Get deal
      *
-     * @return KS\DealBundle\Document\Post $deal
+     * @return KS\DealBundle\Entity\Post $deal
      */
     public function getDeal()
     {
@@ -303,7 +303,7 @@ class Media
     /**
      * Set user
      *
-     * @param KS\UserBundle\Document\User $user
+     * @param KS\UserBundle\Entity\User $user
      * @return self
      */
     public function setUser(User $user)
@@ -315,7 +315,7 @@ class Media
     /**
      * Get user
      *
-     * @return KS\UserBundle\Document\User $user
+     * @return KS\UserBundle\Entity\User $user
      */
     public function getUser()
     {
