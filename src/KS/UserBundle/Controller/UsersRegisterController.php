@@ -19,7 +19,7 @@ use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController;
 
-use KS\UserBundle\Document\User;
+use KS\UserBundle\Entity\User;
 
 /**
  *
