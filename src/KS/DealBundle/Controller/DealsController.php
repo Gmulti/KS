@@ -138,7 +138,7 @@ class DealsController extends RestController
     
         $view = FOSView::create();
 
-        $updatedeal = $this->container->get('ksdeal.handler.deal')->put(
+        $updateDeal = $this->container->get('ksdeal.handler.deal')->put(
             $deal, $request 
         );
 
@@ -169,7 +169,7 @@ class DealsController extends RestController
     
         $view = FOSView::create();
 
-        $deletedeal = $this->container->get('ksdeal.handler.deal')->delete(
+        $deleteDeal = $this->container->get('ksdeal.handler.deal')->delete(
             $deal 
         );
         

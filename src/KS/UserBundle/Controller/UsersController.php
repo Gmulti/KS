@@ -93,7 +93,6 @@ class UsersController extends RestController
     
         $view = FOSView::create();
 
-
         if($this->container->get('ksuser.utils.usertoken')->isAccessToRequest($request, $user)){
             $updateUser = $this->container->get('ksuser.handler.user')->put(
                 $user, $request 

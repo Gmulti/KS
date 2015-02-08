@@ -35,17 +35,7 @@ class DealHandler implements DealHandlerInterface{
 
 	 		if ($method !== "PUT") {
 
-	 			// Add deal on user
-		 		// $user = $deal->getUser();
-		 		// $user->addDeal($deal);
-
-		 		// Add media on user
-		 		// $medias = $deal->getMedias();
-		 		// if($medias !== null && !empty($medias)):
-		 		// 	$user->addMedia($medias);
-		 		// endif;
-		        // $this->em->persist($user);
-		        // $this->em->persist($user);
+		        $this->em->persist($deal);
 	 		}
 
 	        $this->em->flush();
@@ -136,29 +126,29 @@ class DealHandler implements DealHandlerInterface{
     public function delete(Deal $deal){
 
     	try {
-    		$user = $deal->getUser();
-    		$user->removeDeal($deal);
+   //  		$user = $deal->getUser();
+   //  		$user->removeDeal($deal);
 
-    		$media = $deal->getMedia();
-    		if(null !== $media){
-    			$user->removeMedia($media);
-    			$media->removeDeal();
-    			$media->removeUser();
-    		}
+   //  		$media = $deal->getMedia();
+   //  		if(null !== $media){
+   //  			$user->removeMedia($media);
+   //  			$media->removeDeal();
+   //  			$media->removeUser();
+   //  		}
     		
-			$deal->removeMedia();
-    		$deal->removeUser();
+			// $deal->removeMedia();
+   //  		$deal->removeUser();
 
-    		// Update user
-    		$this->em->getManager()->persist($user);
-    		$this->em->getManager()->flush();
+   //  		// Update user
+   //  		$this->em->getManager()->persist($user);
+   //  		$this->em->getManager()->flush();
     	
-    		// Remove
-    		if(null !== $media){
-    			$this->em->getManager()->remove($media);
-    		}
-    		$this->em->getManager()->remove($deal);
-    		$this->em->getManager()->flush();
+   //  		// Remove
+   //  		if(null !== $media){
+   //  			$this->em->getManager()->remove($media);
+   //  		}
+    		$this->em->remove($deal);
+    		$this->em->flush();
 
     	} catch (Exception $e) {
     		return array(

@@ -40,7 +40,7 @@ class UserType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class'      => 'KS\UserBundle\Document\User',
+            'data_class'      => 'KS\UserBundle\Entity\User',
             'csrf_protection' => false
         ));
 

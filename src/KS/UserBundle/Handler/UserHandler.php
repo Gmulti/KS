@@ -5,25 +5,27 @@ namespace KS\UserBundle\Handler;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
+
+use Doctrine\ORM\EntityManager;
 use KS\UserBundle\Form\Type\UserType;
-use KS\UserBundle\Document\User;
+use KS\UserBundle\Entity\User;
 use FOS\RestBundle\Request\ParamFetcher;
 
-use KS\PostBundle\Exception\InvalidFormException;
+use KS\DealBundle\Exception\InvalidFormException;
 
 class UserHandler implements UserHandlerInterface{
 
 	protected $formFactory;
 
-	public function __construct(ManagerRegistry $om, $entityClass, FormFactoryInterface $formFactory)
+	public function __construct(EntityManager $em, $entityClass, FormFactoryInterface $formFactory)
 	{
-	    $this->om = $om;
+	    $this->em = $em;
 	    $this->entityClass = $entityClass;
 	    $this->formFactory = $formFactory;
-	    $this->repository = $this->om->getRepository($this->entityClass);
+	    $this->repository = $this->em->getRepository($this->entityClass);
 	    $this->putConfig  = array('lastname','firstname','birthday');
 	}
+
 
 	private function processForm(User $user, Request $request, $method = "PUT"){
 		
@@ -34,10 +36,10 @@ class UserHandler implements UserHandlerInterface{
 
 	 		if ($method == "PUT") {
 		 		
-		        $this->om->getManager()->persist($user);
+		        $this->em->persist($user);
 	 		}
 
-	        $this->om->getManager()->flush();
+	        $this->em->flush();
 
 	        return $user;
 	    }
@@ -94,8 +96,8 @@ class UserHandler implements UserHandlerInterface{
     public function delete(User $user){
 
     	try {
-    		$this->om->getManager()->remove($user);
-    		$this->om->getManager()->flush();
+    		$this->em->remove($user);
+    		$this->em->flush();
 
     	} catch (Exception $e) {
     		return array(

@@ -5,7 +5,7 @@ namespace KS\UserBundle\Utils;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\ORM\EntityManager;
-use KS\UserBundle\Document\User;
+use KS\UserBundle\Entity\User;
 
 
 class UserTokenUtils
@@ -53,8 +53,7 @@ class UserTokenUtils
 
     public function isAccessToRequest(Request $request, User $user){
 
-        $token = $this->getTokenFromRequest($request);
-        $accessToken = $this->getAccessTokenByTokenRequest($token);
+        $accessToken = $this->getAccessTokenByTokenRequest($request);
 
         return ($accessToken->getUserId() === $user->getUsername() ) ? true : false;
        

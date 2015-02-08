@@ -13,12 +13,12 @@ services:
     #     arguments: ['@doctrine_mongodb']
     #     tags:
     #         - { name: request.param_converter, priority: -2, converter: doctrine_mongo_db_param_converter}
-    # ksuser.handler.user:
-    #     class: KS\UserBundle\Handler\UserHandler
-    #     arguments:
-    #         - "@doctrine_mongodb"
-    #         - "%ksuser.user.class%"
-    #         - "@form.factory"
+    ksuser.handler.user:
+        class: KS\UserBundle\Handler\UserHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "%ksuser.user.class%"
+            - "@form.factory"
     ksuser.utils.usertoken:
         class: KS\UserBundle\Utils\UserTokenUtils
         arguments:

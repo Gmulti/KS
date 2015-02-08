@@ -91,4 +91,8 @@ class AccessToken extends AbstractToken implements AccessTokenInterface
         $this->em->persist($accessToken);
         $this->em->flush();
     }
+
+    public function getCredentials(){
+        return '';
+    }
 }

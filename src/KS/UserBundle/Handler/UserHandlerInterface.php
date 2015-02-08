@@ -3,7 +3,7 @@
 namespace KS\UserBundle\Handler;
 
 use Symfony\Component\HttpFoundation\Request;
-use KS\UserBundle\Document\User;
+use KS\UserBundle\Entity\User;
 use FOS\RestBundle\Request\ParamFetcher;
 
 interface UserHandlerInterface
