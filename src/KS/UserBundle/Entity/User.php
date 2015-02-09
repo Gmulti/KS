@@ -126,6 +126,7 @@ class User extends BaseUser implements OAuth2UserInterface
         $this->medias = new ArrayCollection();
         $this->deals = new ArrayCollection();
         $this->dealsShared = new ArrayCollection();
+        $this->enabled = true;
     }
 
     /**

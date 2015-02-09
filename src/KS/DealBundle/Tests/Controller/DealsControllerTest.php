@@ -19,14 +19,14 @@ class PostsControllerTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testGetPost(){
+    public function testGetDeal(){
         
     }
 
-    public function testGetPosts()
+    public function testGetDeals()
     {
         $crawler = $this->client->request('GET', 
-            '/api/v1/posts.json',
+            '/api/v1/deals.json',
             array(),
             array(),
             $this->headers
