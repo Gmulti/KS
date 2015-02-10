@@ -14,20 +14,22 @@ class PostsControllerTest extends WebTestCase
 
     public function setUp()
     {
+        var_dump($_SERVER);
+        die();
         // LOCAL : tcwg6gajmqoksgswwws0wgsscgwssgc
         // 12345
-        $crawler = $this->client->request('GET', 
-            '/token',
-            array(
-                'grant_type' => 'password',
-                'client_id' => '317b47172',
-                'client_secret' => '598thil5yr4sgg00k08cww8gowcc8cg',
-                'username' => 'test',
-                'password' => 'test',
-                'scope' => 'public'
-            ),
-            array(),
-        );
+        // $crawler = $this->client->request('GET', 
+        //     '/token',
+        //     array(
+        //         'grant_type' => 'password',
+        //         'client_id' => '317b47172',
+        //         'client_secret' => '598thil5yr4sgg00k08cww8gowcc8cg',
+        //         'username' => 'test',
+        //         'password' => 'test',
+        //         'scope' => 'public'
+        //     ),
+        //     array(),
+        // );
 
         $response = $this->client->getResponse();
         $result = json_decode($response->getContent(), true);
