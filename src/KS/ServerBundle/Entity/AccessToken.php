@@ -29,7 +29,7 @@ class AccessToken extends AbstractToken
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    protected $user_id;
+    protected $userId;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -77,26 +77,26 @@ class AccessToken extends AbstractToken
     }
 
     /**
-     * Set user_id
+     * Set userId
      *
      * @param  string      $userId
      * @return AccessToken
      */
     public function setUserId($userId)
     {
-        $this->user_id = $userId;
+        $this->userId = $userId;
 
         return $this;
     }
 
     /**
-     * Get user_id
+     * Get userId
      *
      * @return string
      */
     public function getUserId()
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     /**

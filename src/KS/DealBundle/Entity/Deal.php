@@ -123,7 +123,6 @@ class Deal
         $this->likes = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->medias = new ArrayCollection();
-        $this->setEnabled(true);
     }
    
 

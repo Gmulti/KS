@@ -12,47 +12,71 @@ class PostsControllerTest extends WebTestCase
 
     protected $headers;
 
+    protected static $idDeal;
+
+    protected $username = 'test';
+
+    protected $password = 'test';
+
     public function setUp()
     {
-        var_dump($_SERVER);
-        die();
-        // LOCAL : tcwg6gajmqoksgswwws0wgsscgwssgc
-        // 12345
-        // $crawler = $this->client->request('GET', 
-        //     '/token',
-        //     array(
-        //         'grant_type' => 'password',
-        //         'client_id' => '317b47172',
-        //         'client_secret' => '598thil5yr4sgg00k08cww8gowcc8cg',
-        //         'username' => 'test',
-        //         'password' => 'test',
-        //         'scope' => 'public'
-        //     ),
-        //     array(),
-        // );
 
-        $response = $this->client->getResponse();
+        static::$kernel = static::createKernel();
+        static::$kernel->boot();
+        $this->em = static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+        
+        if ($_SERVER['PWD'] == "/var/www/api.komunitystore") {
+            $clientId = '317b47172';
+            $clientSecret = '598thil5yr4sgg00k08cww8gowcc8cg';
+        }
+        else{
+            $clientId = '12345';
+            $clientSecret = 'tcwg6gajmqoksgswwws0wgsscgwssgc';
+        }
+
+        $client = static::createClient();
+
+        $crawler = $client->request('POST', 
+            '/token',
+            array(
+                'grant_type' => 'password',
+                'client_id' => $clientId,
+                'client_secret' => $clientSecret,
+                'username' => $this->username,
+                'password' => $this->password,
+                'scope' => 'public'
+            ),
+            array()
+        );
+
+        $response = $client->getResponse();
         $result = json_decode($response->getContent(), true);
 
         $this->token = $result['access_token'];
-        $this->headers = array('Authorization' => 'Bearer ' . $this->token);
-        $this->client = static::createClient();
+        $this->headers = array('HTTP_AUTHORIZATION' => 'Bearer ' . $this->token);
     }
 
-    public function testGetDeal(){
-        
+    public function tearDown(){
+        $accessToken = $this->em->getRepository('KSServerBundle:AccessToken')
+                            ->findOneByToken($this->token);
+
+        $this->em->remove($accessToken);
+        $this->em->flush();
     }
 
-    public function testGetDeals()
+
+    public function testGetDealsOffsetLimitDefault()
     {
-        $crawler = $this->client->request('GET', 
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', 
             '/api/v1/deals.json',
             array(),
             array(),
             $this->headers
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
         $this->assertEquals(200, $response->getStatusCode(), 'Cela doit être une erreur serveur');
 
@@ -60,10 +84,61 @@ class PostsControllerTest extends WebTestCase
         $msg = json_decode($response->getContent(), true);
         $this->assertGreaterThanOrEqual(count($msg), 10);
 
+        if(isset($msg[0])):
+            self::$idDeal = $msg[0]['id'];
+        endif;
+
     }
 
-    public function testPostPost(){
-        
+    /**
+     * @depends testGetDealsOffsetLimitDefault
+     */
+    public function testGetDeal(){
+    
+        if(!empty(self::$idDeal)):
+            $client = static::createClient();
+            $crawler = $client->request('GET', 
+                '/api/v1/deals/' . self::$idDeal . '.json',
+                array(),
+                array(),
+                $this->headers
+            );
+
+            $response = $client->getResponse();
+            $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+            $this->assertEquals(200, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+
+            $msg = json_decode($response->getContent(), true);
+        else:
+            $this->assertTrue(false);
+        endif;
     }
+
+    public function testPostDealNoMedia(){
+        $client = static::createClient();
+
+        $crawler = $client->request('POST', 
+            '/api/v1/deals.json',
+            array(
+                'user' => $this->username,
+                'content'  => 'Contenu test'
+            ),
+            array(),
+            $this->headers
+        );
+
+        $response = $client->getResponse();
+        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+        $this->assertEquals(200, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+
+        $msg = json_decode($response->getContent(), true);
+
+        $this->assertEquals($msg['user']['username'], $this->username);
+        $this->assertEquals($msg['content'], 'Contenu test');
+    }
+
+
+
+
 
 }
