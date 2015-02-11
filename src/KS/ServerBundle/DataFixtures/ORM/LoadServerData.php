@@ -7,6 +7,8 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use KS\ServerBundle\Entity\Client;
 
 class LoadServerData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
