@@ -31,13 +31,17 @@ class LoadServerData extends AbstractFixture implements OrderedFixtureInterface,
      */
     public function load(ObjectManager $manager)
     {
-    	$clientManager = $this->container->get('oauth2.client_manager');
 
+        $scopeManager = $container->get('oauth2.scope_manager');
+        $scopeManager->createScope('desktop', 'scope desktop');
+        $scopeManager->createScope('mobileIOS', 'scope IOS');
+
+    	$clientManager = $this->container->get('oauth2.client_manager');
    	 	$clientDesktop = $clientManager->createClient(
             '317b47172',
             array('dev.komunitystore.dev'),
             array('password','refresh_token'),
-            'desktop'
+            array('desktop')
         );
 
         // $clientIOS = $clientManager->createClient(
