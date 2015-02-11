@@ -32,7 +32,7 @@ class LoadServerData extends AbstractFixture implements OrderedFixtureInterface,
     public function load(ObjectManager $manager)
     {
 
-        $scopeManager = $container->get('oauth2.scope_manager');
+        $scopeManager = $this->container->get('oauth2.scope_manager');
         $scopeManager->createScope('desktop', 'scope desktop');
         $scopeManager->createScope('mobileIOS', 'scope IOS');
 
