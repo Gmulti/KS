@@ -36,7 +36,7 @@ class LoadServerData extends AbstractFixture implements OrderedFixtureInterface,
    	 	$clientDesktop = $clientManager->createClient(
             '317b47172',
             array('dev.komunitystore.dev'),
-            'password',
+            array('password','refresh_token'),
             'desktop'
         );
 
