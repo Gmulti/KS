@@ -33,7 +33,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $adminTest->setRoles(array('ROLE_ADMIN'));
         $adminTest->setPlainPassword('testadmin');
 
-        $manager->persist($user);
+        $manager->persist($userTest);
+        $manager->persist($adminTest);
         $manager->flush();
 
         $this->addReference('user-test', $userTest);
