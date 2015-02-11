@@ -4,6 +4,8 @@ namespace KS\DealBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use KS\DealBundle\Entity\Deal;
 
 class LoadDealData extends AbstractFixture implements OrderedFixtureInterface
