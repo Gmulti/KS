@@ -26,7 +26,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
 
         $adminTest = new User();
         $adminTest->setEmail('testadmin@ks.com');
-        $userTest->setUsername('testadmin');
+        $adminTest->setUsername('testadmin');
         $adminTest->setFirstname('de test admin');
         $adminTest->setLastname('Compte');
         $adminTest->setEnabled(true);
