@@ -66,13 +66,13 @@ class User extends BaseUser implements OAuth2UserInterface
     protected $medias;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Deal", cascade={"persist"}, mappedBy="usersShared")
+     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Deal", cascade={"all"}, mappedBy="usersShared")
      * @ORM\JoinColumn(nullable=true)
      */
     protected $dealsShared;
 
     /**
-     * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Deal", mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Deal", mappedBy="user", cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
      * @Expose()
      */
@@ -85,7 +85,7 @@ class User extends BaseUser implements OAuth2UserInterface
     protected $scopes;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Deal", cascade={"persist"}, mappedBy="likes")
+     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Deal", cascade={"all"}, mappedBy="likes")
      * @ORM\JoinColumn(nullable=true)
      */
     protected $usersLikes;
