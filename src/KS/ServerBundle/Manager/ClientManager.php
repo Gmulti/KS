@@ -5,6 +5,7 @@ namespace KS\ServerBundle\Manager;
 use Doctrine\ORM\EntityManager;
 use OAuth2\ServerBundle\Exception\ScopeNotFoundException;
 use KS\ServerBundle\Entity\Client;
+use OAuth2\ServerBundle\Manager\ScopeManagerInterface;
 
 class ClientManager
 {
