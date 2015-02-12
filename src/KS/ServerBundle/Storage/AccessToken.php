@@ -5,15 +5,16 @@ namespace KS\ServerBundle\Storage;
 use OAuth2\Storage\AccessTokenInterface;
 use Doctrine\ORM\EntityManager;
 use KS\ServerBundle\Entity\Client;
+use KS\ServerBundle\Entity\AccessToken as AT;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 class AccessToken extends AbstractToken implements AccessTokenInterface
 {
     private $em;
 
-    public function __construct(EntityManager $EntityManager)
+    public function __construct(EntityManager $entityManager)
     {
-        $this->em = $EntityManager;
+        $this->em = $entityManager;
     }
 
     /**
@@ -80,7 +81,7 @@ class AccessToken extends AbstractToken implements AccessTokenInterface
         }
 
         // Create Access Token
-        $accessToken = new \KS\ServerBundle\Entity\AccessToken();
+        $accessToken = new AT();
         $accessToken->setToken($oauth_token);
         $accessToken->setClient($client);
         $accessToken->setUserId($user_id);
