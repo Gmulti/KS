@@ -130,6 +130,7 @@ liip_imagine:
             filters:
                 thumbnail: { size: [418, 418], mode: inset }
 
+
 nelmio_cors:
     defaults:
         allow_credentials: true
