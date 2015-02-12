@@ -40,7 +40,8 @@ class ClientManager
     {
         $client = new Client();
         $client->setClientId($identifier);
-        $client->setClientSecret($this->generateSecret());
+        $secret = $this->generateSecret();
+        $client->setClientSecret($secret);
         $client->setRedirectUri($redirect_uris);
         $client->setGrantTypes($grant_types);
 
@@ -57,7 +58,7 @@ class ClientManager
 
         $clientOauth = new OAuthClient();
         $clientOauth->setClientId($identifier);
-        $clientOauth->setClientSecret($this->generateSecret());
+        $clientOauth->setClientSecret($secret);
         $clientOauth->setRedirectUri($redirect_uris);
         $clientOauth->setGrantTypes($grant_types);
         $clientOauth->setScopes($scopes);
