@@ -130,7 +130,6 @@ liip_imagine:
             filters:
                 thumbnail: { size: [418, 418], mode: inset }
 
-
 nelmio_cors:
     defaults:
         allow_credentials: true
@@ -138,3 +137,10 @@ nelmio_cors:
         allow_headers: ['*']
         allow_methods: ['POST', 'PUT', 'GET', 'DELETE','OPTIONS']
         max_age: 3600
+    paths:
+        '^/':
+            allow_credentials: true
+            allow_origin: ['*']
+            allow_headers: ['*']
+            allow_methods: ['POST', 'PUT', 'GET', 'DELETE','OPTIONS']
+            max_age: 3600
