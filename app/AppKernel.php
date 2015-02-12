@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
+            new Nelmio\CorsBundle\NelmioCorsBundle(),
 
 
             new KS\UserBundle\KSUserBundle(),
