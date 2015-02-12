@@ -5,6 +5,7 @@ namespace KS\ServerBundle\Manager;
 use Doctrine\ORM\EntityManager;
 use OAuth2\ServerBundle\Exception\ScopeNotFoundException;
 use KS\ServerBundle\Entity\Client;
+use OAuth2\ServerBundle\Entity\Client as OAuthClient;
 use OAuth2\ServerBundle\Manager\ScopeManagerInterface;
 
 class ClientManager
@@ -54,7 +55,15 @@ class ClientManager
 
         $client->setScopes($scopes);
 
+        $clientOauth = new OAuthClient();
+        $clientOauth->setClientId($identifier);
+        $clientOauth->setClientSecret($this->generateSecret());
+        $clientOauth->setRedirectUri($redirect_uris);
+        $clientOauth->setGrantTypes($grant_types);
+        $clientOauth->setScopes($scopes);
+
         // Store Client
+        $this->em->persist($clientOauth);
         $this->em->persist($client);
         $this->em->flush();
 
