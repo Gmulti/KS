@@ -3,6 +3,7 @@
     <parameters>
         <parameter key="oauth2.user_provider.class">KS\UserBundle\Security\UserProvider</parameter>
         <parameter key="oauth2.storage.access_token.class">KS\ServerBundle\Storage\AccessToken</parameter>
+        <parameter key="oauth2.client_manager.class">KS\ServerBundle\Manager\ClientManager</parameter>
     </parameters>
     <services>
 
