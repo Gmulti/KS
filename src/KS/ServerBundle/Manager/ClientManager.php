@@ -63,6 +63,7 @@ class ClientManager
         $clientOauth->setGrantTypes($grant_types);
         $clientOauth->setScopes($scopes);
 
+
         // Store Client
         $this->em->persist($clientOauth);
         $this->em->persist($client);

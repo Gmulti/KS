@@ -32,7 +32,6 @@ class AppKernel extends Kernel
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
 
-
             new KS\UserBundle\KSUserBundle(),
             new KS\DealBundle\KSDealBundle(),
             new KS\PageBundle\KSPageBundle(),

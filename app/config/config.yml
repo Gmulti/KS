@@ -125,7 +125,7 @@ liip_imagine:
             quality: 75
             filters:
                 relative_resize: { widen: 50 }
-        image_post:
+        image_deal:
             quality: 75
             filters:
                 thumbnail: { size: [418, 418], mode: inset }
