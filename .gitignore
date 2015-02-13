@@ -1,6 +1,5 @@
 # Bootstrap
 app/bootstrap*
-composer.lock
 
 # Symfony directories
 vendor/*
@@ -16,6 +15,7 @@ app/config/parameters.yml
 
 # Composer
 composer.phar
+composer.lock
 app/var/
 bin/phpunit
 bin/security-checker

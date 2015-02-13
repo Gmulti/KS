@@ -19,7 +19,6 @@
         "sensio/distribution-bundle": "~3.0",
         "sensio/framework-extra-bundle": "~3.0",
         "incenteev/composer-parameter-handler": "~2.0",
-
         "jms/serializer-bundle": "0.13.*",
         "jms/security-extra-bundle": "dev-master",
         "friendsofsymfony/rest-bundle": "1.4.*",
