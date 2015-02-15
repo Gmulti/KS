@@ -16,24 +16,16 @@ use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 
 
-// @Hateoas\Relation("comments", 
- // *     href = "expr('deals/' ~ object.getId() ~ '/comments')",
- // *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getComments() !== null)")
- // * )
-
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="ks_deal")
- *
+ * @ORM\Table(name="ks_comments")
  * 
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- *
- * @Hateoas\Relation("user", href = "expr('users/' ~ object.getUser() )")
  * 
  * @ExclusionPolicy("all") 
  */
-class Deal
+class Comment
 {
     /**
      * @ORM\Id
@@ -51,20 +43,14 @@ class Deal
 
 
     /**
-     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="deal")
+     * @ORM\OneToOne(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="comment")
      * @ORM\JoinColumn(nullable=true)
      * @Expose()
      */
     protected $medias;
 
     /**
-     * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Comment", mappedBy="deal")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    protected $comments;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="KS\UserBundle\Entity\User", inversedBy="deals", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="KS\UserBundle\Entity\User", inversedBy="comments", cascade={"persist"})
      * @Assert\NotBlank()
      * @Assert\Type(type="KS\UserBundle\Entity\User")
      * @Expose()
@@ -72,31 +58,11 @@ class Deal
     protected $user;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Expose()
-     */
-    protected $url;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="dealsShared")
-     * @ORM\JoinTable(name="users_shared")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    protected $usersShared;
-
-
-    /**
      * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="usersLikes")
      * @ORM\JoinColumn(nullable=true)
      */
     protected $likes;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     *
-     * @Expose()
-     */
-    protected $price;
 
     /**
      * @var date $created
@@ -125,16 +91,9 @@ class Deal
 
     public function __construct()
     {
-        $this->usersShared = new ArrayCollection();
         $this->likes = new ArrayCollection();
-        $this->comments = new ArrayCollection();
-        $this->medias = new ArrayCollection();
     }
    
-
-    public function __toString(){
-        return $this->content;
-    }
 
     /**
      * Get id
@@ -150,7 +109,7 @@ class Deal
      * Set content
      *
      * @param string $content
-     * @return Deal
+     * @return Comment
      */
     public function setContent($content)
     {
@@ -170,56 +129,10 @@ class Deal
     }
 
     /**
-     * Set url
-     *
-     * @param string $url
-     * @return Deal
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
-    /**
-     * Get url
-     *
-     * @return string 
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * Set price
-     *
-     * @param float $price
-     * @return Deal
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * Get price
-     *
-     * @return float 
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
      * Set created
      *
      * @param \DateTime $created
-     * @return Deal
+     * @return Comment
      */
     public function setCreated($created)
     {
@@ -242,7 +155,7 @@ class Deal
      * Set updated
      *
      * @param \DateTime $updated
-     * @return Deal
+     * @return Comment
      */
     public function setUpdated($updated)
     {
@@ -265,7 +178,7 @@ class Deal
      * Set deletedAt
      *
      * @param \DateTime $deletedAt
-     * @return Deal
+     * @return Comment
      */
     public function setDeletedAt($deletedAt)
     {
@@ -285,32 +198,22 @@ class Deal
     }
 
     /**
-     * Add medias
+     * Set medias
      *
      * @param \KS\MediaBundle\Entity\Media $medias
-     * @return Deal
+     * @return Comment
      */
-    public function addMedia(\KS\MediaBundle\Entity\Media $medias)
+    public function setMedias(\KS\MediaBundle\Entity\Media $medias = null)
     {
-        $this->medias[] = $medias;
+        $this->medias = $medias;
 
         return $this;
     }
 
     /**
-     * Remove medias
-     *
-     * @param \KS\MediaBundle\Entity\Media $medias
-     */
-    public function removeMedia(\KS\MediaBundle\Entity\Media $medias)
-    {
-        $this->medias->removeElement($medias);
-    }
-
-    /**
      * Get medias
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \KS\MediaBundle\Entity\Media 
      */
     public function getMedias()
     {
@@ -321,7 +224,7 @@ class Deal
      * Set user
      *
      * @param \KS\UserBundle\Entity\User $user
-     * @return Deal
+     * @return Comment
      */
     public function setUser(\KS\UserBundle\Entity\User $user = null)
     {
@@ -341,43 +244,10 @@ class Deal
     }
 
     /**
-     * Add usersShared
-     *
-     * @param \KS\UserBundle\Entity\User $usersShared
-     * @return Deal
-     */
-    public function addUsersShared(\KS\UserBundle\Entity\User $usersShared)
-    {
-        $this->usersShared[] = $usersShared;
-
-        return $this;
-    }
-
-    /**
-     * Remove usersShared
-     *
-     * @param \KS\UserBundle\Entity\User $usersShared
-     */
-    public function removeUsersShared(\KS\UserBundle\Entity\User $usersShared)
-    {
-        $this->usersShared->removeElement($usersShared);
-    }
-
-    /**
-     * Get usersShared
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUsersShared()
-    {
-        return $this->usersShared;
-    }
-
-    /**
      * Add likes
      *
      * @param \KS\UserBundle\Entity\User $likes
-     * @return Deal
+     * @return Comment
      */
     public function addLike(\KS\UserBundle\Entity\User $likes)
     {
@@ -404,38 +274,5 @@ class Deal
     public function getLikes()
     {
         return $this->likes;
-    }
-
-    /**
-     * Add comments
-     *
-     * @param \KS\DealBundle\Entity\Comment $comments
-     * @return Deal
-     */
-    public function addComment(\KS\DealBundle\Entity\Comment $comments)
-    {
-        $this->comments[] = $comments;
-
-        return $this;
-    }
-
-    /**
-     * Remove comments
-     *
-     * @param \KS\DealBundle\Entity\Comment $comments
-     */
-    public function removeComment(\KS\DealBundle\Entity\Comment $comments)
-    {
-        $this->comments->removeElement($comments);
-    }
-
-    /**
-     * Get comments
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getComments()
-    {
-        return $this->comments;
     }
 }

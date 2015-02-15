@@ -79,6 +79,13 @@ class User extends BaseUser implements OAuth2UserInterface
     protected $deals;
 
     /**
+     * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Comment", mappedBy="user", cascade={"all"})
+     * @ORM\JoinColumn(nullable=true)
+     * @Expose()
+     */
+    protected $comments;
+
+    /**
      * @ORM\Column(type="array")
      * @Expose()
      */
@@ -452,5 +459,38 @@ class User extends BaseUser implements OAuth2UserInterface
     public function getUsersLikes()
     {
         return $this->usersLikes;
+    }
+
+    /**
+     * Add comments
+     *
+     * @param \KS\DealBundle\Entity\Comment $comments
+     * @return User
+     */
+    public function addComment(\KS\DealBundle\Entity\Comment $comments)
+    {
+        $this->comments[] = $comments;
+
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \KS\DealBundle\Entity\Comment $comments
+     */
+    public function removeComment(\KS\DealBundle\Entity\Comment $comments)
+    {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 }
