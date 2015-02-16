@@ -98,6 +98,12 @@ class User extends BaseUser implements OAuth2UserInterface
     protected $usersLikes;
 
     /**
+     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Comment", cascade={"all"}, mappedBy="likesComment")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $usersLikesComment;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Expose()
      */
@@ -179,6 +185,7 @@ class User extends BaseUser implements OAuth2UserInterface
     {
         // We don't hold anything sensitivie, do nothing
     }
+
 
 
     /**
@@ -429,6 +436,39 @@ class User extends BaseUser implements OAuth2UserInterface
     }
 
     /**
+     * Add comments
+     *
+     * @param \KS\DealBundle\Entity\Comment $comments
+     * @return User
+     */
+    public function addComment(\KS\DealBundle\Entity\Comment $comments)
+    {
+        $this->comments[] = $comments;
+
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \KS\DealBundle\Entity\Comment $comments
+     */
+    public function removeComment(\KS\DealBundle\Entity\Comment $comments)
+    {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
      * Add usersLikes
      *
      * @param \KS\DealBundle\Entity\Deal $usersLikes
@@ -462,35 +502,35 @@ class User extends BaseUser implements OAuth2UserInterface
     }
 
     /**
-     * Add comments
+     * Add usersLikesComment
      *
-     * @param \KS\DealBundle\Entity\Comment $comments
+     * @param \KS\DealBundle\Entity\Comment $usersLikesComment
      * @return User
      */
-    public function addComment(\KS\DealBundle\Entity\Comment $comments)
+    public function addUsersLikesComment(\KS\DealBundle\Entity\Comment $usersLikesComment)
     {
-        $this->comments[] = $comments;
+        $this->usersLikesComment[] = $usersLikesComment;
 
         return $this;
     }
 
     /**
-     * Remove comments
+     * Remove usersLikesComment
      *
-     * @param \KS\DealBundle\Entity\Comment $comments
+     * @param \KS\DealBundle\Entity\Comment $usersLikesComment
      */
-    public function removeComment(\KS\DealBundle\Entity\Comment $comments)
+    public function removeUsersLikesComment(\KS\DealBundle\Entity\Comment $usersLikesComment)
     {
-        $this->comments->removeElement($comments);
+        $this->usersLikesComment->removeElement($usersLikesComment);
     }
 
     /**
-     * Get comments
+     * Get usersLikesComment
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getComments()
+    public function getUsersLikesComment()
     {
-        return $this->comments;
+        return $this->usersLikesComment;
     }
 }

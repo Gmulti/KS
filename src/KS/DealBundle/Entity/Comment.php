@@ -19,7 +19,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="ks_comments")
+ * @ORM\Table(name="ks_comment")
  * 
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 
@@ -27,6 +27,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
  */
 class Comment
 {
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -34,6 +35,20 @@ class Comment
      * @Expose()
      */
     protected $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KS\DealBundle\Entity\Deal", inversedBy="comments", cascade={"persist"}) 
+     * @Assert\NotBlank()
+     * @Assert\Type(type="KS\UserBundle\Entity\User")
+     */
+    protected $deal;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KS\UserBundle\Entity\User", inversedBy="comments", cascade={"persist"})
+     * @Assert\NotBlank()
+     * @Assert\Type(type="KS\UserBundle\Entity\User")
+     */
+    protected $user;
 
     /**
      * @ORM\Column(type="string", length=160)
@@ -48,20 +63,14 @@ class Comment
      * @Expose()
      */
     protected $medias;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="KS\UserBundle\Entity\User", inversedBy="comments", cascade={"persist"})
-     * @Assert\NotBlank()
-     * @Assert\Type(type="KS\UserBundle\Entity\User")
-     * @Expose()
-     */
-    protected $user;
+ 
 
     /**
      * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="usersLikes")
      * @ORM\JoinColumn(nullable=true)
+     * @Expose()
      */
-    protected $likes;
+    protected $usersLikesComment;
 
 
     /**
@@ -94,6 +103,7 @@ class Comment
         $this->likes = new ArrayCollection();
     }
    
+
 
     /**
      * Get id
@@ -244,35 +254,35 @@ class Comment
     }
 
     /**
-     * Add likes
+     * Add usersLikesComment
      *
-     * @param \KS\UserBundle\Entity\User $likes
+     * @param \KS\UserBundle\Entity\User $usersLikesComment
      * @return Comment
      */
-    public function addLike(\KS\UserBundle\Entity\User $likes)
+    public function addUsersLikesComment(\KS\UserBundle\Entity\User $usersLikesComment)
     {
-        $this->likes[] = $likes;
+        $this->usersLikesComment[] = $usersLikesComment;
 
         return $this;
     }
 
     /**
-     * Remove likes
+     * Remove usersLikesComment
      *
-     * @param \KS\UserBundle\Entity\User $likes
+     * @param \KS\UserBundle\Entity\User $usersLikesComment
      */
-    public function removeLike(\KS\UserBundle\Entity\User $likes)
+    public function removeUsersLikesComment(\KS\UserBundle\Entity\User $usersLikesComment)
     {
-        $this->likes->removeElement($likes);
+        $this->usersLikesComment->removeElement($usersLikesComment);
     }
 
     /**
-     * Get likes
+     * Get usersLikesComment
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getLikes()
+    public function getUsersLikesComment()
     {
-        return $this->likes;
+        return $this->usersLikesComment;
     }
 }

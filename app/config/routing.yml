@@ -1,35 +1,28 @@
-komunity_store_advert:
+_ks_advert:
     resource: "@KSAdvertBundle/Controller/"
     type:     annotation
     prefix:   /
 
 
-# komunity_store_page:
-#     resource: "@KSPageBundle/Controller/"
-#     type:     annotation
-#     prefix:   /
-
-komunity_store_media:
+_ks_media:
     type:     rest
     resource: KS\MediaBundle\Controller\MediasController
-    prefix: /api/public
 
-komunity_store_post:
-    type:     rest
-    resource: KS\DealBundle\Controller\DealsController
-    prefix: /api/v1
+_ks_deal:
+    resource: "@KSDealBundle/Resources/config/routing.yml"
+    type: rest
 
-komunity_store_user:
+_ks_user:
     type:     rest
     resource: KS\UserBundle\Controller\UsersController
     prefix: /api/v1
 
-komunity_store_user_public:
+_ks_user_public:
     type:     rest
     resource: KS\UserBundle\Controller\UsersRegisterController
     prefix: /api/public
 
-komunity_store_user_admin:
+_ks_user_admin:
     type:     rest
     resource: KS\UserBundle\Controller\UsersAdminController
     prefix: /api/admin/v1

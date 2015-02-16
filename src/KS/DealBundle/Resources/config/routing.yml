@@ -1,0 +1,9 @@
+ks_deal:
+    type:     rest
+    resource: KS\DealBundle\Controller\DealsController
+    prefix: /api/v1
+
+ks_deal_comment:
+    type:     rest
+    parent: ks_deal
+    resource: KS\DealBundle\Controller\CommentsController

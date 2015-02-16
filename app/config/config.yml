@@ -76,6 +76,8 @@ stof_doctrine_extensions:
             tree: true
             timestampable: true
             softdeleteable: true
+            sluggable: true
+            translatable: true
 
 
 fos_user:

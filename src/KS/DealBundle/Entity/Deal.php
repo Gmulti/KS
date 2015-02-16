@@ -51,14 +51,14 @@ class Deal
 
 
     /**
-     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="deal")
+     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="deal",  cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
      * @Expose()
      */
     protected $medias;
 
     /**
-     * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Comment", mappedBy="deal")
+     * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Comment", mappedBy="deal",  cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
      */
     protected $comments;

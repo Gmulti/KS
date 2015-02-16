@@ -81,11 +81,12 @@ class DealsControllerTest extends WebTestCase
         );
 
         $response = $client->getResponse();
+        $msg = json_decode($response->getContent(), true);
+
         $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
         $this->assertEquals(200, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
 
         // Test if result default offset : 0 / limit 10
-        $msg = json_decode($response->getContent(), true);
         $this->assertGreaterThanOrEqual(count($msg), 10);
 
         if(isset($msg[0])):

@@ -32,11 +32,7 @@ class DealsController extends RestController
 {
     
     /**
-     * Return a deals list
-     *
-     * @return FOSView
-     * @Secure(roles="ROLE_USER")
-     * @Route(requirements={"_format"="json|xml"})
+     * Return deals list
      *
      * @QueryParam(name="offset", requirements="\d+", default="0", description="Offset deals")
      * @QueryParam(name="limit", requirements="\d+", default="10", description="Limit deals")
@@ -67,10 +63,6 @@ class DealsController extends RestController
     /**
      * Return a Deal
      *
-     * @return FOSView
-     * @Secure(roles="ROLE_USER")
-     * @Route(requirements={"_format"="json|xml"})
-     *
      * @ParamConverter("Deal")
      */
     public function getDealAction(Deal $deal){
@@ -94,9 +86,6 @@ class DealsController extends RestController
   
     /**
      * Create a Deal
-     *
-     * @return FOSView
-     * @Secure(roles="ROLE_USER")
      */
     public function postDealAction(Request $request){
 
@@ -128,9 +117,6 @@ class DealsController extends RestController
 
     /**
      * Edit a Deal
-     *
-     * @return FOSView
-     * @Secure(roles="ROLE_USER")
      * @ParamConverter("Deal")
      *
      */
@@ -158,10 +144,7 @@ class DealsController extends RestController
     }
 
     /**
-     * Edit a Deal
-     *
-     * @return FOSView
-     * @Secure(roles="ROLE_USER")
+     * Delete a Deal
      * @ParamConverter("Deal")
      *
      */
