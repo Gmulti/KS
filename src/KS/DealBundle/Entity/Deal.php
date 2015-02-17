@@ -84,6 +84,11 @@ class Deal
      */
     protected $usersShared;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Category", cascade={"persist"}, inversedBy="deals")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $categories;
 
     /**
      * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="usersLikes")
@@ -129,6 +134,7 @@ class Deal
         $this->likes = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->medias = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
    
 
@@ -437,5 +443,38 @@ class Deal
     public function getComments()
     {
         return $this->comments;
+    }
+
+    /**
+     * Add categories
+     *
+     * @param \KS\DealBundle\Entity\Category $categories
+     * @return Deal
+     */
+    public function addCategory(\KS\DealBundle\Entity\Category $categories)
+    {
+        $this->categories[] = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \KS\DealBundle\Entity\Category $categories
+     */
+    public function removeCategory(\KS\DealBundle\Entity\Category $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

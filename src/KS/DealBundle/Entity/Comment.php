@@ -285,4 +285,27 @@ class Comment
     {
         return $this->usersLikesComment;
     }
+
+    /**
+     * Set deal
+     *
+     * @param \KS\DealBundle\Entity\Deal $deal
+     * @return Comment
+     */
+    public function setDeal(\KS\DealBundle\Entity\Deal $deal = null)
+    {
+        $this->deal = $deal;
+
+        return $this;
+    }
+
+    /**
+     * Get deal
+     *
+     * @return \KS\DealBundle\Entity\Deal 
+     */
+    public function getDeal()
+    {
+        return $this->deal;
+    }
 }

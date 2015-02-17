@@ -77,7 +77,6 @@ stof_doctrine_extensions:
             timestampable: true
             softdeleteable: true
             sluggable: true
-            translatable: true
 
 
 fos_user:
@@ -87,23 +86,6 @@ fos_user:
     registration:
         confirmation:
             enabled: false
-
-# fos_elastica:
-#     clients:
-#         default: { host: localhost, port: 9200 }
-#     indexes:
-#         search:
-#             types:
-#                 user:
-#                     mappings:
-#                         name: ~
-#                     persistence:
-#                         driver: mongodb
-#                         model: KS\UserBundle\Document\User
-#                         provider: ~
-#                         listener:
-#                             immediate: ~
-#                         finder: ~
 
 fos_rest:
     routing_loader:
