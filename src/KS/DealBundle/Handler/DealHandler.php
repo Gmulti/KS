@@ -16,13 +16,15 @@ class DealHandler implements DealHandlerInterface{
 
 	protected $formFactory;
 
+	protected $configFiles = true;
+
 	public function __construct(EntityManager $em, $entityClass, FormFactoryInterface $formFactory)
 	{
 	    $this->em = $em;
 	    $this->entityClass = $entityClass;
 	    $this->formFactory = $formFactory;
 	    $this->repository = $this->em->getRepository($this->entityClass);
-	    $this->postConfig = array('user','content','media','price','url');
+	    $this->postConfig = array('user','content','medias','price','url','categories');
 	    $this->putConfig  = array('content','media','price','url');
 	}
 
@@ -36,6 +38,15 @@ class DealHandler implements DealHandlerInterface{
 	 		if ($method !== "PUT") {
 
 		        $this->em->persist($deal);
+
+		        if($this->configFiles){
+		        	$medias = $deal->getMedias();
+		           	foreach ($medias as $key => $media) {
+		        		$media->setDeal($deal);
+		        		$media->setUser($deal->getUser());
+		        		$this->em->persist($media);
+		        	}
+		        }
 	 		}
 
 	        $this->em->flush();
@@ -69,11 +80,25 @@ class DealHandler implements DealHandlerInterface{
 					);
 				}
 			}
-	
-			if($request->files->get('media') instanceOf \Symfony\Component\HttpFoundation\File\UploadedFile ){
-				$config['media'] = array(
-					'category' => $this->getCategoryField('media'),
-					'options' => $this->getOptionsField('media'),
+
+			$files = $request->files->get('medias');
+			$this->configFiles = true;
+
+			if (!empty($files)) {
+				foreach ($files as $key => $file) {
+					if(!$file instanceOf \Symfony\Component\HttpFoundation\File\UploadedFile ){
+						$this->configFiles = false;
+					}
+				}
+			}
+			else{
+				$this->configFiles = false;
+			}
+
+			if($this->configFiles){
+				$config['medias'] = array(
+					'category' => $this->getCategoryField('medias'),
+					'options' => $this->getOptionsField('medias'),
 				);
 			}
 		}
@@ -83,14 +108,18 @@ class DealHandler implements DealHandlerInterface{
 		return $form;
 	}
 
+
 	private function getCategoryField($field){
 
 		switch ($field) {
 			case 'user':
 				$result = 'user_selector';
 				break;
-			case 'media':
+			case 'medias':
 				$result = 'media_selector';
+				break;
+			case 'categories':
+				$result = 'category_selector';
 				break;
 			default:
 				$result = null;
@@ -103,6 +132,14 @@ class DealHandler implements DealHandlerInterface{
 	private function getOptionsField($field){
 
 		switch ($field) {
+			case 'medias':
+				$result = array(
+					'multiple' => true,
+					'attr' => array(
+						'multiple' => 'multiple'
+					)
+				);
+				break;
 			default:
 				$result = array();
 				break;
@@ -110,7 +147,6 @@ class DealHandler implements DealHandlerInterface{
 
 		return $result;
 	}
-
 
     public function put(Deal $deal, Request $request){
 
@@ -126,27 +162,7 @@ class DealHandler implements DealHandlerInterface{
     public function delete(Deal $deal){
 
     	try {
-   //  		$user = $deal->getUser();
-   //  		$user->removeDeal($deal);
 
-   //  		$media = $deal->getMedia();
-   //  		if(null !== $media){
-   //  			$user->removeMedia($media);
-   //  			$media->removeDeal();
-   //  			$media->removeUser();
-   //  		}
-    		
-			// $deal->removeMedia();
-   //  		$deal->removeUser();
-
-   //  		// Update user
-   //  		$this->em->getManager()->persist($user);
-   //  		$this->em->getManager()->flush();
-    	
-   //  		// Remove
-   //  		if(null !== $media){
-   //  			$this->em->getManager()->remove($media);
-   //  		}
     		$this->em->remove($deal);
     		$this->em->flush();
 

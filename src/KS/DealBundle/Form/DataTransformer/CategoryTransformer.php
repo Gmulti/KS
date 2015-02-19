@@ -23,23 +23,54 @@ class CategoryTransformer implements DataTransformerInterface
         $this->em = $em;
     }
 
-    /**
-     * @return string
-     */
-    public function transform($category)
+
+    public function transform($categories)
     {
-        if (null === $category) {
+        if (null === $categories) {
             return "";
         }
+        
+        // $categoriesArray = new \Doctrine\Common\Collections\ArrayCollection();     
+        
+        // foreach ($categories as $key => $value) {
+        //     if (condition) {
+        //         # code...
+        //     }
+        // }
 
-        return $category;
+        return $categories;
     }
 
-    public function reverseTransform($category)
+    public function reverseTransform($categories)
     {
+     
+        $categoriesArray = new \Doctrine\Common\Collections\ArrayCollection();  
 
-   
-        return $category;
+        if (!is_array($categories)):
+            throw new TransformationFailedException(sprintf(
+                'Format not valid!'
+            ));
+        endif;
+
+
+        foreach ($categories as $cat) {
+
+            $categoryFind = $this->em
+                                 ->getRepository('KSDealBundle:Category')
+                                 ->findOneBySlug($cat);
+
+            if (null === $categoryFind) {
+                throw new TransformationFailedException(sprintf(
+                    'Categorie "%s" does not exist!',
+                    $cat
+                ));
+            }
+
+            $categoriesArray->add($categoryFind);
+        }
+        
+        return $categoriesArray;
+
     }
 
     public function getName()

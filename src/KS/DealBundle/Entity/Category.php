@@ -38,24 +38,28 @@ class Category
 
     /**
      * @ORM\Column(name="title", type="string", length=64)
+     * @Expose()
      */
     protected $title;
 
     /**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
+     * @Expose()
      */
     protected $lft;
 
     /**
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer")
+     * @Expose()
      */
     protected $rgt;
 
     /**
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer")
+     * @Expose()
      */
     protected $lvl;
 
@@ -63,17 +67,20 @@ class Category
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
+     * @Expose()
      */
     protected $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+     * @Expose()
      */
     protected $children;
 
     /**
      * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(name="slug", type="string", length=128)
+     * @Expose()
      */
     protected $slug;
 
@@ -394,5 +401,9 @@ class Category
     public function getDeals()
     {
         return $this->deals;
+    }
+
+    public function __toString(){
+        return $this->title;
     }
 }

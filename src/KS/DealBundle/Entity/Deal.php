@@ -16,11 +16,6 @@ use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 
 
-// @Hateoas\Relation("comments", 
- // *     href = "expr('deals/' ~ object.getId() ~ '/comments')",
- // *     exclusion = @Hateoas\Exclusion(excludeIf = "expr(object.getComments() !== null)")
- // * )
-
 
 /**
  * @ORM\Entity
@@ -51,7 +46,7 @@ class Deal
 
 
     /**
-     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="deal",  cascade={"all"})
+     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="deal",  cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      * @Expose()
      */

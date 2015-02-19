@@ -24,11 +24,9 @@ class DealType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {	
 
-        
         foreach ($this->formConfig as $key => $field) {
             $category = isset($field['category']) ? $field['category'] : null;
             $options = isset($field['options'])  ? $field['options']  : array();
-
             $builder->add($key, $category, $options);
         }
 

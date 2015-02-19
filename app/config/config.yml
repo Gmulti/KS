@@ -88,11 +88,14 @@ fos_user:
             enabled: false
 
 fos_rest:
-    routing_loader:
-        default_format: json
     param_fetcher_listener: true
+    body_listener:
+        array_normalizer: fos_rest.normalizer.camel_keys
+    format_listener: true
+    view:
+        view_response_listener: 'force'
     body_converter:
-        enabled: false
+        enabled: true
 
 jms_serializer:
     metadata:

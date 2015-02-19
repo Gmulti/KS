@@ -38,20 +38,20 @@ class Media
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Expose()
      */
     protected $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KS\UserBundle\Entity\User", inversedBy="medias")
+     * @ORM\ManyToOne(targetEntity="KS\UserBundle\Entity\User", inversedBy="medias", cascade={"persist"})
      * @Expose()
      */
     protected $user;
 
     /**
      * @Expose()
-     * @ORM\ManyToOne(targetEntity="KS\DealBundle\Entity\Deal", inversedBy="medias")
+     * @ORM\ManyToOne(targetEntity="KS\DealBundle\Entity\Deal", inversedBy="medias", cascade={"persist"})
      */
     protected $deal;
 
@@ -93,11 +93,15 @@ class Media
     /**
      * @var date $updated
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $deletedAt;
 
     private $filenameForRemove;
+
+    public function __construct(){
+        $this->userProfile = false;
+    }
 
     /**
      * Get id
@@ -300,79 +304,79 @@ class Media
         return null === $this->path ? null : $this->getUploadRootDir() . '/' . $this->path;
     }
 
-    /**
-     * Set user
-     *
-     * @param KS\UserBundle\Entity\User $user
-     * @return self
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
-        return $this;
-    }
 
-    /**
-     * Get user
-     *
-     * @return KS\UserBundle\Entity\User $user
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    public function removeUser(){
-        $this->user = null;
-        return $this;
-    }
-
-    /**
-     * Set path
-     *
-     * @param string $path
-     * @return self
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-        return $this;
-    }
-
-    /**
-     * Get path
-     *
-     * @return string $path
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    public function setFile(UploadedFile $file){
-        $this->file = $file;
-        return $this;
-    }
 
     /**
      * Set userProfile
      *
      * @param boolean $userProfile
-     * @return self
+     * @return Media
      */
     public function setUserProfile($userProfile)
     {
         $this->userProfile = $userProfile;
+
         return $this;
     }
 
     /**
      * Get userProfile
      *
-     * @return boolean $userProfile
+     * @return boolean 
      */
     public function getUserProfile()
     {
         return $this->userProfile;
+    }
+
+    /**
+     * Set path
+     *
+     * @param string $path
+     * @return Media
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * Get path
+     *
+     * @return string 
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \KS\UserBundle\Entity\User $user
+     * @return Media
+     */
+    public function setUser(\KS\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \KS\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
     }
 }

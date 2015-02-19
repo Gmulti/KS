@@ -7,3 +7,13 @@ ks_deal_comment:
     type:     rest
     parent: ks_deal
     resource: KS\DealBundle\Controller\CommentsController
+
+ks_category:
+    type:     rest
+    resource: KS\DealBundle\Controller\CategoriesController
+    prefix: /api/v1
+
+ks_category_admin:
+    type:     rest
+    resource: KS\DealBundle\Controller\CategoriesAdminController
+    prefix: /api/admin/v1

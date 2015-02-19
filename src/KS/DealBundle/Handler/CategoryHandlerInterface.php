@@ -3,13 +3,12 @@
 namespace KS\DealBundle\Handler;
 
 use Symfony\Component\HttpFoundation\Request;
-use KS\DealBundle\Entity\Deal;
+use KS\DealBundle\Entity\Category;
 use FOS\RestBundle\Request\ParamFetcher;
 
-interface DealHandlerInterface
+interface CategoryHandlerInterface
 {
-
-    public function put(Deal $deal,Request $request);
+    public function put(Category $deal,Request $request);
 
     public function post(Request $request);
 

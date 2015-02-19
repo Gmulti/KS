@@ -52,7 +52,7 @@ class DealsController extends RestController
 
             $errors = array(
                 'error' => 'not_found',
-                'error_description' => 'No users have found',
+                'error_description' => 'No deals have found',
             );
             $view->setStatusCode(404, $errors);
         }
@@ -103,7 +103,7 @@ class DealsController extends RestController
         }
         else{
             $view->setStatusCode(404,array(
-                'error' => 'error_Deal', 
+                'error' => 'error_deal', 
                 'error_description' => 'Erreur sur le traitement des données'
                 )
             );

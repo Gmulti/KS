@@ -27,26 +27,35 @@ class MediaTransformer implements DataTransformerInterface
      * @return string
      */
     public function transform($media)
-    {
+    {   
+
         if (null === $media) {
             return "";
         }
 
-        return $media;
+        return "";
     }
 
-    public function reverseTransform($file)
+    public function reverseTransform($files)
     {
-
-    	if (!$file instanceOf UploadedFile) {
+        if(empty($files)){
             return null;
         }
 
-        $media = new Media();
-        $media->setFile($file);
+        $medias = new \Doctrine\Common\Collections\ArrayCollection();
 
-
-        return $media;
+        foreach ($files as $key => $file) {
+            if (!$file instanceOf UploadedFile) {
+                return null;
+            }
+            else{
+                $media = new Media();
+                $media->setFile($file);
+                $medias->add($media);
+            }
+        }
+       
+        return $medias;
     }
 
     public function getName()
