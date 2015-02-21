@@ -6,9 +6,9 @@ use Symfony\Component\HttpFoundation\Request;
 use KS\DealBundle\Entity\Category;
 use FOS\RestBundle\Request\ParamFetcher;
 
-interface CategoryHandlerInterface
+interface CommentHandlerInterface
 {
-    public function put(Category $deal,Request $request);
+    public function put(Comment $comment,Request $request);
 
     public function post(Request $request);
 

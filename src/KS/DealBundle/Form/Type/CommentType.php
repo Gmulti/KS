@@ -5,7 +5,7 @@ namespace KS\DealBundle\Form\Type;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
-class DealType extends DynamicForm
+class CommentType extends DynamicForm
 {
 
     /**
@@ -14,7 +14,7 @@ class DealType extends DynamicForm
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class'      => 'KS\DealBundle\Entity\Deal',
+            'data_class'      => 'KS\DealBundle\Entity\Comment',
             'csrf_protection' => false
         ));
 

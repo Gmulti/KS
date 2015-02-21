@@ -38,14 +38,31 @@ class CommentsController extends RestController
      *
      */
     public function getCommentsAction(Deal $deal, ParamFetcher $params){      
+       $view = FOSView::create();
+        
+        $data = $this->getCommentsWithParams($deal, $params);
 
+        if ($data) {
+            $view = $this->view($data, 200);
+            $view->setData($data);
+        }
+        else{
+
+            $errors = array(
+                'error' => 'not_found',
+                'error_description' => 'No deals have found',
+            );
+            $view->setStatusCode(404, $errors);
+        }
+
+        return $this->handleView($view);
     }
 
     /**
      * Return a comment
      *
-     * @ParamConverter("Deal")
-     * @ParamConverter("Comment")
+     * @ParamConverter("deal")
+     * @ParamConverter("comment")
      */
     public function getCommentAction(Deal $deal, Comment $comment){
 
@@ -54,17 +71,40 @@ class CommentsController extends RestController
   
     /**
      * Create a comment
-     * @ParamConverter("Deal")
+     * @ParamConverter("deal")
      */
     public function postCommentAction(Request $request, Deal $deal){
+
+        $view = FOSView::create();
+        $user = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+        $request->request->set('user',$user);
+        
+        $newComment = $this->container->get('ksdeal.handler.comment')->post(
+            $deal,
+            $request
+        );
+
+        if(null !== $newComment){
+             $view = $this->view($newComment, 200);
+
+        }
+        else{
+            $view->setStatusCode(404,array(
+                'error' => 'error_comment', 
+                'error_description' => 'Error on form submit'
+                )
+            );
+        }
+
+        return $this->handleView($view);      
 
 
     }
 
     /**
      * Edit a comment
-     * @ParamConverter("Deal")
-     * @ParamConverter("Comment")
+     * @ParamConverter("deal")
+     * @ParamConverter("comment")
      *
      */
     public function putCommentAction(Request $request, Deal $deal, Comment $comment){
@@ -73,12 +113,30 @@ class CommentsController extends RestController
 
     /**
      * Delete a Comment
-     * @ParamConverter("Comment")
+     * @ParamConverter("comment")
      *
      */
     public function deleteCommentAction(Deal $deal, Comment $comment){
     
  
+    }
+
+    private function getCommentsWithParams($deal, $params){
+
+        $offset = $params->get('offset');
+        $limit = $params->get('limit');
+     
+
+        $data = $this->getDoctrine()->getManager()
+            ->getRepository('KSDealBundle:Comment')
+            ->findBy(
+                array('deal' => $deal),
+                array('updated' => 'DESC'),
+                $limit, 
+                $offset
+            );
+
+        return $data;
     }
 
 }

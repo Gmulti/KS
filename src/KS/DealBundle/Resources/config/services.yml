@@ -1,18 +1,17 @@
 parameters:
     ksdeal.deal.class: KS\DealBundle\Entity\Deal
+    ksdeal.comment.class: KS\DealBundle\Entity\Comment
 
 services:
-    ksdeal.type.user_selector:
-        class: KS\DealBundle\Form\DataTransformer\UserTransformerType
-        arguments: ["@doctrine.orm.entity_manager"]
-        tags:
-            - { name: form.type, alias: user_selector }
 
-    ksdeal.type.media_selector:
-        class: KS\DealBundle\Form\DataTransformer\MediaTransformerType
+    ksdeal.utils.categoryoptionfield:
+        class: KS\DealBundle\Utils\CategoryOptionField
+
+    ksdeal.type.deal_selector:
+        class: KS\DealBundle\Form\DataTransformer\DealTransformerType
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
-            - { name: form.type, alias: media_selector }
+            - { name: form.type, alias: deal_selector }
 
     ksdeal.type.category_selector:
         class: KS\DealBundle\Form\DataTransformer\CategoryTransformerType
@@ -20,9 +19,25 @@ services:
         tags:
             - { name: form.type, alias: category_selector }
 
+    ksdeal.type.type_selector:
+        class: KS\DealBundle\Form\DataTransformer\TypeTransformerType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: type_selector }
+
     ksdeal.handler.deal:
         class: KS\DealBundle\Handler\DealHandler
         arguments:
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.deal.class%"
             - "@form.factory"
+            - "@ksdeal.utils.categoryoptionfield"
+
+    ksdeal.handler.comment:
+        class: KS\DealBundle\Handler\CommentHandler
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "%ksdeal.comment.class%"
+            - "@form.factory"
+            - "@ksdeal.utils.categoryoptionfield"
+

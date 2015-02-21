@@ -52,6 +52,60 @@ class DealsControllerTest extends GeneralController
 
     }
 
+    public function testGetDealsWithStardAndEndPrice()
+    {
+        fwrite(STDOUT, __METHOD__ . "\n");
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', 
+            '/api/v1/deals.json',
+            array(
+                'start_price' => 9,
+                'end_price'   => 11
+            ),
+            array(),
+            self::$headers
+        );
+
+        $response = $client->getResponse();
+        $msg = json_decode($response->getContent(), true);
+
+        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+        $this->assertEquals(200, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+
+        // Test if result default offset : 0 / limit 10
+        $this->assertGreaterThanOrEqual(count($msg), 10);
+        $this->assertGreaterThanOrEqual(9, $msg[0]['price']);
+
+    }
+
+    public function testGetDealsWithStardAndFalseEndPrice()
+    {
+        fwrite(STDOUT, __METHOD__ . "\n");
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', 
+            '/api/v1/deals.json',
+            array(
+                'start_price' => 9,
+                'end_price'   => 7
+            ),
+            array(),
+            self::$headers
+        );
+
+        $response = $client->getResponse();
+        $msg = json_decode($response->getContent(), true);
+
+        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+        $this->assertEquals(200, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+
+        // Test if result default offset : 0 / limit 10
+        $this->assertGreaterThanOrEqual(count($msg), 10);
+        $this->assertGreaterThanOrEqual(9, $msg[0]['price']);
+
+    }
+
     /**
      * @depends testGetDealsOffsetLimitDefault
      */
@@ -133,14 +187,8 @@ class DealsControllerTest extends GeneralController
      */
     public function testDeleteDealNoMedia(){
         fwrite(STDOUT, __METHOD__ . "\n");
-        $client = static::createClient();
-
-        $crawler = $client->request('DELETE', 
-            '/api/v1/deals/' . self::$idDeal . '.json',
-            array(),
-            array(),
-            self::$headers
-        );
+        
+        $client = self::deleteDeal(self::$idDeal);
 
         $response = $client->getResponse();
         $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
@@ -148,6 +196,48 @@ class DealsControllerTest extends GeneralController
 
         $msg = json_decode($response->getContent(), true);
         $this->assertEquals($msg['success'], 'delete_success');
+    }
+
+    private static function deleteDeal($idDeal){
+        $client = static::createClient();
+
+        $crawler = $client->request('DELETE', 
+            '/api/v1/deals/' . $idDeal . '.json',
+            array(),
+            array(),
+            self::$headers
+        );
+
+        return $client;
+
+    }
+
+
+    public function testPostDealCategoryType(){
+        fwrite(STDOUT, __METHOD__ . "\n");
+        $client = static::createClient();
+
+        $crawler = $client->request('POST', 
+            '/api/v1/deals.json',
+            array(
+                'user' => self::$username,
+                'content'  => 'Contenu test',
+                'categories' => array('categorie-1'),
+                'types' => array('code-promo')
+            ),
+            array(),
+            self::$headers
+        );
+
+        $response = $client->getResponse();
+        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+        $this->assertEquals(200, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+
+        $msg = json_decode($response->getContent(), true);
+
+        if (isset($msg['id'])) {
+            self::deleteDeal($msg['id']);
+        }
     }
 
 }

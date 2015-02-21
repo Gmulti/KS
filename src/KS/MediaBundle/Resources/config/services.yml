@@ -1,0 +1,6 @@
+services:
+    ksdeal.type.media_selector:
+        class: KS\MediaBundle\Form\DataTransformer\MediaTransformerType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: media_selector }

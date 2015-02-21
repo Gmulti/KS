@@ -8,7 +8,7 @@ use KS\DealBundle\Form\DataTransformer\UserTransformer;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityManager;
 
-class UserTransformerType extends AbstractType
+class DealTransformerType extends AbstractType
 {
     /**
      * @var ObjectManager
@@ -25,7 +25,7 @@ class UserTransformerType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $transformer = new UserTransformer($this->em);
+        $transformer = new DealTransformer($this->em);
         $builder->addModelTransformer($transformer);
     }
 
@@ -43,6 +43,6 @@ class UserTransformerType extends AbstractType
 
     public function getName()
     {
-        return 'user_selector';
+        return 'deal_selector';
     }
 }

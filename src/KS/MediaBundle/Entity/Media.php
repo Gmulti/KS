@@ -56,6 +56,12 @@ class Media
     protected $deal;
 
     /**
+     * @Expose()
+     * @ORM\ManyToOne(targetEntity="KS\DealBundle\Entity\Deal", inversedBy="medias", cascade={"persist"})
+     */
+    protected $comment;
+
+    /**
      * @ORM\Column(type="boolean")
      * @Expose()
      */
@@ -378,5 +384,28 @@ class Media
     public function setFile(UploadedFile $file = null)
     {
         $this->file = $file;
+    }
+
+    /**
+     * Set comment
+     *
+     * @param \KS\DealBundle\Entity\Deal $comment
+     * @return Media
+     */
+    public function setComment(\KS\DealBundle\Entity\Deal $comment = null)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return \KS\DealBundle\Entity\Deal 
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

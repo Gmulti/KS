@@ -1,6 +1,6 @@
 <?php
 
-namespace KS\DealBundle\Form\DataTransformer;
+namespace KS\MediaBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;

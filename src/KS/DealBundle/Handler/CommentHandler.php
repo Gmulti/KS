@@ -10,9 +10,11 @@ use KS\DealBundle\Form\Type\DealType;
 use KS\DealBundle\Entity\Deal;
 use FOS\RestBundle\Request\ParamFetcher;
 
+use KS\DealBundle\Entity\Comment;
+
 use KS\DealBundle\Exception\InvalidFormException;
 
-class DealHandler implements DealHandlerInterface{
+class CommentHandler implements DealHandlerInterface{
 
 	protected $formFactory;
 
@@ -25,13 +27,13 @@ class DealHandler implements DealHandlerInterface{
 	    $this->formFactory = $formFactory;
 	    $this->categoryOptionField = $categoryOptionField;
 	    $this->repository = $this->em->getRepository($this->entityClass);
-	    $this->postConfig = array('user','content','medias','price','url','categories','lat','lng','address','types');
-	    $this->putConfig  = array('content','media','price','url','lat','lng','address','categories','types');
+	    $this->postConfig = array('user','deal','content');
+	    $this->putConfig  = array('content');
 	}
 
-	private function processForm(Deal $deal, Request $request, $method = "PUT"){
+	private function processForm(Comment $comment, Request $request, $method = "PUT"){
 		
-		$form = $this->createForm($deal, $request, $method);
+		$form = $this->createForm($comment, $request, $method);
 	    $form->handleRequest($request);
 
 	    if ($form->isValid()) {
@@ -58,9 +60,10 @@ class DealHandler implements DealHandlerInterface{
 		throw new InvalidFormException('Invalid submitted data', $form);
 	}
 
-	private function createForm(Deal $deal, Request $request, $method){
+	private function createForm(Comment $comment, Request $request, $method){
+		
 		$config = array();
-
+		
 		if($method === "PUT"){
 			foreach ($request->request as $key => $value) {
 				if(in_array($key, $this->putConfig)){
@@ -104,41 +107,41 @@ class DealHandler implements DealHandlerInterface{
 			}
 		}
 
-		$form = $this->formFactory->create(new DealType($config), $deal, array('method' => $method));
+		$form = $this->formFactory->create(new CommentType(), $comment, array('method' => $method));
 
 		return $form;
 	}
 
 
+    public function put(Comment $comment, Request $request){
 
-    public function put(Deal $deal, Request $request){
-
-    	return $this->processForm($deal, $request);
+    	return $this->processForm($comment, $request);
     }
 
-    public function post(Request $request){
-    	$deal = new Deal();
+    public function post(Deal $deal, Request $request){
+    	$comment = new Comment();
+    	$comment->setDeal($deal);
 
-	    return $this->processForm($deal, $request, 'POST');
+	    return $this->processForm($comment, $request, 'POST');
     }
 
-    public function delete(Deal $deal){
+    public function delete(Comment $comment){
 
     	try {
 
-    		$this->em->remove($deal);
+    		$this->em->remove($comment);
     		$this->em->flush();
 
     	} catch (Exception $e) {
     		return array(
     			'error' => 'exception_delete',
-    			'error_description' => 'Delete error'
+    			'error_description' => 'Comment delete error'
     		);
     	}
 
     	return array(
     		'success' => 'delete_success',
-    		'success_description' => 'Delete deal with success'
+    		'success_description' => 'Delete comment with success'
     	);
     }
 }

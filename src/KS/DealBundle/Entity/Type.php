@@ -243,4 +243,8 @@ class Type
     {
         return $this->deals;
     }
+
+    public function __toString(){
+        return $this->title;
+    }
 }

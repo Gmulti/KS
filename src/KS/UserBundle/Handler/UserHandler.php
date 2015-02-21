@@ -17,11 +17,12 @@ class UserHandler implements UserHandlerInterface{
 
 	protected $formFactory;
 
-	public function __construct(EntityManager $em, $entityClass, FormFactoryInterface $formFactory)
+	public function __construct(EntityManager $em, $entityClass, FormFactoryInterface $formFactory, $categoryOptionField)
 	{
 	    $this->em = $em;
 	    $this->entityClass = $entityClass;
 	    $this->formFactory = $formFactory;
+	    $this->categoryOptionField = $categoryOptionField;
 	    $this->repository = $this->em->getRepository($this->entityClass);
 	    $this->putConfig  = array('lastname','firstname','birthday');
 	}
@@ -54,8 +55,8 @@ class UserHandler implements UserHandlerInterface{
 			foreach ($request->request as $key => $value) {
 				if(in_array($key, $this->putConfig)){
 					$config[$key] = array(
-						'category' => $this->getCategoryField($key),
-						'options' => $this->getOptionsField($key),
+						'category' => $this->categoryOptionField->getCategoryField($key),
+						'options' => $this->categoryOptionField->getOptionsField($key),
 					);
 				}
 			}
@@ -63,28 +64,6 @@ class UserHandler implements UserHandlerInterface{
 
 		return $this->formFactory->create(new UserType($config), $user, array('method' => $method));
 
-	}
-
-	private function getCategoryField($field){
-
-		switch ($field) {
-			default:
-				$result = null;
-				break;
-		}
-
-		return $result;
-	}
-
-	private function getOptionsField($field){
-
-		switch ($field) {
-			default:
-				$result = array();
-				break;
-		}
-
-		return $result;
 	}
 
 

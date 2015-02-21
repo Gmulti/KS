@@ -106,6 +106,24 @@ class Deal
     protected $price;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     * @Expose()
+     */
+    protected $lat;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     * @Expose()
+     */
+    protected $lng;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Expose()
+     */
+    protected $address;
+
+    /**
      * @var date $created
      *
      * @ORM\Column(type="datetime")
@@ -512,5 +530,74 @@ class Deal
     public function getTypes()
     {
         return $this->types;
+    }
+
+    /**
+     * Set lat
+     *
+     * @param float $lat
+     * @return Deal
+     */
+    public function setLat($lat)
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    /**
+     * Get lat
+     *
+     * @return float 
+     */
+    public function getLat()
+    {
+        return $this->lat;
+    }
+
+    /**
+     * Set lng
+     *
+     * @param float $lng
+     * @return Deal
+     */
+    public function setLng($lng)
+    {
+        $this->lng = $lng;
+
+        return $this;
+    }
+
+    /**
+     * Get lng
+     *
+     * @return float 
+     */
+    public function getLng()
+    {
+        return $this->lng;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     * @return Deal
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string 
+     */
+    public function getAddress()
+    {
+        return $this->address;
     }
 }

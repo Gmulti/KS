@@ -39,7 +39,7 @@ class Comment
     /**
      * @ORM\ManyToOne(targetEntity="KS\DealBundle\Entity\Deal", inversedBy="comments", cascade={"persist"}) 
      * @Assert\NotBlank()
-     * @Assert\Type(type="KS\UserBundle\Entity\User")
+     * @Assert\Type(type="KS\UserBundle\Entity\Deal")
      */
     protected $deal;
 
@@ -58,12 +58,11 @@ class Comment
 
 
     /**
-     * @ORM\OneToOne(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="comment")
+     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="comment",  cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      * @Expose()
      */
     protected $medias;
- 
 
     /**
      * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="usersLikes")
@@ -97,13 +96,14 @@ class Comment
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $deletedAt;
-
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->likes = new ArrayCollection();
+        $this->medias = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->usersLikesComment = new \Doctrine\Common\Collections\ArrayCollection();
     }
-   
-
 
     /**
      * Get id
@@ -208,26 +208,26 @@ class Comment
     }
 
     /**
-     * Set medias
+     * Set deal
      *
-     * @param \KS\MediaBundle\Entity\Media $medias
+     * @param \KS\DealBundle\Entity\Deal $deal
      * @return Comment
      */
-    public function setMedias(\KS\MediaBundle\Entity\Media $medias = null)
+    public function setDeal(\KS\DealBundle\Entity\Deal $deal = null)
     {
-        $this->medias = $medias;
+        $this->deal = $deal;
 
         return $this;
     }
 
     /**
-     * Get medias
+     * Get deal
      *
-     * @return \KS\MediaBundle\Entity\Media 
+     * @return \KS\DealBundle\Entity\Deal 
      */
-    public function getMedias()
+    public function getDeal()
     {
-        return $this->medias;
+        return $this->deal;
     }
 
     /**
@@ -251,6 +251,39 @@ class Comment
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Add medias
+     *
+     * @param \KS\MediaBundle\Entity\Media $medias
+     * @return Comment
+     */
+    public function addMedia(\KS\MediaBundle\Entity\Media $medias)
+    {
+        $this->medias[] = $medias;
+
+        return $this;
+    }
+
+    /**
+     * Remove medias
+     *
+     * @param \KS\MediaBundle\Entity\Media $medias
+     */
+    public function removeMedia(\KS\MediaBundle\Entity\Media $medias)
+    {
+        $this->medias->removeElement($medias);
+    }
+
+    /**
+     * Get medias
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMedias()
+    {
+        return $this->medias;
     }
 
     /**
@@ -284,28 +317,5 @@ class Comment
     public function getUsersLikesComment()
     {
         return $this->usersLikesComment;
-    }
-
-    /**
-     * Set deal
-     *
-     * @param \KS\DealBundle\Entity\Deal $deal
-     * @return Comment
-     */
-    public function setDeal(\KS\DealBundle\Entity\Deal $deal = null)
-    {
-        $this->deal = $deal;
-
-        return $this;
-    }
-
-    /**
-     * Get deal
-     *
-     * @return \KS\DealBundle\Entity\Deal 
-     */
-    public function getDeal()
-    {
-        return $this->deal;
     }
 }
