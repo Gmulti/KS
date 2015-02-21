@@ -37,7 +37,7 @@ class CommentsController extends RestController
      * @QueryParam(name="limit", requirements="\d+", default="10", description="Limit deals")
      *
      */
-    public function getCommentsAction(ParamFetcher $params){      
+    public function getCommentsAction(Deal $deal, ParamFetcher $params){      
 
     }
 

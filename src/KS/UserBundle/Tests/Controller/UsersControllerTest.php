@@ -3,57 +3,18 @@
 namespace KS\UserBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use KS\UserBundle\Tests\Fixtures\Document\LoadPageData;
+use KS\DealBundle\Tests\GeneralController;
 
-class UsersControllerTest extends WebTestCase
+class UsersControllerTest extends GeneralController
 {
 
-    protected static $token;
-
-    protected static $headers;
-
     protected static $idUser;
-
-    protected static $em;
 
     protected static $newUser = 'newtest';
 
     protected static $newPassword = 'newtest';
 
     protected static $newEmail = 'newtest@email.com';
-
-    protected static $clientId;
-
-    protected static $clientSecret;
-
-    public static function setUpBeforeClass()
-    {
-        fwrite(STDOUT, __METHOD__ . "\n");
-        static::$kernel = static::createKernel();
-        static::$kernel->boot();
-        self::$em = static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
-        
-        if ($_SERVER['PWD'] == "/var/www/api.komunitystore") {
-            self::$clientId = '317b47172';
-            self::$clientSecret = '598thil5yr4sgg00k08cww8gowcc8cg';
-        }
-        else{
-            self::$clientId = '12345';
-            self::$clientSecret = 'tcwg6gajmqoksgswwws0wgsscgwssgc';
-        }
-
-    }
-
-    public static function tearDownAfterClass(){
-        fwrite(STDOUT, __METHOD__ . "\n");
-        $accessToken = self::$em->getRepository('KSServerBundle:AccessToken')
-                            ->findOneByToken(self::$token);
-        if(null !== $accessToken):
-            self::$em->remove($accessToken);
-            self::$em->flush();
-        endif;
-    }
-
 
     public function testRegisterUser()
     {

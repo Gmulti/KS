@@ -3,13 +3,17 @@
 namespace KS\DealBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use KS\DealBundle\Tests\GeneralController;
+use KS\DealBundle\Tests\Fixtures\Document\LoadPageData;
 
-class DealsControllerTest extends GeneralController
+class CategoriesDealsControllerTest extends WebTestCase
 {
-    protected static $idDeal;
 
-    public function testGetDealsOffsetLimitDefault()
+	protected static $username = 'test';
+
+    protected static $password = 'test';
+
+
+    public function testGetDealsFromCategoryOffsetLimitDefault()
     {
         fwrite(STDOUT, __METHOD__ . "\n");
         $client = static::createClient();

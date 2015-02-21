@@ -18,7 +18,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 /**
  * @ORM\Entity
  * @ORM\Table(name="ks_category")
- * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
+ * @ORM\Entity(repositoryClass="KS\DealBundle\Entity\CategoryRepository")
  *
  * @Gedmo\Tree(type="nested")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)

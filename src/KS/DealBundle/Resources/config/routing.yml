@@ -17,3 +17,8 @@ ks_category_admin:
     type:     rest
     resource: KS\DealBundle\Controller\CategoriesAdminController
     prefix: /api/admin/v1
+
+ks_category_deal:
+    type:     rest
+    parent: ks_category
+    resource: KS\DealBundle\Controller\CategoriesDealsController
