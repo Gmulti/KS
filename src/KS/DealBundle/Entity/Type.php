@@ -16,15 +16,14 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 
 
 /**
- * @ORM\Table(name="ks_category")
- * @ORM\Entity(repositoryClass="KS\DealBundle\Entity\CategoryRepository")
+ * @ORM\Table(name="ks_type")
+ * @ORM\Entity(repositoryClass="KS\DealBundle\Entity\TypeRepository")
  *
- * @Gedmo\Tree(type="nested")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 
  * @ExclusionPolicy("all") 
  */
-class Category
+class Type
 {
 
     /**
@@ -42,41 +41,6 @@ class Category
     protected $title;
 
     /**
-     * @Gedmo\TreeLeft
-     * @ORM\Column(name="lft", type="integer")
-     * @Expose()
-     */
-    protected $lft;
-
-    /**
-     * @Gedmo\TreeRight
-     * @ORM\Column(name="rgt", type="integer")
-     * @Expose()
-     */
-    protected $rgt;
-
-    /**
-     * @Gedmo\TreeLevel
-     * @ORM\Column(name="lvl", type="integer")
-     * @Expose()
-     */
-    protected $lvl;
-
-    /**
-     * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
-     * @Expose()
-     */
-    protected $parent;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
-     * @Expose()
-     */
-    protected $children;
-
-    /**
      * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(name="slug", type="string", length=128)
      * @Expose()
@@ -84,7 +48,7 @@ class Category
     protected $slug;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Deal", cascade={"all"}, mappedBy="categories")
+     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Deal", cascade={"all"}, mappedBy="types")
      * @ORM\JoinColumn(nullable=true)
      */
     protected $deals;
@@ -113,11 +77,14 @@ class Category
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $deletedAt;
-
-    public function __construct(){
-         $this->categories = new ArrayCollection();
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->deals = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
 
     /**
      * Get id
@@ -133,7 +100,7 @@ class Category
      * Set title
      *
      * @param string $title
-     * @return Category
+     * @return Type
      */
     public function setTitle($title)
     {
@@ -153,79 +120,10 @@ class Category
     }
 
     /**
-     * Set lft
-     *
-     * @param integer $lft
-     * @return Category
-     */
-    public function setLft($lft)
-    {
-        $this->lft = $lft;
-
-        return $this;
-    }
-
-    /**
-     * Get lft
-     *
-     * @return integer 
-     */
-    public function getLft()
-    {
-        return $this->lft;
-    }
-
-    /**
-     * Set rgt
-     *
-     * @param integer $rgt
-     * @return Category
-     */
-    public function setRgt($rgt)
-    {
-        $this->rgt = $rgt;
-
-        return $this;
-    }
-
-    /**
-     * Get rgt
-     *
-     * @return integer 
-     */
-    public function getRgt()
-    {
-        return $this->rgt;
-    }
-
-    /**
-     * Set lvl
-     *
-     * @param integer $lvl
-     * @return Category
-     */
-    public function setLvl($lvl)
-    {
-        $this->lvl = $lvl;
-
-        return $this;
-    }
-
-    /**
-     * Get lvl
-     *
-     * @return integer 
-     */
-    public function getLvl()
-    {
-        return $this->lvl;
-    }
-
-    /**
      * Set slug
      *
      * @param string $slug
-     * @return Category
+     * @return Type
      */
     public function setSlug($slug)
     {
@@ -248,7 +146,7 @@ class Category
      * Set created
      *
      * @param \DateTime $created
-     * @return Category
+     * @return Type
      */
     public function setCreated($created)
     {
@@ -271,7 +169,7 @@ class Category
      * Set updated
      *
      * @param \DateTime $updated
-     * @return Category
+     * @return Type
      */
     public function setUpdated($updated)
     {
@@ -294,7 +192,7 @@ class Category
      * Set deletedAt
      *
      * @param \DateTime $deletedAt
-     * @return Category
+     * @return Type
      */
     public function setDeletedAt($deletedAt)
     {
@@ -314,66 +212,10 @@ class Category
     }
 
     /**
-     * Set parent
-     *
-     * @param \KS\DealBundle\Entity\Category $parent
-     * @return Category
-     */
-    public function setParent(\KS\DealBundle\Entity\Category $parent = null)
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * Get parent
-     *
-     * @return \KS\DealBundle\Entity\Category 
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * Add children
-     *
-     * @param \KS\DealBundle\Entity\Category $children
-     * @return Category
-     */
-    public function addChild(\KS\DealBundle\Entity\Category $children)
-    {
-        $this->children[] = $children;
-
-        return $this;
-    }
-
-    /**
-     * Remove children
-     *
-     * @param \KS\DealBundle\Entity\Category $children
-     */
-    public function removeChild(\KS\DealBundle\Entity\Category $children)
-    {
-        $this->children->removeElement($children);
-    }
-
-    /**
-     * Get children
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
-    /**
      * Add deals
      *
      * @param \KS\DealBundle\Entity\Deal $deals
-     * @return Category
+     * @return Type
      */
     public function addDeal(\KS\DealBundle\Entity\Deal $deals)
     {
@@ -400,9 +242,5 @@ class Category
     public function getDeals()
     {
         return $this->deals;
-    }
-
-    public function __toString(){
-        return $this->title;
     }
 }

@@ -7,16 +7,16 @@ use KS\DealBundle\Tests\Fixtures\Document\LoadPageData;
 
 use KS\DealBundle\Tests\GeneralController;
 
-class CategoriesDealsControllerTest extends GeneralController
+class TypesDealsControllerTest extends GeneralController
 {
 
-	 public function testGetDealsFromCategoryOffsetLimitDefaultNoConnect()
+	public function testGetDealsFromTypeOffsetLimitDefaultNoConnect()
     {
         fwrite(STDOUT, __METHOD__ . "\n");
         $client = static::createClient();
 
         $crawler = $client->request('GET', 
-            '/api/v1/categories/categorie-1/deals.json'
+            '/api/v1/types/bon-plan/deals.json'
         );
 
         $response = $client->getResponse();
@@ -26,13 +26,13 @@ class CategoriesDealsControllerTest extends GeneralController
 
     }
 
-    public function testGetDealsFromCategoryOffsetLimitDefault()
+    public function testGetDealsFromTypeOffsetLimitDefault()
     {
         fwrite(STDOUT, __METHOD__ . "\n");
         $client = static::createClient();
 
         $crawler = $client->request('GET', 
-            '/api/v1/categories/categorie-1/deals.json',
+            '/api/v1/types/bon-plan/deals.json',
             array(),
             array(),
             self::$headers

@@ -13,12 +13,17 @@ ks_category:
     resource: KS\DealBundle\Controller\CategoriesController
     prefix: /api/v1
 
-ks_category_admin:
-    type:     rest
-    resource: KS\DealBundle\Controller\CategoriesAdminController
-    prefix: /api/admin/v1
-
 ks_category_deal:
     type:     rest
     parent: ks_category
     resource: KS\DealBundle\Controller\CategoriesDealsController
+
+ks_type:
+    type:     rest
+    resource: KS\DealBundle\Controller\TypesController
+    prefix: /api/v1
+
+ks_type_deal:
+    type:     rest
+    parent: ks_type
+    resource: KS\DealBundle\Controller\TypesDealsController

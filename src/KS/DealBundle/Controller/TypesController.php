@@ -19,14 +19,14 @@ use FOS\RestBundle\Controller\Annotations\Post as MethodPost;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController as RestController;
 
-use KS\DealBundle\Entity\Category;
+use KS\DealBundle\Entity\Type;
 
 
 /**
  *
- * @NamePrefix("api_v1_categories_")
+ * @NamePrefix("api_v1_types_")
  */
-class CategoriesController extends RestController
+class TypesController extends RestController
 {
     
     /**
@@ -36,10 +36,10 @@ class CategoriesController extends RestController
      * @QueryParam(name="limit", requirements="\d+", default="100", description="Limit categories")
      *
      */
-    public function getCategoriesAction(ParamFetcher $params){      
+    public function getTypesAction(ParamFetcher $params){      
         $view = FOSView::create();
         
-        $data = $this->getCategoriesWithParams($params);
+        $data = $this->getTypesWithParams($params);
 
         if ($data) {
             $view = $this->view($data, 200);
@@ -49,7 +49,7 @@ class CategoriesController extends RestController
 
             $errors = array(
                 'error' => 'not_found',
-                'error_description' => 'No categories have found',
+                'error_description' => 'No types have found',
             );
             $view->setStatusCode(404, $errors);
         }
@@ -60,19 +60,19 @@ class CategoriesController extends RestController
     /**
      * Return a Category
      *
-     * @ParamConverter("category", options={"repository_method": "findByIdOrSlug" })
+     * @ParamConverter("type", options={"repository_method": "findByIdOrSlug" })
      */
-    public function getCategoryAction(Category $category){
+    public function getTypeAction(Type $type){
 
         $view = FOSView::create();
 
-        if ($category) {
-            $view = $this->view($category, 200);
+        if ($type) {
+            $view = $this->view($type, 200);
         }
         else{
             $error = array(
                 'error' => 'not_found',
-                'error_description' => 'Category not found'
+                'error_description' => 'Type not found'
             );
             $view->setStatusCode(404, $error);
         }
@@ -80,12 +80,12 @@ class CategoriesController extends RestController
         return $this->handleView($view);
     }
 
-    private function getCategoriesWithParams($params){
+    private function getTypesWithParams($params){
         $offset = $params->get('offset');
         $limit = $params->get('limit');
 
         $data = $this->getDoctrine()->getManager()
-            ->getRepository('KSDealBundle:Category')
+            ->getRepository('KSDealBundle:Type')
             ->findBy(array(), array(), $limit, $offset);
 
         return $data;

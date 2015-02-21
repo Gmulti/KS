@@ -20,7 +20,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 /**
  * @ORM\Entity
  * @ORM\Table(name="ks_deal")
- *
+ * @ORM\Entity(repositoryClass="KS\DealBundle\Entity\DealRepository")
  * 
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  *
@@ -55,6 +55,7 @@ class Deal
     /**
      * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Comment", mappedBy="deal",  cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
+     * @Expose()
      */
     protected $comments;
 
@@ -84,6 +85,12 @@ class Deal
      * @ORM\JoinColumn(nullable=true)
      */
     protected $categories;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Type", cascade={"persist"}, inversedBy="deals")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $types;
 
     /**
      * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="usersLikes")
@@ -130,6 +137,7 @@ class Deal
         $this->comments = new ArrayCollection();
         $this->medias = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->types = new ArrayCollection();
     }
    
 
@@ -471,5 +479,38 @@ class Deal
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Add types
+     *
+     * @param \KS\DealBundle\Entity\Type $types
+     * @return Deal
+     */
+    public function addType(\KS\DealBundle\Entity\Type $types)
+    {
+        $this->types[] = $types;
+
+        return $this;
+    }
+
+    /**
+     * Remove types
+     *
+     * @param \KS\DealBundle\Entity\Type $types
+     */
+    public function removeType(\KS\DealBundle\Entity\Type $types)
+    {
+        $this->types->removeElement($types);
+    }
+
+    /**
+     * Get types
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 }

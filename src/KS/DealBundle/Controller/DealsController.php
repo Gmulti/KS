@@ -36,6 +36,8 @@ class DealsController extends RestController
      *
      * @QueryParam(name="offset", requirements="\d+", default="0", description="Offset deals")
      * @QueryParam(name="limit", requirements="\d+", default="10", description="Limit deals")
+     * @QueryParam(name="start_price", requirements="\d+", description="Price start deals")
+     * @QueryParam(name="end_price", requirements="\d+", description="Price end deals")
      *
      */
     public function getDealsAction(ParamFetcher $params)
@@ -63,7 +65,7 @@ class DealsController extends RestController
     /**
      * Return a Deal
      *
-     * @ParamConverter("Deal")
+     * @ParamConverter("deal")
      */
     public function getDealAction(Deal $deal){
 
@@ -117,7 +119,7 @@ class DealsController extends RestController
 
     /**
      * Edit a Deal
-     * @ParamConverter("Deal")
+     * @ParamConverter("deal")
      *
      */
     public function putDealAction(Request $request, Deal $deal){
@@ -145,7 +147,7 @@ class DealsController extends RestController
 
     /**
      * Delete a Deal
-     * @ParamConverter("Deal")
+     * @ParamConverter("deal")
      *
      */
     public function deleteDealAction(Deal $deal){
@@ -172,10 +174,19 @@ class DealsController extends RestController
 
         $offset = $params->get('offset');
         $limit = $params->get('limit');
+        $options = array();
+
+        if($params->get('start_price') !== null){
+            $options['start_price'] = $params->get('start_price');   
+        }
+       
+        if ($params->get('end_price') !== null) {
+            $options['end_price'] = $params->get('end_price');
+        }
 
         $data = $this->getDoctrine()->getManager()
             ->getRepository('KSDealBundle:Deal')
-            ->findBy(array(), array('updated' => 'DESC'), $limit, $offset);
+            ->getDealsWithOptions($options, $limit, $offset);
 
         return $data;
     }

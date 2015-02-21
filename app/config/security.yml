@@ -10,7 +10,7 @@ security:
         fos_userbundle:
             id: fos_user.user_provider.username
         oauth2:
-            id: fos_userbundle.user_provider.username
+            id: fos_user.user_provider.username
 
     firewalls:
         api:

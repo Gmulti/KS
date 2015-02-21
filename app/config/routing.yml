@@ -23,10 +23,6 @@ _ks_user_public:
     resource: KS\UserBundle\Controller\UsersRegisterController
     prefix: /api/public
 
-_ks_user_admin:
-    type:     rest
-    resource: KS\UserBundle\Controller\UsersAdminController
-    prefix: /api/admin/v1
 
 oauth2_server:
     resource: "@OAuth2ServerBundle/Controller/"

@@ -2,20 +2,20 @@
 
 namespace KS\DealBundle\Entity;
 
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use Doctrine\ORM\EntityRepository;
 
-class CategoryRepository extends NestedTreeRepository
+class TypeRepository extends EntityRepository
 {
-	public function getDealsByCategory($category, $limit = 0, $offset = 10)
+	public function getDealsByType($type, $limit = 0, $offset = 10)
 	{
     	$qb = $this->_em->createQueryBuilder();
 
 		$qb->select('d')
 			->from('KSDealBundle:Deal','d')
-			->join('d.categories' , 'c')
+			->join('d.types' , 'c')
 			->addSelect('c')
-			->where('c.id = :category')
-			->setParameter('category', $category->getId())
+			->where('c.id = :type')
+			->setParameter('type', $type->getId())
 			->orderBy('d.updated', 'DESC')
 			->setFirstResult($offset)
 			->setMaxResults($limit);
@@ -32,15 +32,15 @@ class CategoryRepository extends NestedTreeRepository
   		// String
   		if($cast === 0){
   			$qb->select('c')
-				->from('KSDealBundle:Category','c')
-				->where('c.slug = :category')
-				->setParameter('category', $value);
+				->from('KSDealBundle:Type','c')
+				->where('c.slug = :type')
+				->setParameter('type', $value);
   		}
   		else{
   			$qb->select('c')
-				->from('KSDealBundle:Category','c')
-				->where('c.id = :category')
-				->setParameter('category', $cast);
+				->from('KSDealBundle:Type','c')
+				->where('c.id = :type')
+				->setParameter('type', $cast);
   		}
 
   		return $qb->getQuery()

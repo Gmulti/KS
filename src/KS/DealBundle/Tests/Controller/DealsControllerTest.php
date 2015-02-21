@@ -9,6 +9,22 @@ class DealsControllerTest extends GeneralController
 {
     protected static $idDeal;
 
+    public function testGetDealsOffsetLimitDefaultNoConnect()
+    {
+        fwrite(STDOUT, __METHOD__ . "\n");
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', 
+            '/api/v1/deals.json'
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+        $this->assertEquals(500, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+
+    }
+
     public function testGetDealsOffsetLimitDefault()
     {
         fwrite(STDOUT, __METHOD__ . "\n");
