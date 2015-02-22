@@ -57,7 +57,7 @@ class Media
 
     /**
      * @Expose()
-     * @ORM\ManyToOne(targetEntity="KS\DealBundle\Entity\Deal", inversedBy="medias", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="KS\DealBundle\Entity\Comment", inversedBy="medias", cascade={"persist"})
      */
     protected $comment;
 
@@ -392,7 +392,7 @@ class Media
      * @param \KS\DealBundle\Entity\Deal $comment
      * @return Media
      */
-    public function setComment(\KS\DealBundle\Entity\Deal $comment = null)
+    public function setComment(\KS\DealBundle\Entity\Comment $comment = null)
     {
         $this->comment = $comment;
 

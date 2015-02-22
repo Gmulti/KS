@@ -45,7 +45,6 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity="KS\UserBundle\Entity\User", inversedBy="comments", cascade={"persist"})
-     * @Expose()
      * @Assert\NotBlank()
      * @Assert\Type(type="KS\UserBundle\Entity\User")
      */
@@ -263,6 +262,7 @@ class Comment
      */
     public function addMedia(\KS\MediaBundle\Entity\Media $medias)
     {
+        $medias->setComment($this);
         $this->medias[] = $medias;
 
         return $this;

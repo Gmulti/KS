@@ -26,8 +26,8 @@ class CommentHandler implements CommentHandlerInterface{
 	    $this->formFactory = $formFactory;
 	    $this->categoryOptionField = $categoryOptionField;
 	    $this->repository = $this->em->getRepository($this->entityClass);
-	    $this->postConfig = array('user','deal','content');
-	    $this->putConfig  = array('content');
+	    $this->postConfig = array('user','deal','content','medias');
+	    $this->putConfig  = array('content','medias');
 	}
 private function getErrorMessages(\Symfony\Component\Form\Form $form) {
     $errors = array();
@@ -62,7 +62,6 @@ private function getErrorMessages(\Symfony\Component\Form\Form $form) {
 		        if($this->configFiles){
 		        	$medias = $comment->getMedias();
 		           	foreach ($medias as $key => $media) {
-		        		$media->setComment($comment);
 		        		$media->setUser($comment->getUser());
 		        		$this->em->persist($media);
 		        	}

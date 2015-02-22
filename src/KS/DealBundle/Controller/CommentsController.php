@@ -62,13 +62,20 @@ class CommentsController extends RestController
      * Return a comment
      *
      * @ParamConverter("deal")
-     * @ParamConverter("comment", options={"mapping": {"deal": "deal"}})
      */
-    public function getCommentAction(Deal $deal, Comment $comment){
-        
+    public function getCommentAction(Deal $deal, $idComment){
+
         $view = FOSView::create();
 
-        if ($deal) {
+        $comment = $this->getDoctrine()->getManager()
+                        ->getRepository('KSDealBundle:Comment')
+                        ->findOneBy(array(
+                                'deal' => $deal,
+                                'id'   => $idComment
+                            )
+                        ); 
+
+        if ($comment) {
             $view = $this->view($comment, 200);
         }
         else{
