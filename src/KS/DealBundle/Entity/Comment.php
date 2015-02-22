@@ -39,12 +39,13 @@ class Comment
     /**
      * @ORM\ManyToOne(targetEntity="KS\DealBundle\Entity\Deal", inversedBy="comments", cascade={"persist"}) 
      * @Assert\NotBlank()
-     * @Assert\Type(type="KS\UserBundle\Entity\Deal")
+     * @Assert\Type(type="KS\DealBundle\Entity\Deal")
      */
     protected $deal;
 
     /**
      * @ORM\ManyToOne(targetEntity="KS\UserBundle\Entity\User", inversedBy="comments", cascade={"persist"})
+     * @Expose()
      * @Assert\NotBlank()
      * @Assert\Type(type="KS\UserBundle\Entity\User")
      */
@@ -52,6 +53,7 @@ class Comment
 
     /**
      * @ORM\Column(type="string", length=160)
+     * @Assert\NotBlank()
      * @Expose()
      */
     protected $content;

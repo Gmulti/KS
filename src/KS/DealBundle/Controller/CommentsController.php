@@ -62,10 +62,24 @@ class CommentsController extends RestController
      * Return a comment
      *
      * @ParamConverter("deal")
-     * @ParamConverter("comment")
+     * @ParamConverter("comment", options={"mapping": {"deal": "deal"}})
      */
     public function getCommentAction(Deal $deal, Comment $comment){
+        
+        $view = FOSView::create();
 
+        if ($deal) {
+            $view = $this->view($comment, 200);
+        }
+        else{
+            $error = array(
+                'error' => 'not_found',
+                'error_description' => 'Deal not found'
+            );
+            $view->setStatusCode(404, $error);
+        }
+
+        return $this->handleView($view);
     }
 
   
@@ -73,12 +87,12 @@ class CommentsController extends RestController
      * Create a comment
      * @ParamConverter("deal")
      */
-    public function postCommentAction(Request $request, Deal $deal){
+    public function postCommentAction(Deal $deal, Request $request){
 
         $view = FOSView::create();
         $user = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
         $request->request->set('user',$user);
-        
+
         $newComment = $this->container->get('ksdeal.handler.comment')->post(
             $deal,
             $request

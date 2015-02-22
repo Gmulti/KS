@@ -40,6 +40,7 @@ class Deal
 
     /**
      * @ORM\Column(type="string", length=160)
+     * @Assert\NotBlank()
      * @Expose()
      */
     protected $content;

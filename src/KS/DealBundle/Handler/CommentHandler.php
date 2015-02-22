@@ -6,15 +6,14 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\ORM\EntityManager;
-use KS\DealBundle\Form\Type\DealType;
+use KS\DealBundle\Form\Type\CommentType;
 use KS\DealBundle\Entity\Deal;
-use FOS\RestBundle\Request\ParamFetcher;
-
 use KS\DealBundle\Entity\Comment;
+use FOS\RestBundle\Request\ParamFetcher;
 
 use KS\DealBundle\Exception\InvalidFormException;
 
-class CommentHandler implements DealHandlerInterface{
+class CommentHandler implements CommentHandlerInterface{
 
 	protected $formFactory;
 
@@ -30,7 +29,25 @@ class CommentHandler implements DealHandlerInterface{
 	    $this->postConfig = array('user','deal','content');
 	    $this->putConfig  = array('content');
 	}
+private function getErrorMessages(\Symfony\Component\Form\Form $form) {
+    $errors = array();
 
+    foreach ($form->getErrors() as $key => $error) {
+        if ($form->isRoot()) {
+            $errors['#'][] = $error->getMessage();
+        } else {
+            $errors[] = $error->getMessage();
+        }
+    }
+
+    foreach ($form->all() as $child) {
+        if (!$child->isValid()) {
+            $errors[$child->getName()] = $this->getErrorMessages($child);
+        }
+    }
+
+    return $errors;
+}
 	private function processForm(Comment $comment, Request $request, $method = "PUT"){
 		
 		$form = $this->createForm($comment, $request, $method);
@@ -40,13 +57,13 @@ class CommentHandler implements DealHandlerInterface{
 
 	 		if ($method !== "PUT") {
 
-		        $this->em->persist($deal);
+		        $this->em->persist($comment);
 
 		        if($this->configFiles){
-		        	$medias = $deal->getMedias();
+		        	$medias = $comment->getMedias();
 		           	foreach ($medias as $key => $media) {
-		        		$media->setDeal($deal);
-		        		$media->setUser($deal->getUser());
+		        		$media->setComment($comment);
+		        		$media->setUser($comment->getUser());
 		        		$this->em->persist($media);
 		        	}
 		        }
@@ -54,7 +71,7 @@ class CommentHandler implements DealHandlerInterface{
 
 	        $this->em->flush();
 
-	        return $deal;
+	        return $comment;
 	    }
 
 		throw new InvalidFormException('Invalid submitted data', $form);
@@ -107,7 +124,8 @@ class CommentHandler implements DealHandlerInterface{
 			}
 		}
 
-		$form = $this->formFactory->create(new CommentType(), $comment, array('method' => $method));
+
+		$form = $this->formFactory->create(new CommentType($config), $comment, array('method' => $method));
 
 		return $form;
 	}
