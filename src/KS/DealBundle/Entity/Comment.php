@@ -66,7 +66,7 @@ class Comment
     protected $medias;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="usersLikes")
+     * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="commentsLikes")
      * @ORM\JoinColumn(nullable=true)
      * @Expose()
      */
@@ -97,6 +97,8 @@ class Comment
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $deletedAt;
+ 
+
     /**
      * Constructor
      */
@@ -262,7 +264,6 @@ class Comment
      */
     public function addMedia(\KS\MediaBundle\Entity\Media $medias)
     {
-        $medias->setComment($this);
         $this->medias[] = $medias;
 
         return $this;

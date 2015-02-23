@@ -147,8 +147,18 @@ class CommentsController extends RestController
      *
      */
     public function postCommentLikeAction(Deal $deal, $idComment, Request $request){
+
+    }
+
+    /**
+     * Dislike a Comment
+     * @ParamConverter("deal")
+     *
+     */
+    public function postCommentDislikeAction(Deal $deal, $idComment, Request $request){
    
     }
+
 
     private function getCommentsWithParams($deal, $params){
 

@@ -11,7 +11,7 @@ use KS\DealBundle\Models\RelationManyHandlerInterface;
 use KS\UserBundle\Entity\User;
 
 
-class LikeHandler implements RelationManyHandlerInterface{
+class LikeDealHandler implements RelationManyHandlerInterface{
 
 
 	public function __construct(EntityManager $em, $entityClass)

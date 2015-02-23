@@ -7,10 +7,16 @@ services:
         class: KS\DealBundle\Utils\CategoryOptionField
 
     ksdeal.handler.deallike:
-        class: KS\DealBundle\Handler\LikeHandler
+        class: KS\DealBundle\Handler\LikeDealHandler
         arguments: 
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.deal.class%"
+
+    ksdeal.handler.commentlike:
+        class: KS\DealBundle\Handler\LikeCommentHandler
+        arguments: 
+            - "@doctrine.orm.entity_manager"
+            - "%ksdeal.comment.class%"
 
 
     ksdeal.type.deal_selector:

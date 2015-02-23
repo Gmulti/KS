@@ -98,10 +98,10 @@ class User extends BaseUser implements OAuth2UserInterface
     protected $dealsLikes;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Comment", cascade={"all"}, mappedBy="likesComment")
+     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Comment", cascade={"all"}, mappedBy="usersLikesComment")
      * @ORM\JoinColumn(nullable=true)
      */
-    protected $usersLikesComment;
+    protected $commentsLikes;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -503,35 +503,35 @@ class User extends BaseUser implements OAuth2UserInterface
     }
 
     /**
-     * Add usersLikesComment
+     * Add commentsLikes
      *
-     * @param \KS\DealBundle\Entity\Comment $usersLikesComment
+     * @param \KS\DealBundle\Entity\Comment $commentsLikes
      * @return User
      */
-    public function addUsersLikesComment(\KS\DealBundle\Entity\Comment $usersLikesComment)
+    public function addCommentsLike(\KS\DealBundle\Entity\Comment $commentsLikes)
     {
-        $this->usersLikesComment[] = $usersLikesComment;
+        $this->commentsLikes[] = $commentsLikes;
 
         return $this;
     }
 
     /**
-     * Remove usersLikesComment
+     * Remove commentsLikes
      *
-     * @param \KS\DealBundle\Entity\Comment $usersLikesComment
+     * @param \KS\DealBundle\Entity\Comment $commentsLikes
      */
-    public function removeUsersLikesComment(\KS\DealBundle\Entity\Comment $usersLikesComment)
+    public function removeCommentsLike(\KS\DealBundle\Entity\Comment $commentsLikes)
     {
-        $this->usersLikesComment->removeElement($usersLikesComment);
+        $this->commentsLikes->removeElement($commentsLikes);
     }
 
     /**
-     * Get usersLikesComment
+     * Get commentsLikes
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getUsersLikesComment()
+    public function getCommentsLikes()
     {
-        return $this->usersLikesComment;
+        return $this->commentsLikes;
     }
 }

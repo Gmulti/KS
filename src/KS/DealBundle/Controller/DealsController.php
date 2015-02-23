@@ -200,7 +200,7 @@ class DealsController extends RestController
         return $this->handleView($view);   
     }
 
-     /**
+    /**
      * Dislike a Deal
      * @ParamConverter("deal")
      *

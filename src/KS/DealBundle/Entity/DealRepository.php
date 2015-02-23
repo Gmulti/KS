@@ -62,7 +62,7 @@ class DealRepository extends EntityRepository implements LikeRepositoryInterface
 				  ->getResult();
   	}
 
-  	public function getLikeByUser(Deal $deal, User $user){
+  	public function getLikeByUser($deal, User $user){
 
   		$qb = $this->_em->createQueryBuilder();
 
