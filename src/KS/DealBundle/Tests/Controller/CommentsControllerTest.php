@@ -10,6 +10,8 @@ use KS\DealBundle\Tests\GeneralController;
 class CommentsControllerTest extends GeneralController
 {
 
+    protected static $idDeal;
+
     private function getDeal(){
         $client = static::createClient();
 

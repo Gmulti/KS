@@ -81,24 +81,29 @@ class UsersControllerTest extends GeneralController
      */
     public function testDeleteUser(){
         fwrite(STDOUT, __METHOD__ . "\n");
-    	$client = static::createClient();
 
-        $crawler = $client->request('DELETE', 
-            '/api/v1/users/' . self::$idUser . '.json',
-            array(),
-            array(),
-            self::$headers
-        );
+        if (self::$idUser !== null) {
+               
+        	$client = static::createClient();
 
-        $response = $client->getResponse();
-        $msg = json_decode($response->getContent(), true);
+            $crawler = $client->request('DELETE', 
+                '/api/v1/users/' . self::$idUser . '.json',
+                array(),
+                array(),
+                self::$headers
+            );
 
-        if(isset($msg['success'])){
-            $this->assertEquals(202, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
-            $this->assertEquals($msg['success'], 'delete_success');
-        }
-        else{
-            $this->assertEquals(404, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+            $response = $client->getResponse();
+            $msg = json_decode($response->getContent(), true);
+
+            if(isset($msg['success'])){
+                $this->assertEquals(202, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+                $this->assertEquals($msg['success'], 'delete_success');
+            }
+            else{
+                $this->assertEquals(404, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+
+            }
 
         }
        
