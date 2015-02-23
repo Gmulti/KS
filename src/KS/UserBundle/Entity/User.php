@@ -92,10 +92,10 @@ class User extends BaseUser implements OAuth2UserInterface
     protected $scopes;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Deal", cascade={"all"}, mappedBy="likes")
+     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Deal", cascade={"all"}, mappedBy="usersLikes")
      * @ORM\JoinColumn(nullable=true)
      */
-    protected $usersLikes;
+    protected $dealsLikes;
 
     /**
      * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Comment", cascade={"all"}, mappedBy="likesComment")
@@ -185,6 +185,7 @@ class User extends BaseUser implements OAuth2UserInterface
     {
         // We don't hold anything sensitivie, do nothing
     }
+
 
 
 
@@ -469,36 +470,36 @@ class User extends BaseUser implements OAuth2UserInterface
     }
 
     /**
-     * Add usersLikes
+     * Add dealsLikes
      *
-     * @param \KS\DealBundle\Entity\Deal $usersLikes
+     * @param \KS\DealBundle\Entity\Deal $dealsLikes
      * @return User
      */
-    public function addUsersLike(\KS\DealBundle\Entity\Deal $usersLikes)
+    public function addDealsLike(\KS\DealBundle\Entity\Deal $dealsLikes)
     {
-        $this->usersLikes[] = $usersLikes;
+        $this->dealsLikes[] = $dealsLikes;
 
         return $this;
     }
 
     /**
-     * Remove usersLikes
+     * Remove dealsLikes
      *
-     * @param \KS\DealBundle\Entity\Deal $usersLikes
+     * @param \KS\DealBundle\Entity\Deal $dealsLikes
      */
-    public function removeUsersLike(\KS\DealBundle\Entity\Deal $usersLikes)
+    public function removeDealsLike(\KS\DealBundle\Entity\Deal $dealsLikes)
     {
-        $this->usersLikes->removeElement($usersLikes);
+        $this->dealsLikes->removeElement($dealsLikes);
     }
 
     /**
-     * Get usersLikes
+     * Get dealsLikes
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getUsersLikes()
+    public function getDealsLikes()
     {
-        return $this->usersLikes;
+        return $this->dealsLikes;
     }
 
     /**

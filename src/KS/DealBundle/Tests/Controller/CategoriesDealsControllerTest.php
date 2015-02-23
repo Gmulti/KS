@@ -10,8 +10,7 @@ use KS\DealBundle\Tests\GeneralController;
 class CategoriesDealsControllerTest extends GeneralController
 {
 
-	 public function testGetDealsFromCategoryOffsetLimitDefaultNoConnect()
-    {
+	public function testGetDealsFromCategoryOffsetLimitDefaultNoConnect(){
         fwrite(STDOUT, __METHOD__ . "\n");
         $client = static::createClient();
 

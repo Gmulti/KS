@@ -94,10 +94,10 @@ class Deal
     protected $types;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="usersLikes")
+     * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="dealsLikes")
      * @ORM\JoinColumn(nullable=true)
      */
-    protected $likes;
+    protected $usersLikes;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -163,6 +163,7 @@ class Deal
     public function __toString(){
         return $this->content;
     }
+
 
     /**
      * Get id
@@ -241,6 +242,75 @@ class Deal
     public function getPrice()
     {
         return $this->price;
+    }
+
+    /**
+     * Set lat
+     *
+     * @param float $lat
+     * @return Deal
+     */
+    public function setLat($lat)
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    /**
+     * Get lat
+     *
+     * @return float 
+     */
+    public function getLat()
+    {
+        return $this->lat;
+    }
+
+    /**
+     * Set lng
+     *
+     * @param float $lng
+     * @return Deal
+     */
+    public function setLng($lng)
+    {
+        $this->lng = $lng;
+
+        return $this;
+    }
+
+    /**
+     * Get lng
+     *
+     * @return float 
+     */
+    public function getLng()
+    {
+        return $this->lng;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     * @return Deal
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string 
+     */
+    public function getAddress()
+    {
+        return $this->address;
     }
 
     /**
@@ -346,6 +416,39 @@ class Deal
     }
 
     /**
+     * Add comments
+     *
+     * @param \KS\DealBundle\Entity\Comment $comments
+     * @return Deal
+     */
+    public function addComment(\KS\DealBundle\Entity\Comment $comments)
+    {
+        $this->comments[] = $comments;
+
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \KS\DealBundle\Entity\Comment $comments
+     */
+    public function removeComment(\KS\DealBundle\Entity\Comment $comments)
+    {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
      * Set user
      *
      * @param \KS\UserBundle\Entity\User $user
@@ -399,72 +502,6 @@ class Deal
     public function getUsersShared()
     {
         return $this->usersShared;
-    }
-
-    /**
-     * Add likes
-     *
-     * @param \KS\UserBundle\Entity\User $likes
-     * @return Deal
-     */
-    public function addLike(\KS\UserBundle\Entity\User $likes)
-    {
-        $this->likes[] = $likes;
-
-        return $this;
-    }
-
-    /**
-     * Remove likes
-     *
-     * @param \KS\UserBundle\Entity\User $likes
-     */
-    public function removeLike(\KS\UserBundle\Entity\User $likes)
-    {
-        $this->likes->removeElement($likes);
-    }
-
-    /**
-     * Get likes
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getLikes()
-    {
-        return $this->likes;
-    }
-
-    /**
-     * Add comments
-     *
-     * @param \KS\DealBundle\Entity\Comment $comments
-     * @return Deal
-     */
-    public function addComment(\KS\DealBundle\Entity\Comment $comments)
-    {
-        $this->comments[] = $comments;
-
-        return $this;
-    }
-
-    /**
-     * Remove comments
-     *
-     * @param \KS\DealBundle\Entity\Comment $comments
-     */
-    public function removeComment(\KS\DealBundle\Entity\Comment $comments)
-    {
-        $this->comments->removeElement($comments);
-    }
-
-    /**
-     * Get comments
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getComments()
-    {
-        return $this->comments;
     }
 
     /**
@@ -534,71 +571,35 @@ class Deal
     }
 
     /**
-     * Set lat
+     * Add usersLikes
      *
-     * @param float $lat
+     * @param \KS\UserBundle\Entity\User $usersLikes
      * @return Deal
      */
-    public function setLat($lat)
+    public function addUsersLike(\KS\UserBundle\Entity\User $usersLikes)
     {
-        $this->lat = $lat;
+        $this->usersLikes[] = $usersLikes;
 
         return $this;
     }
 
     /**
-     * Get lat
+     * Remove usersLikes
      *
-     * @return float 
+     * @param \KS\UserBundle\Entity\User $usersLikes
      */
-    public function getLat()
+    public function removeUsersLike(\KS\UserBundle\Entity\User $usersLikes)
     {
-        return $this->lat;
+        $this->usersLikes->removeElement($usersLikes);
     }
 
     /**
-     * Set lng
+     * Get usersLikes
      *
-     * @param float $lng
-     * @return Deal
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function setLng($lng)
+    public function getUsersLikes()
     {
-        $this->lng = $lng;
-
-        return $this;
-    }
-
-    /**
-     * Get lng
-     *
-     * @return float 
-     */
-    public function getLng()
-    {
-        return $this->lng;
-    }
-
-    /**
-     * Set address
-     *
-     * @param string $address
-     * @return Deal
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    /**
-     * Get address
-     *
-     * @return string 
-     */
-    public function getAddress()
-    {
-        return $this->address;
+        return $this->usersLikes;
     }
 }

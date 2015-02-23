@@ -137,7 +137,6 @@ class DealsControllerTest extends GeneralController
         $crawler = $client->request('POST', 
             '/api/v1/deals.json',
             array(
-                'user' => self::$username,
                 'content'  => 'Contenu test'
             ),
             array(),

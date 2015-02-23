@@ -29,25 +29,7 @@ class CommentHandler implements CommentHandlerInterface{
 	    $this->postConfig = array('user','deal','content','medias');
 	    $this->putConfig  = array('content','medias');
 	}
-private function getErrorMessages(\Symfony\Component\Form\Form $form) {
-    $errors = array();
 
-    foreach ($form->getErrors() as $key => $error) {
-        if ($form->isRoot()) {
-            $errors['#'][] = $error->getMessage();
-        } else {
-            $errors[] = $error->getMessage();
-        }
-    }
-
-    foreach ($form->all() as $child) {
-        if (!$child->isValid()) {
-            $errors[$child->getName()] = $this->getErrorMessages($child);
-        }
-    }
-
-    return $errors;
-}
 	private function processForm(Comment $comment, Request $request, $method = "PUT"){
 		
 		$form = $this->createForm($comment, $request, $method);

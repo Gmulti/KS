@@ -12,48 +12,110 @@ class CommentsControllerTest extends GeneralController
 
     protected static $idDeal;
 
-    private function getDeal(){
+    protected static $idComment;
+
+    private static function getDeal(){
         $client = static::createClient();
 
         $crawler = $client->request('GET', 
-            '/api/v1/deals.json'
-        );
-
-        $response = $client->getResponse();
-        $msg = json_decode($response->getContent(), true);
-        
-        if(isset($msg[0])):
-            self::$idDeal = $msg[0]['id'];
-        endif;
-
-    }
-
-    public function testPostDealNoMedia(){
-        fwrite(STDOUT, __METHOD__ . "\n");
-        $client = static::createClient();
-
-        $crawler = $client->request('POST', 
             '/api/v1/deals.json',
-            array(
-                'user' => self::$username,
-                'content'  => 'Contenu test'
-            ),
+            array(),
             array(),
             self::$headers
         );
 
         $response = $client->getResponse();
-        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
-        $this->assertEquals(200, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
-
         $msg = json_decode($response->getContent(), true);
+        
+        if(isset($msg[0]['id'])):
+            return $msg[0]['id'];
+        endif;
 
-        $this->assertEquals($msg['user']['username'], self::$username);
-        $this->assertEquals($msg['content'], 'Contenu test');
-
-        self::$idDeal = $msg['id'];
+        return null;
     }
 
+    public function testPostCommentNoMedia(){
+        fwrite(STDOUT, __METHOD__ . "\n");
 
+        $idDeal = self::getDeal();
+
+        if ($idDeal !== null) {
+            $client = static::createClient();
+
+            $crawler = $client->request('POST', 
+                '/api/v1/deals/' . $idDeal . '/comments.json',
+                array(
+                    'content'  => 'Commentaire test'
+                ),
+                array(),
+                self::$headers
+            );
+
+            $response = $client->getResponse();
+            $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+            $this->assertEquals(200, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+
+            $msg = json_decode($response->getContent(), true);
+
+            $this->assertEquals($msg['content'], 'Commentaire test');
+
+            if(isset($msg['id'])):
+                self::$idDeal = $idDeal;
+                self::$idComment = $msg['id'];
+            endif;
+
+        }
+    }
+
+    /**
+     * @depends testPostCommentNoMedia
+     */
+    public function testGetComment(){
+        fwrite(STDOUT, __METHOD__ . "\n");
+
+        if(self::$idComment !== null){
+            $client = static::createClient();
+
+            $crawler = $client->request('GET', 
+                '/api/v1/deals/' . self::$idDeal . '/comments/' . self::$idComment . '.json',
+                array(
+                    'content'  => 'Commentaire test'
+                ),
+                array(),
+                self::$headers
+            );
+
+            $response = $client->getResponse();
+            $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+            $this->assertEquals(200, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+
+            $msg = json_decode($response->getContent(), true);
+
+            $this->assertEquals($msg['content'], 'Commentaire test');
+
+        }
+    }
+
+    public function testPostCommentNoConnect(){
+        fwrite(STDOUT, __METHOD__ . "\n");
+
+        $idDeal = self::getDeal();
+
+        if ($idDeal !== null) {
+            $client = static::createClient();
+
+            $crawler = $client->request('POST', 
+                '/api/v1/deals/' . $idDeal . '/comments.json',
+                array(
+                    'content'  => 'Commentaire test'
+                )
+            );
+
+            $response = $client->getResponse();
+            $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+            $this->assertEquals(500, $response->getStatusCode());
+
+        }
+    }
 
 }

@@ -3,9 +3,15 @@ parameters:
     ksdeal.comment.class: KS\DealBundle\Entity\Comment
 
 services:
-
     ksdeal.utils.categoryoptionfield:
         class: KS\DealBundle\Utils\CategoryOptionField
+
+    ksdeal.handler.deallike:
+        class: KS\DealBundle\Handler\LikeHandler
+        arguments: 
+            - "@doctrine.orm.entity_manager"
+            - "%ksdeal.deal.class%"
+
 
     ksdeal.type.deal_selector:
         class: KS\DealBundle\Form\DataTransformer\DealTransformerType

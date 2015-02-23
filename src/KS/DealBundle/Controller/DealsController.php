@@ -169,6 +169,68 @@ class DealsController extends RestController
         return $this->handleView($view);   
     }
 
+    /**
+     * Like a Deal
+     * @ParamConverter("deal")
+     *
+     */
+    public function postDealLikeAction(Deal $deal, Request $request){
+        $view = FOSView::create();
+        
+        $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+        $user = $this->getDoctrine()->getManager()
+                     ->getRepository('KSUserBundle:User')->findOneByUsername($username);
+
+        $dealLike = $this->container->get('ksdeal.handler.deallike')->post(
+            $deal, $user
+        );
+
+        if(null !== $dealLike){
+             $view = $this->view($dealLike, 200);
+
+        }
+        else{
+            $view->setStatusCode(404,array(
+                    'error' => 'already_like', 
+                    'error_description' => 'You already like deal'
+                )
+            );
+        }
+
+        return $this->handleView($view);   
+    }
+
+     /**
+     * Dislike a Deal
+     * @ParamConverter("deal")
+     *
+     */
+    public function postDealDislikeAction(Deal $deal, Request $request){
+        $view = FOSView::create();
+        
+        $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+        $user = $this->getDoctrine()->getManager()
+                     ->getRepository('KSUserBundle:User')->findOneByUsername($username);
+
+        $dealDislike = $this->container->get('ksdeal.handler.deallike')->delete(
+            $deal, $user
+        );
+
+        if(null !== $dealDislike){
+             $view = $this->view($dealDislike, 200);
+
+        }
+        else{
+            $view->setStatusCode(404,array(
+                    'error' => 'no_like', 
+                    'error_description' => 'Do not like this deal'
+                )
+            );
+        }
+
+        return $this->handleView($view);   
+    }
+
 
     private function getDealsWithParams(ParamFetcher $params){
 

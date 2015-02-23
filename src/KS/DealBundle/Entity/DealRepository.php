@@ -3,8 +3,11 @@
 namespace KS\DealBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use KS\UserBundle\Entity\User;
+use KS\DealBundle\Entity\Deal;
+use KS\DealBundle\Models\LikeRepositoryInterface;
 
-class DealRepository extends EntityRepository
+class DealRepository extends EntityRepository implements LikeRepositoryInterface
 {
 
 	private $start_price;
@@ -57,6 +60,23 @@ class DealRepository extends EntityRepository
 
 		return $qb->getQuery()
 				  ->getResult();
+  	}
+
+  	public function getLikeByUser(Deal $deal, User $user){
+
+  		$qb = $this->_em->createQueryBuilder();
+
+		$qb->select('d')
+			->from('KSDealBundle:Deal','d')
+			->join('d.usersLikes' , 'u')
+			->addSelect('u')
+			->where('u.id = :user')
+			->setParameter('user', $user->getId())
+			->andWhere('d.id = :deal')
+			->setParameter('deal', $deal->getId());
+
+		return $qb->getQuery()
+				  ->getOneOrNullResult();
   	}
 
   

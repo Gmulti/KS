@@ -125,21 +125,29 @@ class CommentsController extends RestController
     /**
      * Edit a comment
      * @ParamConverter("deal")
-     * @ParamConverter("comment")
      *
      */
-    public function putCommentAction(Request $request, Deal $deal, Comment $comment){
+    public function putCommentAction(Deal $deal, $idComment, Request $request){
 
     }
 
     /**
      * Delete a Comment
-     * @ParamConverter("comment")
+     * @ParamConverter("deal")
      *
      */
-    public function deleteCommentAction(Deal $deal, Comment $comment){
+    public function deleteCommentAction(Deal $deal, $idComment){
     
  
+    }
+
+    /**
+     * Like a Comment
+     * @ParamConverter("deal")
+     *
+     */
+    public function postCommentLikeAction(Deal $deal, $idComment, Request $request){
+   
     }
 
     private function getCommentsWithParams($deal, $params){
