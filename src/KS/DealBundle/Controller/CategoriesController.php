@@ -34,6 +34,7 @@ class CategoriesController extends RestController
      *
      * @QueryParam(name="offset", requirements="\d+", default="0", description="Offset categories")
      * @QueryParam(name="limit", requirements="\d+", default="100", description="Limit categories")
+     * @QueryParam(name="compact", requirements="\d+", default="0", description="Compact categories")
      *
      */
     public function getCategoriesAction(ParamFetcher $params){      
@@ -83,10 +84,22 @@ class CategoriesController extends RestController
     private function getCategoriesWithParams($params){
         $offset = $params->get('offset');
         $limit = $params->get('limit');
+        $compact = $params->get('compact');
 
-        $data = $this->getDoctrine()->getManager()
-            ->getRepository('KSDealBundle:Category')
-            ->findBy(array(), array(), $limit, $offset);
+        if ($compact) {
+            $data = $this->getDoctrine()->getManager()
+                         ->getRepository('KSDealBundle:Category')->getAllParent();
+
+            $data = $this->getDoctrine()->getManager()
+                        ->getRepository('KSDealBundle:Category')->buildTreeArrayCategory($data);
+
+        }
+        else{
+            $data = $this->getDoctrine()->getManager()
+                        ->getRepository('KSDealBundle:Category')
+                        ->findBy(array(), array(), $limit, $offset);
+        }
+        
 
         return $data;
     }

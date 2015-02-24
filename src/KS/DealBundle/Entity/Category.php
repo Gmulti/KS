@@ -42,6 +42,12 @@ class Category
     protected $title;
 
     /**
+     * @Gedmo\TreeRoot
+     * @ORM\Column(name="root", type="integer", nullable=true)
+     */
+    protected $root;
+
+    /**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
      * @Expose()
@@ -404,5 +410,28 @@ class Category
 
     public function __toString(){
         return $this->title;
+    }
+
+    /**
+     * Set root
+     *
+     * @param integer $root
+     * @return Category
+     */
+    public function setRoot($root)
+    {
+        $this->root = $root;
+
+        return $this;
+    }
+
+    /**
+     * Get root
+     *
+     * @return integer 
+     */
+    public function getRoot()
+    {
+        return $this->root;
     }
 }

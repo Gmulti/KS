@@ -47,4 +47,34 @@ class CategoryRepository extends NestedTreeRepository
 				  ->getOneOrNullResult();
 
   	}
+
+  	public function getAllParent(){
+  		$qb = $this->_em->createQueryBuilder();
+  		$qb->select('c')
+		    ->from('KSDealBundle:Category', 'c')
+		    ->orderBy('c.root, c.lft', 'ASC');
+
+		return $qb->getQuery()->getArrayResult();
+  	}
+
+  	public function buildTreeArrayCategory($nodes){
+	 
+        $nestedTree = $this->buildTreeArray($nodes);
+
+        $build = function ($tree) use (&$build) {
+            foreach ($tree as $node) {
+
+                $output[$node['id']]['slug'] = $node['slug']; 
+                $output[$node['id']]['title'] = $node['title']; 
+                if (count($node['__children']) > 0) {
+                    $output[$node['id']]['children'] = $build($node['__children']);
+                }
+            }
+
+            return $output;
+        };
+
+        return $build($nestedTree);
+	}
+
 }
