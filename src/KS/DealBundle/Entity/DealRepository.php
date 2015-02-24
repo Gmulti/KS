@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use KS\UserBundle\Entity\User;
 use KS\DealBundle\Entity\Deal;
 use KS\DealBundle\Models\LikeRepositoryInterface;
+use KS\DealBundle\Models\LikeEntityInterface;
 
 class DealRepository extends EntityRepository implements LikeRepositoryInterface
 {
@@ -62,7 +63,7 @@ class DealRepository extends EntityRepository implements LikeRepositoryInterface
 				  ->getResult();
   	}
 
-  	public function getLikeByUser($deal, User $user){
+  	public function getLikeByUser(LikeEntityInterface $deal, User $user){
 
   		$qb = $this->_em->createQueryBuilder();
 

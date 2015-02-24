@@ -6,18 +6,19 @@ use Doctrine\ORM\EntityRepository;
 use KS\UserBundle\Entity\User;
 use KS\DealBundle\Entity\Deal;
 use KS\DealBundle\Models\LikeRepositoryInterface;
+use KS\DealBundle\Models\LikeEntityInterface;
 
 class CommentRepository extends EntityRepository implements LikeRepositoryInterface
 {
 
 
-  	public function getLikeByUser($comment, User $user){
+  	public function getLikeByUser(LikeEntityInterface $comment, User $user){
 
   		$qb = $this->_em->createQueryBuilder();
 
-		$qb->select('d')
+		$qb->select('c')
 			->from('KSDealBundle:Comment','c')
-			->join('c.likesComment' , 'u')
+			->join('c.usersLikesComment' , 'u')
 			->addSelect('u')
 			->where('u.id = :user')
 			->setParameter('user', $user->getId())

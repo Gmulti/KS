@@ -9,8 +9,8 @@ use FOS\RestBundle\Request\ParamFetcher;
 interface RelationManyHandlerInterface
 {
 
-    public function delete($entityLike, User $user);
+    public function delete(LikeEntityInterface $entityLike, User $user);
 
-    public function post($entityLike, User $user);
+    public function post(LikeEntityInterface $entityLike, User $user);
 
 }

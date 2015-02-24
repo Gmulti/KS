@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
 use KS\DealBundle\Entity\Deal;
 use KS\DealBundle\Models\RelationManyHandlerInterface;
+use KS\DealBundle\Models\LikeEntityInterface;
 use KS\UserBundle\Entity\User;
 
 
@@ -21,7 +22,7 @@ class LikeDealHandler implements RelationManyHandlerInterface{
 	    $this->repository = $this->em->getRepository($this->entityClass);
 	}
 
-	public function delete($deal, User $user){
+	public function delete(LikeEntityInterface $deal, User $user){
 		$result = $this->repository->getLikeByUser($deal, $user);
 
     	if($result !== null){
@@ -38,7 +39,7 @@ class LikeDealHandler implements RelationManyHandlerInterface{
     	return null;
 	}
 
-    public function post($deal, User $user){
+    public function post(LikeEntityInterface $deal, User $user){
     	$result = $this->repository->getLikeByUser($deal, $user);
 
     	if($result == null){

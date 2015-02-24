@@ -8,7 +8,7 @@ use KS\DealBundle\Entity\Deal;
 interface LikeRepositoryInterface
 {
 
-    public function getLikeByUser($entityLike, User $user);
+    public function getLikeByUser(LikeEntityInterface $entityLike, User $user);
 
 
 }

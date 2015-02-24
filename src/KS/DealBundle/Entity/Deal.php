@@ -14,11 +14,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
+use KS\DealBundle\Models\LikeEntityInterface;
 
 
 
 /**
- * @ORM\Entity
  * @ORM\Table(name="ks_deal")
  * @ORM\Entity(repositoryClass="KS\DealBundle\Entity\DealRepository")
  * 
@@ -28,7 +28,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
  * 
  * @ExclusionPolicy("all") 
  */
-class Deal
+class Deal implements LikeEntityInterface
 {
     /**
      * @ORM\Id

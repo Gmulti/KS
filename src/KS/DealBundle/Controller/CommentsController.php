@@ -67,13 +67,7 @@ class CommentsController extends RestController
 
         $view = FOSView::create();
 
-        $comment = $this->getDoctrine()->getManager()
-                        ->getRepository('KSDealBundle:Comment')
-                        ->findOneBy(array(
-                                'deal' => $deal,
-                                'id'   => $idComment
-                            )
-                        ); 
+        $comment = $this->getCommentByDealAndId($deal, $idComment);
 
         if ($comment) {
             $view = $this->view($comment, 200);
@@ -147,7 +141,41 @@ class CommentsController extends RestController
      *
      */
     public function postCommentLikeAction(Deal $deal, $idComment, Request $request){
+        $view = FOSView::create();
+        
+        $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+        $user = $this->getDoctrine()->getManager()
+                     ->getRepository('KSUserBundle:User')->findOneByUsername($username);
 
+        $comment = $this->getCommentByDealAndId($deal, $idComment);
+
+
+        if ($comment !== null) {
+            $commentLike = $this->container->get('ksdeal.handler.commentlike')->post(
+                $comment, $user
+            );
+
+            if(null !== $commentLike){
+                 $view = $this->view($commentLike, 200);
+
+            }
+            else{
+                $view->setStatusCode(404,array(
+                        'error' => 'already_like', 
+                        'error_description' => 'You already like comment'
+                    )
+                );
+            }
+        }
+        else{
+            $view->setStatusCode(404,array(
+                    'error' => 'not_found', 
+                    'error_description' => 'Comment not found'
+                )
+            );
+        }
+
+        return $this->handleView($view); 
     }
 
     /**
@@ -156,7 +184,42 @@ class CommentsController extends RestController
      *
      */
     public function postCommentDislikeAction(Deal $deal, $idComment, Request $request){
-   
+        $view = FOSView::create();
+        
+        $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+        $user = $this->getDoctrine()->getManager()
+                     ->getRepository('KSUserBundle:User')->findOneByUsername($username);
+
+        $comment = $this->getCommentByDealAndId($deal, $idComment);
+       
+        if ($comment !== null) {
+          
+            $commentLike = $this->container->get('ksdeal.handler.commentlike')->delete(
+                $comment, $user
+            );
+
+            if(null !== $commentLike){
+                 $view = $this->view($commentLike, 200);
+
+            }
+            else{
+                $view->setStatusCode(404,array(
+                        'error' => 'no_like', 
+                        'error_description' => 'Do not like this comment'
+                    )
+                );
+            }
+
+        }
+        else{
+            $view->setStatusCode(404,array(
+                    'error' => 'not_found', 
+                    'error_description' => 'Comment not found'
+                )
+            );
+        }
+
+        return $this->handleView($view);   
     }
 
 
@@ -176,6 +239,17 @@ class CommentsController extends RestController
             );
 
         return $data;
+    }
+
+    private function getCommentByDealAndId(Deal $deal, $idComment){
+
+        return $this->getDoctrine()->getManager()
+                    ->getRepository('KSDealBundle:Comment')
+                    ->findOneBy(array(
+                            'deal' => $deal,
+                            'id'   => $idComment
+                        )
+                    ); 
     }
 
 }

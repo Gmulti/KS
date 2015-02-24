@@ -15,17 +15,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 
+use KS\DealBundle\Models\LikeEntityInterface;
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="KS\DealBundle\Entity\CommentRepository")
  * @ORM\Table(name="ks_comment")
  * 
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * 
  * @ExclusionPolicy("all") 
  */
-class Comment
+class Comment implements LikeEntityInterface
 {
 
     /**

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
 use KS\DealBundle\Entity\Deal;
 use KS\DealBundle\Models\RelationManyHandlerInterface;
+use KS\DealBundle\Models\LikeEntityInterface;
 use KS\UserBundle\Entity\User;
 
 
@@ -21,8 +22,8 @@ class LikeCommentHandler implements RelationManyHandlerInterface{
 	    $this->repository = $this->em->getRepository($this->entityClass);
 	}
 
-	public function delete($deal, User $user){
-		$result = $this->repository->getLikeByUser($deal, $user);
+	public function delete(LikeEntityInterface $comment, User $user){
+		$result = $this->repository->getLikeByUser($comment, $user);
 
     	if($result !== null){
     		$comment->removeUsersLikesComment($user);
@@ -32,14 +33,14 @@ class LikeCommentHandler implements RelationManyHandlerInterface{
     		$this->em->persist($user);
     		$this->em->flush();
 
-    		return $deal;
+    		return $comment;
     	}
 
     	return null;
 	}
 
-    public function post($deal, User $user){
-    	$result = $this->repository->getLikeByUser($deal, $user);
+    public function post(LikeEntityInterface $comment, User $user){
+    	$result = $this->repository->getLikeByUser($comment, $user);
 
     	if($result == null){
     		$comment->addUsersLikesComment($user);
@@ -49,7 +50,7 @@ class LikeCommentHandler implements RelationManyHandlerInterface{
     		$this->em->persist($comment);
     		$this->em->flush();
 
-    		return $deal;
+    		return $comment;
     	}
 
     	return null;
