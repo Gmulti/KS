@@ -151,7 +151,7 @@ class CommentsLikeController extends RestController
 
         $data = $this->getDoctrine()->getManager()
 	            ->getRepository('KSDealBundle:Comment')
-	            ->getLikes($comment,$options);
+	            ->getNbManyRelation($comment,$options);
 
         return $data;
     }

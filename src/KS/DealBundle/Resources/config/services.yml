@@ -7,19 +7,19 @@ services:
         class: KS\DealBundle\Utils\CategoryOptionField
 
     ksdeal.handler.deallike:
-        class: KS\DealBundle\Handler\LikeDealHandler
+        class: KS\DealBundle\Handler\ManyHandler
         arguments: 
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.deal.class%"
 
     ksdeal.handler.commentlike:
-        class: KS\DealBundle\Handler\LikeCommentHandler
+        class: KS\DealBundle\Handler\ManyHandler
         arguments: 
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.comment.class%"
 
     ksdeal.handler.sharedeal:
-        class: KS\DealBundle\Handler\ShareDealHandler
+        class: KS\DealBundle\Handler\ManyHandler
         arguments: 
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.deal.class%"

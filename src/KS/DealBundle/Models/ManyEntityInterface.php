@@ -3,8 +3,7 @@
 namespace KS\DealBundle\Models;
 
 
-interface LikeEntityInterface
+interface ManyEntityInterface
 {
-
 
 }

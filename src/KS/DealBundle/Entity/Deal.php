@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
-use KS\DealBundle\Models\LikeEntityInterface;
+use KS\DealBundle\Models\ManyEntityInterface;
 
 
 
@@ -28,7 +28,7 @@ use KS\DealBundle\Models\LikeEntityInterface;
  * 
  * @ExclusionPolicy("all") 
  */
-class Deal implements LikeEntityInterface
+class Deal implements ManyEntityInterface
 {
     /**
      * @ORM\Id

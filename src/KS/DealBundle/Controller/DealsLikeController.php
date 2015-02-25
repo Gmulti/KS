@@ -125,7 +125,7 @@ class DealsLikeController extends RestController
 
         $data = $this->getDoctrine()->getManager()
 	            ->getRepository('KSDealBundle:Deal')
-	            ->getLikes($deal,$options);
+	            ->getNbManyRelation($deal,$options);
 
         return $data;
     }

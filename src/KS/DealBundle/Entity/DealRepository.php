@@ -5,10 +5,11 @@ namespace KS\DealBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use KS\UserBundle\Entity\User;
 use KS\DealBundle\Entity\Deal;
-use KS\DealBundle\Models\LikeRepositoryInterface;
-use KS\DealBundle\Models\LikeEntityInterface;
+use KS\DealBundle\Models\ManyRepositoryInterface;
+use KS\DealBundle\Models\ManyEntityInterface;
+use KS\DealBundle\Models\ManyTypeInterface;
 
-class DealRepository extends EntityRepository implements LikeRepositoryInterface
+class DealRepository extends EntityRepository implements ManyRepositoryInterface
 {
 
 	private $start_price;
@@ -63,25 +64,32 @@ class DealRepository extends EntityRepository implements LikeRepositoryInterface
 				  ->getResult();
   	}
 
-  	public function getLikeByUser(LikeEntityInterface $deal, User $user){
+  	public function getManyByUser(ManyEntityInterface $entityMany, User $user, ManyTypeInterface $typeMany){
 
   		$qb = $this->_em->createQueryBuilder();
 
 		$qb->select('d')
-			->from('KSDealBundle:Deal','d')
-			->join('d.usersLikes' , 'u')
-			->addSelect('u')
+			->from('KSDealBundle:Deal','d');
+
+		if ($typeMany instanceOf LikeDealManyType) {
+			$qb->join('d.usersLikes' , 'u');
+		}
+		elseif ($typeMany instanceOf ShareDealManyType){
+			$qb->join('d.usersShared' , 'u');
+		}
+			
+		$qb->addSelect('u')
 			->where('u.id = :user')
 			->setParameter('user', $user->getId())
 			->andWhere('d.id = :deal')
-			->setParameter('deal', $deal->getId());
+			->setParameter('deal', $entityMany->getId());
 
 		return $qb->getQuery()
 				  ->getOneOrNullResult();
   	}
 
 
-  	public function getLikes($deal, $options = array()){
+  	public function getNbManyRelation(ManyEntityInterface $entityMany, ManyTypeInterface $typeMany, $options = array()){
   		$qb = $this->_em->createQueryBuilder();
 
   		if (isset($options['username_only']) && $options['username_only']) {
@@ -90,33 +98,25 @@ class DealRepository extends EntityRepository implements LikeRepositoryInterface
 		else{
 			$qb->select('u');
 		}
-		
-		$qb->from('KSUserBundle:User','u')
-			->join('u.dealsLikes' , 'd')
-			->where('d.id = :deal')
-			->setParameter('deal', $deal->getId());
+
+		$qb->from('KSUserBundle:User','u');
+
+		if ($typeMany instanceOf LikeDealManyType) {
+			$qb->join('u.dealsLikes' , 'd');
+		}
+		elseif ($typeMany instanceOf ShareDealManyType){
+			$qb->join('u.dealsShared' , 'd');
+		}
+			
+		$qb->where('d.id = :deal')
+			->setParameter('deal', $entityMany->getId());
 
 
 		return $qb->getQuery()
 				  ->getResult();
   	}
 
-  	public function getShareByUser(Deal $deal, User $user){
-  		
-  		$qb = $this->_em->createQueryBuilder();
 
-		$qb->select('d')
-			->from('KSDealBundle:Deal','d')
-			->join('d.usersShared' , 'u')
-			->addSelect('u')
-			->where('u.id = :user')
-			->setParameter('user', $user->getId())
-			->andWhere('d.id = :deal')
-			->setParameter('deal', $deal->getId());
-
-		return $qb->getQuery()
-				  ->getOneOrNullResult();
-  	}
 
   
 }
