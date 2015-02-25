@@ -27,6 +27,7 @@ class LikeCommentHandler implements RelationManyHandlerInterface{
 
     	if($result !== null){
     		$comment->removeUsersLikesComment($user);
+            $comment->setNbUsersLikes($comment->getNbUsersLikes()-1);
             $user->removeCommentsLike($comment);
 
     		$this->em->persist($comment);
@@ -44,6 +45,7 @@ class LikeCommentHandler implements RelationManyHandlerInterface{
 
     	if($result == null){
     		$comment->addUsersLikesComment($user);
+            $comment->setNbUsersLikes($comment->getNbUsersLikes()+1);
     		$user->addCommentsLike($comment);
 
     		$this->em->persist($user);

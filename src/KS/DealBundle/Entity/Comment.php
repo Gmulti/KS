@@ -73,6 +73,12 @@ class Comment implements LikeEntityInterface
      */
     protected $usersLikesComment;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Expose()
+     */
+    protected $nbUsersLikes;
+
 
     /**
      * @var date $created
@@ -321,5 +327,28 @@ class Comment implements LikeEntityInterface
     public function getUsersLikesComment()
     {
         return $this->usersLikesComment;
+    }
+
+    /**
+     * Set nbUsersLikes
+     *
+     * @param integer $nbUsersLikes
+     * @return Comment
+     */
+    public function setNbUsersLikes($nbUsersLikes)
+    {
+        $this->nbUsersLikes = $nbUsersLikes;
+
+        return $this;
+    }
+
+    /**
+     * Get nbUsersLikes
+     *
+     * @return integer 
+     */
+    public function getNbUsersLikes()
+    {
+        return $this->nbUsersLikes;
     }
 }

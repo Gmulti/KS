@@ -26,7 +26,8 @@ class LikeDealHandler implements RelationManyHandlerInterface{
 		$result = $this->repository->getLikeByUser($deal, $user);
 
     	if($result !== null){
-    		$deal->removeUsersLike($user);
+            $deal->removeUsersLike($user);
+    		$deal->setNbUsersLikes($deal->getNbUsersLikes()-1);
     		$user->removeDealsLike($deal);
 
     		$this->em->persist($deal);
@@ -44,6 +45,7 @@ class LikeDealHandler implements RelationManyHandlerInterface{
 
     	if($result == null){
     		$deal->addUsersLike($user);
+            $deal->setNbUsersLikes($deal->getNbUsersLikes()+1);
     		$user->addDealsLike($deal);
 
     		$this->em->persist($user);

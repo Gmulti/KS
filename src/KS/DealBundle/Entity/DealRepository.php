@@ -80,5 +80,26 @@ class DealRepository extends EntityRepository implements LikeRepositoryInterface
 				  ->getOneOrNullResult();
   	}
 
+
+  	public function getLikes($deal, $options = array()){
+  		$qb = $this->_em->createQueryBuilder();
+
+  		if (isset($options['username_only']) && $options['username_only']) {
+			$qb->select('u.username');
+		}
+		else{
+			$qb->select('u');
+		}
+		
+		$qb->from('KSUserBundle:User','u')
+			->join('u.dealsLikes' , 'd')
+			->where('d.id = :deal')
+			->setParameter('deal', $deal->getId());
+
+
+		return $qb->getQuery()
+				  ->getResult();
+  	}
+
   
 }

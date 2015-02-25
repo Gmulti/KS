@@ -29,5 +29,25 @@ class CommentRepository extends EntityRepository implements LikeRepositoryInterf
 				  ->getOneOrNullResult();
   	}
 
+	public function getLikes($comment, $options = array()){
+  		$qb = $this->_em->createQueryBuilder();
+
+  		if (isset($options['username_only']) && $options['username_only']) {
+			$qb->select('u.username');
+		}
+		else{
+			$qb->select('u');
+		}
+		
+		$qb->from('KSUserBundle:User','u')
+			->join('u.commentsLikes' , 'c')
+			->where('c.id = :comment')
+			->setParameter('comment', $comment->getId());
+
+
+		return $qb->getQuery()
+				  ->getResult();
+  	}
+
   
 }

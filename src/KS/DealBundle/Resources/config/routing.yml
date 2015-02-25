@@ -8,6 +8,16 @@ ks_deal_comment:
     parent: ks_deal
     resource: KS\DealBundle\Controller\CommentsController
 
+ks_deal_like:
+    type:     rest
+    parent: ks_deal
+    resource: KS\DealBundle\Controller\DealsLikeController
+
+ks_deal_comment_like:
+    type:     rest
+    parent: ks_deal_comment
+    resource: KS\DealBundle\Controller\CommentsLikeController
+
 ks_category:
     type:     rest
     resource: KS\DealBundle\Controller\CategoriesController

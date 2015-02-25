@@ -100,6 +100,12 @@ class Deal implements LikeEntityInterface
     protected $usersLikes;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Expose()
+     */
+    protected $nbUsersLikes;
+
+    /**
      * @ORM\Column(type="float", nullable=true)
      *
      * @Expose()
@@ -601,5 +607,28 @@ class Deal implements LikeEntityInterface
     public function getUsersLikes()
     {
         return $this->usersLikes;
+    }
+
+    /**
+     * Set nbUsersLikes
+     *
+     * @param integer $nbUsersLikes
+     * @return Deal
+     */
+    public function setNbUsersLikes($nbUsersLikes)
+    {
+        $this->nbUsersLikes = $nbUsersLikes;
+
+        return $this;
+    }
+
+    /**
+     * Get nbUsersLikes
+     *
+     * @return integer 
+     */
+    public function getNbUsersLikes()
+    {
+        return $this->nbUsersLikes;
     }
 }
