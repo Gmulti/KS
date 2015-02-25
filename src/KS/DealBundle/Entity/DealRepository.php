@@ -101,5 +101,22 @@ class DealRepository extends EntityRepository implements LikeRepositoryInterface
 				  ->getResult();
   	}
 
+  	public function getShareByUser(Deal $deal, User $user){
+  		
+  		$qb = $this->_em->createQueryBuilder();
+
+		$qb->select('d')
+			->from('KSDealBundle:Deal','d')
+			->join('d.usersShared' , 'u')
+			->addSelect('u')
+			->where('u.id = :user')
+			->setParameter('user', $user->getId())
+			->andWhere('d.id = :deal')
+			->setParameter('deal', $deal->getId());
+
+		return $qb->getQuery()
+				  ->getOneOrNullResult();
+  	}
+
   
 }

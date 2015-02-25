@@ -82,6 +82,12 @@ class Deal implements LikeEntityInterface
     protected $usersShared;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Expose()
+     */
+    protected $nbUsersShared;
+
+    /**
      * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Category", cascade={"persist"}, inversedBy="deals")
      * @ORM\JoinColumn(nullable=true)
      */
@@ -630,5 +636,28 @@ class Deal implements LikeEntityInterface
     public function getNbUsersLikes()
     {
         return $this->nbUsersLikes;
+    }
+
+    /**
+     * Set nbUsersShared
+     *
+     * @param integer $nbUsersShared
+     * @return Deal
+     */
+    public function setNbUsersShared($nbUsersShared)
+    {
+        $this->nbUsersShared = $nbUsersShared;
+
+        return $this;
+    }
+
+    /**
+     * Get nbUsersShared
+     *
+     * @return integer 
+     */
+    public function getNbUsersShared()
+    {
+        return $this->nbUsersShared;
     }
 }

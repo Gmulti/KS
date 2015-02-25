@@ -106,7 +106,7 @@ class DealsController extends RestController
         else{
             $view->setStatusCode(404,array(
                 'error' => 'error_deal', 
-                'error_description' => 'Erreur sur le traitement des données'
+                'error_description' => 'Error on data processing'
                 )
             );
         }
@@ -137,7 +137,7 @@ class DealsController extends RestController
         else{
             $view->setStatusCode(404,array(
                 'error' => 'error_put', 
-                'error_description' => 'Erreur sur le traitement des données'
+                'error_description' => 'Error on data processing'
                 )
             );
         }
@@ -168,6 +168,8 @@ class DealsController extends RestController
 
         return $this->handleView($view);   
     }
+
+   
 
 
     private function getDealsWithParams(ParamFetcher $params){

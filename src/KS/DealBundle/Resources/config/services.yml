@@ -18,6 +18,11 @@ services:
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.comment.class%"
 
+    ksdeal.handler.sharedeal:
+        class: KS\DealBundle\Handler\ShareDealHandler
+        arguments: 
+            - "@doctrine.orm.entity_manager"
+            - "%ksdeal.deal.class%"
 
     ksdeal.type.deal_selector:
         class: KS\DealBundle\Form\DataTransformer\DealTransformerType
