@@ -1,6 +1,9 @@
 parameters:
     ksdeal.deal.class: KS\DealBundle\Entity\Deal
     ksdeal.comment.class: KS\DealBundle\Entity\Comment
+    ksdeal.commentlike.models: KS\DealBundle\Models\LikeCommentManyType
+    ksdeal.deallike.models: KS\DealBundle\Models\LikeDealManyType
+    ksdeal.dealshare.models: KS\DealBundle\Models\ShareDealManyType
 
 services:
     ksdeal.utils.categoryoptionfield:
@@ -11,18 +14,21 @@ services:
         arguments: 
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.deal.class%"
+            - "%ksdeal.deallike.models%"
 
     ksdeal.handler.commentlike:
         class: KS\DealBundle\Handler\ManyHandler
         arguments: 
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.comment.class%"
+            - "%ksdeal.commentlike.models%"
 
     ksdeal.handler.sharedeal:
         class: KS\DealBundle\Handler\ManyHandler
         arguments: 
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.deal.class%"
+            - "%ksdeal.dealshare.models%"
 
     ksdeal.type.deal_selector:
         class: KS\DealBundle\Form\DataTransformer\DealTransformerType

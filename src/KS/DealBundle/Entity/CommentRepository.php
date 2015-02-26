@@ -8,6 +8,7 @@ use KS\DealBundle\Entity\Deal;
 use KS\DealBundle\Models\ManyRepositoryInterface;
 use KS\DealBundle\Models\ManyEntityInterface;
 use KS\DealBundle\Models\ManyTypeInterface;
+use KS\DealBundle\Models\LikeCommentlManyType;
 
 class CommentRepository extends EntityRepository implements ManyRepositoryInterface
 {

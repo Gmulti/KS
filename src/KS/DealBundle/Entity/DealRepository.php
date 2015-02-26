@@ -8,6 +8,8 @@ use KS\DealBundle\Entity\Deal;
 use KS\DealBundle\Models\ManyRepositoryInterface;
 use KS\DealBundle\Models\ManyEntityInterface;
 use KS\DealBundle\Models\ManyTypeInterface;
+use KS\DealBundle\Models\LikeDealManyType;
+use KS\DealBundle\Models\ShareDealManyType;
 
 class DealRepository extends EntityRepository implements ManyRepositoryInterface
 {
@@ -71,13 +73,14 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 		$qb->select('d')
 			->from('KSDealBundle:Deal','d');
 
-		if ($typeMany instanceOf LikeDealManyType) {
+		if ($typeMany instanceof LikeDealManyType) {
+			var_dump('expression');
 			$qb->join('d.usersLikes' , 'u');
 		}
-		elseif ($typeMany instanceOf ShareDealManyType){
+		elseif ($typeMany instanceof ShareDealManyType){
 			$qb->join('d.usersShared' , 'u');
 		}
-			
+
 		$qb->addSelect('u')
 			->where('u.id = :user')
 			->setParameter('user', $user->getId())

@@ -10,18 +10,21 @@ use KS\DealBundle\Entity\Deal;
 use KS\DealBundle\Models\RelationManyHandlerInterface;
 use KS\DealBundle\Models\ManyEntityInterface;
 use KS\DealBundle\Models\ManyTypeInterface;
+use KS\DealBundle\Models\LikeDealManyType;
+use KS\DealBundle\Models\LikeCommentManyType;
+use KS\DealBundle\Models\ShareDealManyType;
 use KS\UserBundle\Entity\User;
 
 
 class ManyHandler implements RelationManyHandlerInterface{
 
 
-	public function __construct(EntityManager $em, ManyEntityInterface $entityClass, ManyTypeInterface $typeMany)
+	public function __construct(EntityManager $em, $entityClass, $typeMany)
 	{
 	    $this->em = $em;
 	    $this->entityClass = $entityClass;
 	    $this->repository = $this->em->getRepository($this->entityClass);
-	    $this->typeMany = $typeMany;
+	    $this->typeMany = new $typeMany();
 	}
 
 	public function delete(ManyEntityInterface $entityMany, User $user){
@@ -39,11 +42,11 @@ class ManyHandler implements RelationManyHandlerInterface{
 	    		$this->removeShareDeal($entityMany, $user);
 	    	}
 
-    		$this->em->persist($deal);
+    		$this->em->persist($entityMany);
     		$this->em->persist($user);
     		$this->em->flush();
 
-    		return $deal;
+    		return $entityMany;
     	}
 
     	return null;
