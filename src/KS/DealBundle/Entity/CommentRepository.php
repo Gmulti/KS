@@ -8,7 +8,7 @@ use KS\DealBundle\Entity\Deal;
 use KS\DealBundle\Models\ManyRepositoryInterface;
 use KS\DealBundle\Models\ManyEntityInterface;
 use KS\DealBundle\Models\ManyTypeInterface;
-use KS\DealBundle\Models\LikeCommentlManyType;
+use KS\DealBundle\Models\LikeCommentManyType;
 
 class CommentRepository extends EntityRepository implements ManyRepositoryInterface
 {
@@ -20,7 +20,7 @@ class CommentRepository extends EntityRepository implements ManyRepositoryInterf
 		$qb->select('c')
 			->from('KSDealBundle:Comment','c');
 
-		if ($typeMany instanceOf LikeCommentlManyType) {
+		if ($typeMany instanceOf LikeCommentManyType) {
 			$qb->join('c.usersLikesComment' , 'u');
 		}
 		
@@ -47,7 +47,7 @@ class CommentRepository extends EntityRepository implements ManyRepositoryInterf
 		
 		$qb->from('KSUserBundle:User','u');
 
-		if ($typeMany instanceOf LikeCommentlManyType) {
+		if ($typeMany instanceOf LikeCommentManyType) {
 			$qb->join('u.commentsLikes' , 'c');
 		}
 			

@@ -52,7 +52,7 @@ class CommentsController extends RestController
                 'error' => 'not_found',
                 'error_description' => 'No deals have found',
             );
-            $view->setStatusCode(404, $errors);
+            $view = $this->view($errors, 404);
         }
 
         return $this->handleView($view);
@@ -77,7 +77,7 @@ class CommentsController extends RestController
                 'error' => 'not_found',
                 'error_description' => 'Deal not found'
             );
-            $view->setStatusCode(404, $error);
+            $view = $this->view($error, 404);
         }
 
         return $this->handleView($view);
@@ -104,11 +104,12 @@ class CommentsController extends RestController
 
         }
         else{
-            $view->setStatusCode(404,array(
+            $error = array(
                 'error' => 'error_comment', 
                 'error_description' => 'Error on form submit'
-                )
             );
+
+            $view = $this->view($error, 404);
         }
 
         return $this->handleView($view);      

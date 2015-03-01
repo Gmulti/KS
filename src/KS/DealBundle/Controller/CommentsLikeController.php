@@ -56,19 +56,21 @@ class CommentsLikeController extends RestController
 
             }
             else{
-                $view->setStatusCode(404,array(
-                        'error' => 'already_like', 
-                        'error_description' => 'You already like comment'
-                    )
+                $error = array(
+                    'error' => 'already_like', 
+                    'error_description' => 'You already like comment'
                 );
+
+                $view = $this->view($error, 404);
             }
         }
         else{
-            $view->setStatusCode(404,array(
-                    'error' => 'not_found', 
-                    'error_description' => 'Comment not found'
-                )
+            $error = array(
+                'error' => 'not_found', 
+                'error_description' => 'Comment not found'
             );
+
+            $view = $this->view($error, 404);
         }
 
         return $this->handleView($view); 
@@ -99,20 +101,22 @@ class CommentsLikeController extends RestController
 
             }
             else{
-                $view->setStatusCode(404,array(
-                        'error' => 'no_like', 
-                        'error_description' => 'Do not like this comment'
-                    )
+                $error = array(
+                    'error' => 'no_like', 
+                    'error_description' => 'Do not like this comment'
                 );
+
+                $view = $this->view($error, 404);
             }
 
         }
         else{
-            $view->setStatusCode(404,array(
-                    'error' => 'not_found', 
-                    'error_description' => 'Comment not found'
-                )
+            $error = array(
+                'error' => 'not_found', 
+                'error_description' => 'Comment not found'
             );
+
+            $view = $this->view($error, 404);
         }
 
         return $this->handleView($view);   
@@ -135,11 +139,11 @@ class CommentsLikeController extends RestController
 
         }
         else{
-            $view->setStatusCode(404,array(
+            $error = array(
                     'error' => 'no_like', 
                     'error_description' => 'No likes'
-                )
             );
+            $view = $this->view($error, 404);
         }
 
         return $this->handleView($view);   
@@ -149,9 +153,7 @@ class CommentsLikeController extends RestController
 
     	$options['username_only'] = $params->get('username_only');
 
-        $data = $this->getDoctrine()->getManager()
-	            ->getRepository('KSDealBundle:Comment')
-	            ->getNbManyRelation($comment,$options);
+        $data =  $this->container->get('ksdeal.handler.commentlike')->get($comment,$options);
 
         return $data;
     }

@@ -74,7 +74,6 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 			->from('KSDealBundle:Deal','d');
 
 		if ($typeMany instanceof LikeDealManyType) {
-			var_dump('expression');
 			$qb->join('d.usersLikes' , 'u');
 		}
 		elseif ($typeMany instanceof ShareDealManyType){
@@ -118,8 +117,5 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 		return $qb->getQuery()
 				  ->getResult();
   	}
-
-
-
   
 }

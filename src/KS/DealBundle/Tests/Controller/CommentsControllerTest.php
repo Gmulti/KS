@@ -65,6 +65,9 @@ class CommentsControllerTest extends GeneralController
             endif;
 
         }
+        else{
+            fwrite(STDOUT, 'No test post comment no media' . "\n");
+        } 
     }
 
     /**
@@ -94,6 +97,9 @@ class CommentsControllerTest extends GeneralController
             $this->assertEquals($msg['content'], 'Commentaire test');
 
         }
+        else{
+            fwrite(STDOUT, 'No test get comment' . "\n");
+        } 
     }
 
     public function testPostCommentNoConnect(){
@@ -116,6 +122,9 @@ class CommentsControllerTest extends GeneralController
             $this->assertEquals(500, $response->getStatusCode());
 
         }
+        else{
+            fwrite(STDOUT, 'No test post comment no connect' . "\n");
+        } 
     }
 
 }

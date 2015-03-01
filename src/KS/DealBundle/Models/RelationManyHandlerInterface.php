@@ -8,6 +8,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 
 interface RelationManyHandlerInterface
 {
+	public function get(ManyEntityInterface $entityMany, $options);
 
     public function delete(ManyEntityInterface $entityLike, User $user);
 

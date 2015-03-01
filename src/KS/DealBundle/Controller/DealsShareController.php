@@ -52,11 +52,11 @@ class DealsLikeController extends RestController
 
         }
         else{
-              $view->setStatusCode(404,array(
-                'error' => 'error_share', 
-                'error_description' => 'Error on data processing'
-                )
+            $error = array(
+              'error' => 'error_share', 
+              'error_description' => 'Error on data processing'
             );
+            $view = $this->view($error, 404);
         }
 
         return $this->handleView($view);  

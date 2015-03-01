@@ -52,6 +52,10 @@ class ManyHandler implements RelationManyHandlerInterface{
     	return null;
 	}
 
+	public function get(ManyEntityInterface $entityMany, $options){
+		return $this->repository->getNbManyRelation($entityMany, $this->typeMany, $options);
+	}
+
     public function post(ManyEntityInterface $entityMany, User $user){
 
     	$result = $this->repository->getManyByUser($entityMany, $user, $this->typeMany);
@@ -86,7 +90,7 @@ class ManyHandler implements RelationManyHandlerInterface{
 
     }
 
-    private function addCommentDeal($comment, $user){
+    private function addCommentLike($comment, $user){
 
 		$comment->addUsersLikesComment($user);
         $comment->setNbUsersLikes($comment->getNbUsersLikes()+1);
@@ -96,7 +100,7 @@ class ManyHandler implements RelationManyHandlerInterface{
 
     private function addShareDeal($deal, $user){
 		$deal->addUsersShared($user);
-		$deal->setNbUsersLikes($deal->getNbUsersShared()-1);
+		$deal->setNbUsersLikes($deal->getNbUsersShared()+1);
 		$user->addDealsShared($deal);
     }
 
@@ -110,5 +114,11 @@ class ManyHandler implements RelationManyHandlerInterface{
 		$comment->removeUsersLikesComment($user);
         $comment->setNbUsersLikes($comment->getNbUsersLikes()-1);
         $user->removeCommentsLike($comment);
+    }
+
+    private function removeShareDeal($deal, $user){
+		$deal->removeUsersShared($user);
+		$deal->setNbUsersLikes($deal->getNbUsersShared()-1);
+		$user->removeDealsShared($deal);
     }
 }

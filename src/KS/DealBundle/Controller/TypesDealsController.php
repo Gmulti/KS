@@ -61,7 +61,7 @@ class TypesDealsController extends RestController
 	                'error' => 'not_found',
 	                'error_description' => 'No deals have found',
 	            );
-	            $view->setStatusCode(404, $errors);
+	            $view = $this->view($errors, 404);
 	        }
         }
 

@@ -51,7 +51,7 @@ class TypesController extends RestController
                 'error' => 'not_found',
                 'error_description' => 'No types have found',
             );
-            $view->setStatusCode(404, $errors);
+            $view = $this->view($errors, 404);
         }
 
         return $this->handleView($view);
@@ -74,7 +74,7 @@ class TypesController extends RestController
                 'error' => 'not_found',
                 'error_description' => 'Type not found'
             );
-            $view->setStatusCode(404, $error);
+            $view = $this->view($error, 404);
         }
 
         return $this->handleView($view);

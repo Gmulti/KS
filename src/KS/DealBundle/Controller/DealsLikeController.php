@@ -52,11 +52,11 @@ class DealsLikeController extends RestController
 
         }
         else{
-            $view->setStatusCode(404,array(
-                    'error' => 'already_like', 
-                    'error_description' => 'You already like deal'
-                )
+             $errors = array(
+                'error' => 'already_like', 
+                'error_description' => 'You already like deal'
             );
+            $view = $this->view($errors,404);
         }
 
         return $this->handleView($view);   
@@ -83,10 +83,11 @@ class DealsLikeController extends RestController
 
         }
         else{
-            $view->setStatusCode(404,array(
+            $view = $this->view(array(
                     'error' => 'no_like', 
                     'error_description' => 'Do not like this deal'
-                )
+                ),
+                404
             );
         }
 
@@ -109,10 +110,11 @@ class DealsLikeController extends RestController
 
         }
         else{
-            $view->setStatusCode(404,array(
+            $view = $this->view(array(
                     'error' => 'no_like', 
                     'error_description' => 'No likes'
-                )
+                ),
+                404
             );
         }
 
@@ -123,9 +125,7 @@ class DealsLikeController extends RestController
 
     	$options['username_only'] = $params->get('username_only');
 
-        $data = $this->getDoctrine()->getManager()
-	            ->getRepository('KSDealBundle:Deal')
-	            ->getNbManyRelation($deal,$options);
+        $data =  $this->container->get('ksdeal.handler.deallike')->get($deal,$options);
 
         return $data;
     }

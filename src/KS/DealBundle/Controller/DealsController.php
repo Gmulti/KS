@@ -56,7 +56,8 @@ class DealsController extends RestController
                 'error' => 'not_found',
                 'error_description' => 'No deals have found',
             );
-            $view->setStatusCode(404, $errors);
+
+            $view = $this->view($errors, 404);
         }
 
         return $this->handleView($view);
@@ -79,7 +80,7 @@ class DealsController extends RestController
                 'error' => 'not_found',
                 'error_description' => 'Deal not found'
             );
-            $view->setStatusCode(404, $error);
+            $view = $this->view($error, 404);
         }
 
         return $this->handleView($view);
@@ -100,15 +101,15 @@ class DealsController extends RestController
         );
 
         if(null !== $newDeal){
-             $view = $this->view($newDeal, 200);
+            $view = $this->view($newDeal, 200);
 
         }
         else{
-            $view->setStatusCode(404,array(
+            $error = array(
                 'error' => 'error_deal', 
                 'error_description' => 'Error on data processing'
-                )
             );
+            $view = $this->view($error, 404);
         }
 
         return $this->handleView($view);      
@@ -135,11 +136,12 @@ class DealsController extends RestController
 
         }
         else{
-            $view->setStatusCode(404,array(
+            $error = array(
                 'error' => 'error_put', 
                 'error_description' => 'Error on data processing'
-                )
             );
+
+            $view = $this->view($error, 404);
         }
 
         return $this->handleView($view);   
@@ -163,7 +165,7 @@ class DealsController extends RestController
 
         }
         else{
-            $view->setStatusCode(404,$deleteDeal);
+            $view = $this->view($deleteDeal, 404);
         }
 
         return $this->handleView($view);   
