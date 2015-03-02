@@ -30,6 +30,8 @@ class LoadDealData extends AbstractFixture implements OrderedFixtureInterface
         $dealAdmin->addCategory($this->getReference('cat11'));
         $dealAdmin->addCategory($this->getReference('cat22'));
         $dealAdmin->addType($this->getReference('bon-plan'));
+        $dealAdmin->addUsersLike($this->getReference('user-test'));
+        $dealAdmin->setNbUsersLikes(1);
 
         $dealGratuit = new Deal();
         $dealGratuit->setContent('dummy deal gratuit');
@@ -43,6 +45,8 @@ class LoadDealData extends AbstractFixture implements OrderedFixtureInterface
         $manager->persist($dealAdmin);
         $manager->persist($dealGratuit);
         $manager->flush();
+
+        $this->addReference('deal-promo', $deal);
 
       
     }
