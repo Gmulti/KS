@@ -26,7 +26,6 @@ class LoadCommentData extends AbstractFixture implements OrderedFixtureInterface
                 $comment->setUser($this->getReference('admin-test'));
             }
             $comment->setDeal($this->getReference('deal-promo'));
-            
             $manager->persist($comment);
         }
        
