@@ -90,12 +90,14 @@ class Deal implements ManyEntityInterface
     /**
      * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Category", cascade={"persist"}, inversedBy="deals")
      * @ORM\JoinColumn(nullable=true)
+     * @Expose()
      */
     protected $categories;
 
     /**
      * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Type", cascade={"persist"}, inversedBy="deals")
      * @ORM\JoinColumn(nullable=true)
+     * @Expose()
      */
     protected $types;
 
