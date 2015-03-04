@@ -14,6 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\SerializedName;
 use KS\DealBundle\Models\ManyEntityInterface;
 
 
@@ -24,7 +26,8 @@ use KS\DealBundle\Models\ManyEntityInterface;
  * 
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  *
- * @Hateoas\Relation("user", href = "expr('users/' ~ object.getUser() )")
+ * @Hateoas\Relation("user", href = "expr('api/v1/users/' ~ object.getUser() )")
+ * @Hateoas\Relation("comments", href = "expr('api/v1/deals/' ~ object.getId() ~ '/comments')")
  * 
  * @ExclusionPolicy("all") 
  */
@@ -56,7 +59,6 @@ class Deal implements ManyEntityInterface
     /**
      * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Comment", mappedBy="deal",  cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
-     * @Expose()
      */
     protected $comments;
 
@@ -64,7 +66,6 @@ class Deal implements ManyEntityInterface
      * @ORM\ManyToOne(targetEntity="KS\UserBundle\Entity\User", inversedBy="deals", cascade={"persist"})
      * @Assert\NotBlank()
      * @Assert\Type(type="KS\UserBundle\Entity\User")
-     * @Expose()
      */
     protected $user;
 
@@ -90,14 +91,12 @@ class Deal implements ManyEntityInterface
     /**
      * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Category", cascade={"persist"}, inversedBy="deals")
      * @ORM\JoinColumn(nullable=true)
-     * @Expose()
      */
     protected $categories;
 
     /**
      * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Type", cascade={"persist"}, inversedBy="deals")
      * @ORM\JoinColumn(nullable=true)
-     * @Expose()
      */
     protected $types;
 
@@ -662,4 +661,66 @@ class Deal implements ManyEntityInterface
     {
         return $this->nbUsersShared;
     }
+
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("comments")
+     *
+     * @return string
+     */
+    public function getCommentsSerialize()
+    {   
+        return count($this->getComments());
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("user")
+     *
+     * @return string
+     */
+    public function getUserSerialize()
+    {   
+        return array(
+            'id' => $this->getUser()->getID(),
+            'username' => $this->getUser()->getUsername()
+
+        );
+    }
+
+     /**
+     * @VirtualProperty
+     * @SerializedName("categories")
+     *
+     * @return string
+     */
+    public function getCategoriesSerialize()
+    {   
+        $categories = $this->getCategories();
+        $array = array();
+        foreach ($categories as $key => $category) {
+            array_push($array, $category->getTitle());
+        }
+
+        return $array;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("types")
+     *
+     * @return string
+     */
+    public function getTypesSerialize()
+    {   
+        $types = $this->getTypes();
+        $array = array();
+        foreach ($types as $key => $type) {
+            array_push($array, $type->getTitle());
+        }
+
+        return $array;
+    }
+
 }
