@@ -6,6 +6,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\ORM\EntityManager;
+
 use KS\DealBundle\Entity\Deal;
 use KS\DealBundle\Models\RelationManyHandlerInterface;
 use KS\DealBundle\Models\ManyEntityInterface;
@@ -13,7 +14,10 @@ use KS\DealBundle\Models\ManyTypeInterface;
 use KS\DealBundle\Models\LikeDealManyType;
 use KS\DealBundle\Models\LikeCommentManyType;
 use KS\DealBundle\Models\ShareDealManyType;
+
+use KS\UserBundle\Models\FollowUserManyType;
 use KS\UserBundle\Entity\User;
+use KS\UserBundle\Entity\UserRelation;
 
 
 class ManyHandler implements RelationManyHandlerInterface{
@@ -27,8 +31,10 @@ class ManyHandler implements RelationManyHandlerInterface{
 	    $this->typeMany = new $typeMany();
 	}
 
-	public function delete(ManyEntityInterface $entityMany, User $user){
+	public function delete(ManyEntityInterface $entityMany, User $user, $options = array()){
+
 		$result = $this->repository->getManyByUser($entityMany, $user, $this->typeMany);
+		
 
     	if($result !== null){
 
@@ -40,6 +46,9 @@ class ManyHandler implements RelationManyHandlerInterface{
 	    	}
 	    	elseif ($this->typeMany instanceOf ShareDealManyType) {
 	    		$this->removeShareDeal($entityMany, $user);
+	    	}
+	    	elseif($this->typeMany instanceOf FollowUserManyType){
+	    		$this->removeFollowUser($entityMany, $user, $result);
 	    	}
 
     		$this->em->persist($entityMany);
@@ -56,9 +65,9 @@ class ManyHandler implements RelationManyHandlerInterface{
 		return $this->repository->getNbManyRelation($entityMany, $this->typeMany, $options);
 	}
 
-    public function post(ManyEntityInterface $entityMany, User $user){
+    public function post(ManyEntityInterface $entityMany, User $user, $options = array()){
 
-    	$result = $this->repository->getManyByUser($entityMany, $user, $this->typeMany);
+		$result = $this->repository->getManyByUser($entityMany, $user, $this->typeMany);
 
     	if (null == $result) {
     		if ($this->typeMany instanceOf LikeDealManyType) {
@@ -69,6 +78,9 @@ class ManyHandler implements RelationManyHandlerInterface{
 	    	}
 	    	elseif ($this->typeMany instanceOf ShareDealManyType) {
 	    		$this->addShareDeal($entityMany, $user);
+	    	}
+	    	elseif($this->typeMany instanceOf FollowUserManyType){
+	    		$this->addFollowUser($entityMany, $user);
 	    	}
 	    		
     		$this->em->persist($user);
@@ -120,5 +132,28 @@ class ManyHandler implements RelationManyHandlerInterface{
 		$deal->removeUsersShared($user);
 		$deal->setNbUsersLikes($deal->getNbUsersShared()-1);
 		$user->removeDealsShared($deal);
+    }
+
+    private function addFollowUser($userFollowed, $userSubscribe){
+    	$userRelation = new UserRelation();
+    	$userRelation->setFollowedUser($userFollowed);
+    	$userRelation->setSubscribedUser($userSubscribe);
+
+    	$userFollowed->addFollower($userRelation);
+		$userFollowed->setNbFollowers($userFollowed->getNbFollowers()+1);
+
+		$userSubscribe->addSubscribe($userRelation);
+		$userSubscribe->setNbSubscribes($userSubscribe->getNbSubscribes()+1);
+		$this->em->persist($userRelation);
+    }
+
+    private function removeFollowUser($userFollowed, $userFollow, $userRelation){
+
+    	$userFollowed->removeFollower($userRelation);
+		$userFollowed->setNbFollowers($userFollowed->getNbFollowers()-1);
+
+		$userFollow->removeSubscribe($userRelation);
+		$userFollow->setNbSubscribes($userFollow->getNbSubscribes()-1);
+		$this->em->remove($userRelation);
     }
 }

@@ -8,6 +8,11 @@ ks_deal_comment:
     parent: ks_deal
     resource: KS\DealBundle\Controller\CommentsController
 
+ks_deal_share:
+    type:     rest
+    parent: ks_deal
+    resource: KS\DealBundle\Controller\DealsShareController
+
 ks_deal_like:
     type:     rest
     parent: ks_deal
@@ -37,3 +42,5 @@ ks_type_deal:
     type:     rest
     parent: ks_type
     resource: KS\DealBundle\Controller\TypesDealsController
+
+

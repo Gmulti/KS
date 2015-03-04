@@ -26,9 +26,9 @@ use KS\MediaBundle\Entity\Media;
 
 /**
  *
- * @NamePrefix("api_v1_deals_like_")
+ * @NamePrefix("api_v1_deals_share_")
  */
-class DealsLikeController extends RestController
+class DealsShareController extends RestController
 {
     
     /**
@@ -36,14 +36,14 @@ class DealsLikeController extends RestController
      * @ParamConverter("deal")
      *
      */
-    public function postDealShareAction(Deal $deal, Request $request){
+    public function postShareAction(Deal $deal, Request $request){
         $view = FOSView::create();
 
         $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
         $user = $this->getDoctrine()->getManager()
                      ->getRepository('KSUserBundle:User')->findOneByUsername($username);
 
-        $shareDeal = $this->container->get('ksdeal.handler.sharedeal')->share(
+        $shareDeal = $this->container->get('ksdeal.handler.sharedeal')->post(
             $deal, $user
         );
         
@@ -53,24 +53,12 @@ class DealsLikeController extends RestController
         }
         else{
             $error = array(
-              'error' => 'error_share', 
-              'error_description' => 'Error on data processing'
+              'error' => 'already_share', 
+              'error_description' => 'Already share this deal'
             );
             $view = $this->view($error, 404);
         }
 
         return $this->handleView($view);  
     }
-    private function getLikes($deal, $params){
-
-    	$options['username_only'] = $params->get('username_only');
-
-        $data = $this->getDoctrine()->getManager()
-	            ->getRepository('KSDealBundle:Deal')
-	            ->getLikes($deal,$options);
-
-        return $data;
-    }
-
-
 }

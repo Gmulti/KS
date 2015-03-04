@@ -58,10 +58,18 @@ class UsersRegisterController extends FOSRestController
         $errors = $validator->validate($user, array('Registration'));
 
         if (count($errors) == 0) {
-        	// Extend fos user manager
-        	$userManager = $this->container->get('fos_user.user_manager');
-            $userManager->updateUser($user);
-            $view->setStatusCode(200)->setData($user);
+            try {
+                $userManager = $this->container->get('fos_user.user_manager');
+                $userManager->updateUser($user);
+                $view->setStatusCode(200)->setData($user);
+            } catch (\Exception $e) {
+                $error = array(
+                    'error' => 'user_already_exist',
+                    'error_description' => 'Delete user in work'
+                );
+                $view->setStatusCode(400)->setData($error);
+            }
+        
         } 
         else{
             $error = array(

@@ -3,7 +3,6 @@ _ks_advert:
     type:     annotation
     prefix:   /
 
-
 _ks_media:
     type:     rest
     resource: KS\MediaBundle\Controller\MediasController
@@ -14,14 +13,8 @@ _ks_deal:
     type: rest
 
 _ks_user:
-    type:     rest
-    resource: KS\UserBundle\Controller\UsersController
-    prefix: /api/v1
-
-_ks_user_public:
-    type:     rest
-    resource: KS\UserBundle\Controller\UsersRegisterController
-    prefix: /api/public
+    resource: "@KSUserBundle/Resources/config/routing.yml"
+    type: rest
 
 
 oauth2_server:

@@ -10,8 +10,8 @@ interface RelationManyHandlerInterface
 {
 	public function get(ManyEntityInterface $entityMany, $options);
 
-    public function delete(ManyEntityInterface $entityLike, User $user);
+    public function delete(ManyEntityInterface $entityLike, User $user, $options = array());
 
-    public function post(ManyEntityInterface $entityLike, User $user);
+    public function post(ManyEntityInterface $entityLike, User $user, $options = array());
 
 }

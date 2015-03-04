@@ -33,7 +33,6 @@ class UsersController extends RestController
      * Return users list
      *
      * @return FOSView
-     * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
      */
 	public function getUsersAction()
@@ -57,9 +56,8 @@ class UsersController extends RestController
     /**
      * Return a user
      *
-     * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
-     * @ParamConverter("user")
+     * @ParamConverter("user", options={"repository_method": "findByIdOrSlug" })
      */
     public function getUserAction(User $user){
 
@@ -85,11 +83,10 @@ class UsersController extends RestController
      * Edit a user
      *
      * @return FOSView
-     * @Secure(roles="ROLE_USER")
      * @ParamConverter("user")
      *
      */
-    public function putUserAction(Request $request, User $user){
+    public function putUserAction(User $user, Request $request){
     
         $view = FOSView::create();
 
@@ -170,7 +167,6 @@ class UsersController extends RestController
 
     /**
      * Get username from token
-     * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
      * @Get("/username")
      *
@@ -193,7 +189,6 @@ class UsersController extends RestController
     /**
      * Get roles from token
      *
-     * @Secure(roles="ROLE_USER")
      * @Route(requirements={"_format"="json|xml"})
      * @Get("/role/{token}")
      *
@@ -223,7 +218,6 @@ class UsersController extends RestController
     /**
      * Delete token / logout
      *
-     * @Secure(roles="ROLE_USER")
      * @Post("/logout")
      *
      */

@@ -1,0 +1,15 @@
+ks_user:
+    type:     rest
+    resource: KS\UserBundle\Controller\UsersController
+    prefix: /api/v1
+
+ks_user_follow:
+    type:     rest
+    resource: KS\UserBundle\Controller\UsersFollowController
+    prefix: /api/v1
+
+ks_user_public:
+    type:     rest
+    resource: KS\UserBundle\Controller\UsersRegisterController
+    prefix: /api/public
+

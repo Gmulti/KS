@@ -54,11 +54,12 @@ doctrine:
         charset:  UTF8
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
-        entity_managers:
-            default:
-                auto_mapping: true
-                mappings:
-                    StofDoctrineExtensionsBundle: ~
+        auto_mapping: true
+        filters:
+            softdeleteable:
+                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                enabled: true
+
 
 # Swiftmailer Configuration
 swiftmailer:

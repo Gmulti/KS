@@ -62,8 +62,8 @@ class UsersControllerTest extends GeneralController
                 'grant_type' => 'password',
                 'client_id' => self::$clientId,
                 'client_secret' => self::$clientSecret,
-                'username' => self::$newUser,
-                'password' => self::$newPassword,
+                'username' => 'test',
+                'password' => 'test',
                 'scope' => 'public'
             ),
             array()

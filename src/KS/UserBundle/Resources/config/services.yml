@@ -1,7 +1,16 @@
 parameters:
     ksuser.user.class: KS\UserBundle\Entity\User
+    ksuser.userfollow.models: KS\UserBundle\Models\FollowUserManyType
+
 
 services:
+    ksuser.handler.userfollow:
+        class: KS\DealBundle\Handler\ManyHandler
+        arguments: 
+            - "@doctrine.orm.entity_manager"
+            - "%ksuser.user.class%"
+            - "%ksuser.userfollow.models%"
+
     oauth2.user_provider:
         class: %oauth2.user_provider.class%
         arguments:

@@ -20,8 +20,11 @@ use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 
+use KS\DealBundle\Models\ManyEntityInterface;
+
+
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="KS\UserBundle\Entity\UserRepository")
  * @ORM\Table(name="ks_user")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  *
@@ -33,7 +36,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
  *
  * @ExclusionPolicy("all") 
  */
-class User extends BaseUser implements OAuth2UserInterface
+class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
 {
     /**
      * @ORM\Id
@@ -70,6 +73,30 @@ class User extends BaseUser implements OAuth2UserInterface
      * @ORM\JoinColumn(nullable=true)
      */
     protected $dealsShared;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KS\UserBundle\Entity\UserRelation", mappedBy="subscribedUser")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $subscribes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KS\UserBundle\Entity\UserRelation", mappedBy="followedUser")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $followers;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Expose()
+     */
+    protected $nbSubscribes;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Expose()
+     */
+    protected $nbFollowers;
 
     /**
      * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Deal", mappedBy="user", cascade={"all"})
@@ -137,6 +164,8 @@ class User extends BaseUser implements OAuth2UserInterface
     {
         parent::__construct();
         $this->medias = new ArrayCollection();
+        $this->followers = new ArrayCollection();
+        $this->subscribes = new ArrayCollection();
         $this->deals = new ArrayCollection();
         $this->dealsShared = new ArrayCollection();
         $this->enabled = true;
@@ -533,5 +562,118 @@ class User extends BaseUser implements OAuth2UserInterface
     public function getCommentsLikes()
     {
         return $this->commentsLikes;
+    }
+
+
+    /**
+     * Set nbSubscribes
+     *
+     * @param integer $nbSubscribes
+     * @return User
+     */
+    public function setNbSubscribes($nbSubscribes)
+    {
+        $this->nbSubscribes = $nbSubscribes;
+
+        return $this;
+    }
+
+    /**
+     * Get nbSubscribes
+     *
+     * @return integer 
+     */
+    public function getNbSubscribes()
+    {
+        return $this->nbSubscribes;
+    }
+
+    /**
+     * Set nbFollowers
+     *
+     * @param integer $nbFollowers
+     * @return User
+     */
+    public function setNbFollowers($nbFollowers)
+    {
+        $this->nbFollowers = $nbFollowers;
+
+        return $this;
+    }
+
+    /**
+     * Get nbFollowers
+     *
+     * @return integer 
+     */
+    public function getNbFollowers()
+    {
+        return $this->nbFollowers;
+    }
+
+    /**
+     * Add subscribes
+     *
+     * @param \KS\UserBundle\Entity\UserRelation $subscribes
+     * @return User
+     */
+    public function addSubscribe(\KS\UserBundle\Entity\UserRelation $subscribes)
+    {
+        $this->subscribes[] = $subscribes;
+
+        return $this;
+    }
+
+    /**
+     * Remove subscribes
+     *
+     * @param \KS\UserBundle\Entity\UserRelation $subscribes
+     */
+    public function removeSubscribe(\KS\UserBundle\Entity\UserRelation $subscribes)
+    {
+        $this->subscribes->removeElement($subscribes);
+    }
+
+    /**
+     * Get subscribes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubscribes()
+    {
+        return $this->subscribes;
+    }
+
+    /**
+     * Add followers
+     *
+     * @param \KS\UserBundle\Entity\UserRelation $followers
+     * @return User
+     */
+    public function addFollower(\KS\UserBundle\Entity\UserRelation $followers)
+    {
+        $this->followers[] = $followers;
+
+        return $this;
+    }
+
+    /**
+     * Remove followers
+     *
+     * @param \KS\UserBundle\Entity\UserRelation $followers
+     */
+    public function removeFollower(\KS\UserBundle\Entity\UserRelation $followers)
+    {
+        $this->followers->removeElement($followers);
+    }
+
+    /**
+     * Get followers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFollowers()
+    {
+        return $this->followers;
     }
 }
