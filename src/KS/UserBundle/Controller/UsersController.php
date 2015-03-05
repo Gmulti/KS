@@ -57,7 +57,7 @@ class UsersController extends RestController
      * Return a user
      *
      * @Route(requirements={"_format"="json|xml"})
-     * @ParamConverter("user", options={"repository_method": "findByIdOrSlug" })
+     * @ParamConverter("user", options={"repository_method": "findByIdOrUsername" })
      */
     public function getUserAction(User $user){
 
@@ -83,7 +83,7 @@ class UsersController extends RestController
      * Edit a user
      *
      * @return FOSView
-     * @ParamConverter("user")
+     * @ParamConverter("user", options={"repository_method": "findByIdOrUsername" })
      *
      */
     public function putUserAction(User $user, Request $request){
@@ -120,7 +120,7 @@ class UsersController extends RestController
 
     /**
      * @Route(requirements={"_format"="json|xml"})
-     * @ParamConverter("user")
+     * @ParamConverter("user", options={"repository_method": "findByIdOrUsername" })
      */
     public function deleteUserAction(User $user)
     {
@@ -168,7 +168,7 @@ class UsersController extends RestController
     /**
      * Get username from token
      * @Route(requirements={"_format"="json|xml"})
-     * @Get("/username")
+     * @Get("/me")
      *
      */
     public function getUsernameByTokenAction(Request $request){
@@ -177,7 +177,16 @@ class UsersController extends RestController
         $data = $this->container->get('ksuser.utils.usertoken')->getAccessTokenByTokenRequest($request);
 
         if ($data) {
-            $view->setStatusCode(200)->setData($data->getUsername());
+            $user = $this->getDoctrine()->getManager()
+                         ->getRepository('KSUserBundle:User')
+                         ->findOneByUsername($data->getUserId());
+            if($user){
+                $view->setStatusCode(200)->setData($user);
+            }
+            else{
+                $view->setStatusCode(200)->setData($data->getUserId());
+            }
+            
         }
         else{
             $view->setStatusCode(404);

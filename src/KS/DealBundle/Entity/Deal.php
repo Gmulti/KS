@@ -26,8 +26,8 @@ use KS\DealBundle\Models\ManyEntityInterface;
  * 
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  *
- * @Hateoas\Relation("user", href = "expr('api/v1/users/' ~ object.getUser() )")
- * @Hateoas\Relation("comments", href = "expr('api/v1/deals/' ~ object.getId() ~ '/comments')")
+ * @Hateoas\Relation("user", href = "expr('users/' ~ object.getUser() )")
+ * @Hateoas\Relation("comments", href = "expr('deals/' ~ object.getId() ~ '/comments')")
  * 
  * @ExclusionPolicy("all") 
  */
@@ -52,6 +52,7 @@ class Deal implements ManyEntityInterface
     /**
      * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="deal",  cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
+     * @ORM\OrderBy({"updated" = "DESC"})
      * @Expose()
      */
     protected $medias;
@@ -59,6 +60,7 @@ class Deal implements ManyEntityInterface
     /**
      * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Comment", mappedBy="deal",  cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $comments;
 
@@ -79,6 +81,7 @@ class Deal implements ManyEntityInterface
      * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="dealsShared")
      * @ORM\JoinTable(name="users_shared")
      * @ORM\JoinColumn(nullable=true)
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $usersShared;
 
@@ -103,6 +106,7 @@ class Deal implements ManyEntityInterface
     /**
      * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="dealsLikes")
      * @ORM\JoinColumn(nullable=true)
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $usersLikes;
 
@@ -665,7 +669,7 @@ class Deal implements ManyEntityInterface
 
     /**
      * @VirtualProperty
-     * @SerializedName("comments")
+     * @SerializedName("nb_comments")
      *
      * @return string
      */
@@ -678,7 +682,6 @@ class Deal implements ManyEntityInterface
      * @VirtualProperty
      * @SerializedName("user")
      *
-     * @return string
      */
     public function getUserSerialize()
     {   
@@ -692,8 +695,6 @@ class Deal implements ManyEntityInterface
      /**
      * @VirtualProperty
      * @SerializedName("categories")
-     *
-     * @return string
      */
     public function getCategoriesSerialize()
     {   
@@ -710,7 +711,6 @@ class Deal implements ManyEntityInterface
      * @VirtualProperty
      * @SerializedName("types")
      *
-     * @return string
      */
     public function getTypesSerialize()
     {   

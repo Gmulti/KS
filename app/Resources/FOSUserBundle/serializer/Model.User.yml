@@ -11,7 +11,3 @@ FOS\UserBundle\Model\User:
             expose: true
         locked:
             expose: true
-        groups:
-            expose: true
-        roles:
-            expose: true

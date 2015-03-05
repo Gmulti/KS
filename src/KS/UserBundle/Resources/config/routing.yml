@@ -8,8 +8,19 @@ ks_user_follow:
     resource: KS\UserBundle\Controller\UsersFollowController
     prefix: /api/v1
 
+ks_user_comment:
+    type:     rest
+    resource: KS\UserBundle\Controller\CommentsController
+    prefix: /api/v1
+
+ks_user_deal:
+    type:     rest
+    resource: KS\UserBundle\Controller\DealsController
+    prefix: /api/v1
+
 ks_user_public:
     type:     rest
     resource: KS\UserBundle\Controller\UsersRegisterController
     prefix: /api/public
+
 

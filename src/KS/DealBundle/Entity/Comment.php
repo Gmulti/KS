@@ -14,6 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\SerializedName;
 
 use KS\DealBundle\Models\ManyEntityInterface;
 
@@ -69,7 +71,6 @@ class Comment implements ManyEntityInterface
     /**
      * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="commentsLikes")
      * @ORM\JoinColumn(nullable=true)
-     * @Expose()
      */
     protected $usersLikesComment;
 
@@ -351,4 +352,18 @@ class Comment implements ManyEntityInterface
     {
         return $this->nbUsersLikes;
     }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("user")
+     *
+     */
+    public function getUserSerialize()
+    {   
+        return array(
+            'id' => $this->getUser()->getId(),
+            'username' => $this->getUser()->getUsername()
+        );
+    }
+
 }

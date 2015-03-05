@@ -1,6 +1,6 @@
 <?php
 
-namespace KS\DealBundle\Tests\Controller;
+namespace KS\UserBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use KS\DealBundle\Tests\GeneralController;
@@ -22,8 +22,8 @@ class UsersFollowControllerTest extends GeneralController
         $response = $client->getResponse();
         $msg = json_decode($response->getContent(), true);
         
-        if(isset($msg[0]['id'])):
-            return $msg[0]['id'];
+        if(isset($msg['id'])):
+            return $msg['id'];
         endif;
 
         return null;

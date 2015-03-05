@@ -19,6 +19,8 @@ use Hateoas\Configuration\Annotation as Hateoas;
 
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\SerializedName;
 
 use KS\DealBundle\Models\ManyEntityInterface;
 
@@ -29,10 +31,6 @@ use KS\DealBundle\Models\ManyEntityInterface;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  *
  * @Serializer\XmlRoot("user")
- *
- * @Hateoas\Relation("deals", href = "expr('/users/' ~ object.getUsername() ~ '/deals')")
- * @Hateoas\Relation("shareDeals", href = "expr('/users/' ~ object.getUsername() ~ '/shareDeals')")
- * @Hateoas\Relation("comments", href = "expr('/users/' ~ object.getUsername() ~ '/comments')")
  *
  * @ExclusionPolicy("all") 
  */
@@ -64,25 +62,28 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
     /**
      * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="user")
      * @ORM\JoinColumn(nullable=true)
-     * @Expose()
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $medias;
 
     /**
      * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Deal", cascade={"all"}, mappedBy="usersShared")
      * @ORM\JoinColumn(nullable=true)
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $dealsShared;
 
     /**
      * @ORM\OneToMany(targetEntity="KS\UserBundle\Entity\UserRelation", mappedBy="subscribedUser")
      * @ORM\JoinColumn(nullable=true)
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $subscribes;
 
     /**
      * @ORM\OneToMany(targetEntity="KS\UserBundle\Entity\UserRelation", mappedBy="followedUser")
      * @ORM\JoinColumn(nullable=true)
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $followers;
 
@@ -101,14 +102,14 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
     /**
      * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Deal", mappedBy="user", cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
-     * @Expose()
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $deals;
 
     /**
      * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Comment", mappedBy="user", cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
-     * @Expose()
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $comments;
 
@@ -675,5 +676,77 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
     public function getFollowers()
     {
         return $this->followers;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("nb_comments")
+     *
+     * @return string
+     */
+    public function getNbCommentsSerialize()
+    {   
+        return count($this->getComments());
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("comments")
+     *
+     * @return string
+     */
+    public function getCommentsSerialize()
+    {   
+        $array = array();
+        for ($i=0; $i < 10; $i++) { 
+             array_push($array, $this->getComments()->offsetGet($i));
+        }
+
+        return $array;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("medias")
+     *
+     */
+    public function getMediasSerialize()
+    {   
+        $array = array();
+        for ($i=0; $i < 10; $i++) { 
+             array_push($array, $this->getMedias()->offsetGet($i));
+        }
+
+        return $array;
+    }
+
+     /**
+     * @VirtualProperty
+     * @SerializedName("deals")
+     *
+     */
+    public function getDealsSerialize()
+    {   
+        $array = array();
+        for ($i=0; $i < 10; $i++) { 
+             array_push($array, $this->getDeals()->offsetGet($i));
+        }
+
+        return $array;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("deals_shared")
+     *
+     */
+    public function getDealsSharedSerialize()
+    {   
+        $array = array();
+        for ($i=0; $i < 10; $i++) { 
+             array_push($array, $this->getDealsShared()->offsetGet($i));
+        }
+
+        return $array;
     }
 }

@@ -23,14 +23,14 @@ class UserRepository extends EntityRepository implements ManyRepositoryInterface
 
   		// String
   		if($cast === 0){
-  			$qb->select('c')
+  			$qb->select('u')
 				->from('KSUserBundle:User','u')
-				->where('u.slug = :user')
+				->where('u.username = :user')
 				->setParameter('user', $value);
   		}
   		else{
-  			$qb->select('c')
-				->from('KSUserBundle:User','c')
+  			$qb->select('u')
+				->from('KSUserBundle:User','u')
 				->where('u.id = :user')
 				->setParameter('user', $cast);
   		}

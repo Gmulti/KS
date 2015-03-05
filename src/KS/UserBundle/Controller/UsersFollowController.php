@@ -30,7 +30,7 @@ class UsersFollowController extends FOSRestController
 
     /**
      * Follow a user
-     * @ParamConverter("userFollowed")
+     * @ParamConverter("userFollowed", options={"repository_method": "findByIdOrUsername" })
      *
      */
     public function postUserFollowAction(User $userFollowed, Request $request){
@@ -45,7 +45,7 @@ class UsersFollowController extends FOSRestController
         );
         
         if(null !== $userFollow){
-             $view = $this->view($userFollow, 202);
+             $view = $this->view($userFollow, 200);
 
         }
         else{
@@ -63,7 +63,7 @@ class UsersFollowController extends FOSRestController
 
     /**
      * Unfollow a user
-     * @ParamConverter("userFollowed")
+     * @ParamConverter("userFollowed", options={"repository_method": "findByIdOrUsername" })
      *
      */
     public function postUserUnfollowAction(User $userFollowed, Request $request){
@@ -79,7 +79,7 @@ class UsersFollowController extends FOSRestController
             );
             
             if(null !== $userFollow){
-                 $view = $this->view($userFollow, 202);
+                 $view = $this->view($userFollow, 200);
 
             }
             else{
