@@ -12,7 +12,7 @@ class TypeRepository extends EntityRepository
 
 		$qb->select('d')
 			->from('KSDealBundle:Deal','d')
-			->join('d.types' , 'c')
+			->join('d.type' , 'c')
 			->addSelect('c')
 			->where('c.id = :type')
 			->setParameter('type', $type->getId())

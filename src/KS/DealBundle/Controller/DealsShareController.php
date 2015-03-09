@@ -48,7 +48,7 @@ class DealsShareController extends RestController
         );
         
         if(null !== $shareDeal){
-             $view = $this->view($shareDeal, 202);
+             $view = $this->view($shareDeal, 200);
 
         }
         else{

@@ -38,6 +38,7 @@ class DealsController extends RestController
      * @QueryParam(name="limit", requirements="\d+", default="10", description="Limit deals")
      * @QueryParam(name="start_price", requirements="\d+", description="Price start deals")
      * @QueryParam(name="end_price", requirements="\d+", description="Price end deals")
+     * @QueryParam(name="thumbnails", requirements="\d{1}", default="0")
      *
      */
     public function getDealsAction(ParamFetcher $params)
@@ -178,6 +179,10 @@ class DealsController extends RestController
 
         $offset = $params->get('offset');
         $limit = $params->get('limit');
+        if($limit > 30){
+            $limit = 30;
+        }
+
         $options = array();
 
         if($params->get('start_price') !== null){

@@ -137,17 +137,20 @@ class DealsControllerTest extends GeneralController
         $crawler = $client->request('POST', 
             '/api/v1/deals.json',
             array(
-                'content'  => 'Contenu test'
+                'content'  => 'Contenu test',
+                'type' => 'bon-plan'
             ),
             array(),
             self::$headers
         );
 
         $response = $client->getResponse();
+        $msg = json_decode($response->getContent(), true);
+
         $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
         $this->assertEquals(200, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
 
-        $msg = json_decode($response->getContent(), true);
+       
 
         $this->assertEquals($msg['user']['username'], self::$username);
         $this->assertEquals($msg['content'], 'Contenu test');
@@ -222,7 +225,8 @@ class DealsControllerTest extends GeneralController
                 'user' => self::$username,
                 'content'  => 'Contenu test',
                 'categories' => array('categorie-1'),
-                'types' => array('code-promo')
+                'type' => 'code-promo',
+                'promoCode' => 'MYPROMOCODE'
             ),
             array(),
             self::$headers

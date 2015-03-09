@@ -3,7 +3,7 @@
 namespace KS\DealBundle\Utils;
 
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CategoryOptionField
 {
@@ -20,7 +20,7 @@ class CategoryOptionField
             case 'categories':
                 $result = 'category_selector';
                 break;
-            case 'types':
+            case 'type':
                 $result = 'type_selector';
                 break;
             default:
@@ -40,6 +40,16 @@ class CategoryOptionField
                     'attr' => array(
                         'multiple' => 'multiple'
                     )
+                );
+                break;
+            case 'promoCode':
+            case 'reductionType':
+            case 'reduction':
+                $result = array(
+                    'constraints' => array(
+                        new NotBlank()
+                    )
+
                 );
                 break;
             default:

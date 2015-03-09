@@ -698,8 +698,11 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
     public function getCommentsSerialize()
     {   
         $array = array();
-        for ($i=0; $i < 10; $i++) { 
-             array_push($array, $this->getComments()->offsetGet($i));
+        $comments = $this->getComments();
+        if (!empty($comments)) {
+            for ($i=0; $i < 10; $i++) { 
+                array_push($array, $comments->offsetGet($i));
+            }
         }
 
         return $array;
@@ -713,8 +716,11 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
     public function getMediasSerialize()
     {   
         $array = array();
-        for ($i=0; $i < 10; $i++) { 
-             array_push($array, $this->getMedias()->offsetGet($i));
+        $medias =  $this->getMedias();
+        if(!empty($medias)){
+            for ($i=0; $i < 10; $i++) { 
+                 array_push($array, $medias->offsetGet($i));
+            }
         }
 
         return $array;
@@ -728,8 +734,11 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
     public function getDealsSerialize()
     {   
         $array = array();
-        for ($i=0; $i < 10; $i++) { 
-             array_push($array, $this->getDeals()->offsetGet($i));
+        $deals = $this->getDeals();
+        if(!empty($deals)){
+             for ($i=0; $i < 10; $i++) { 
+                 array_push($array, $deals->offsetGet($i));
+            }
         }
 
         return $array;

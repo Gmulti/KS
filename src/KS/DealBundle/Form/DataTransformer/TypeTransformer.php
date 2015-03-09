@@ -24,52 +24,32 @@ class TypeTransformer implements DataTransformerInterface
     }
 
 
-    public function transform($types)
+    public function transform($type)
     {
-        if (null === $types) {
+        if (null === $type) {
             return "";
         }
         
-        // $typesArray = new \Doctrine\Common\Collections\ArrayCollection();     
+        // $typeArray = new \Doctrine\Common\Collections\ArrayCollection();     
         
-        // foreach ($types as $key => $value) {
+        // foreach ($type as $key => $value) {
         //     if (condition) {
         //         # code...
         //     }
         // }
 
-        return $types;
+
+        return $type;
     }
 
-    public function reverseTransform($types)
+    public function reverseTransform($type)
     {
-     
-        $typesArray = new \Doctrine\Common\Collections\ArrayCollection();  
-
-        if (!is_array($types)):
-            throw new TransformationFailedException(sprintf(
-                'Format not valid!'
-            ));
-        endif;
-
-
-        foreach ($types as $type) {
-
-            $typeFind = $this->em
-                             ->getRepository('KSDealBundle:Type')
-                             ->findOneBySlug($type);
-
-            if (null === $typeFind) {
-                throw new TransformationFailedException(sprintf(
-                    'Type "%s" does not exist!',
-                    $type
-                ));
-            }
-
-            $typesArray->add($typeFind);
-        }
-        
-        return $typesArray;
+       
+        $type = $this->em
+                 ->getRepository('KSDealBundle:Type')
+                 ->findOneBySlug($type);
+                 
+        return $type;
 
     }
 

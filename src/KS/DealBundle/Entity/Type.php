@@ -47,9 +47,11 @@ class Type
      */
     protected $slug;
 
+    
     /**
-     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Deal", cascade={"all"}, mappedBy="types")
+     * @ORM\OneToMany(targetEntity="KS\DealBundle\Entity\Deal", mappedBy="type",  cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
+     * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $deals;
 
@@ -211,6 +213,12 @@ class Type
         return $this->deletedAt;
     }
 
+
+
+    public function __toString(){
+        return $this->title;
+    }
+
     /**
      * Add deals
      *
@@ -242,9 +250,5 @@ class Type
     public function getDeals()
     {
         return $this->deals;
-    }
-
-    public function __toString(){
-        return $this->title;
     }
 }

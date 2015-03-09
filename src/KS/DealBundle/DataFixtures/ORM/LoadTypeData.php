@@ -23,7 +23,7 @@ class LoadTypeData extends AbstractFixture implements OrderedFixtureInterface
         $bonPlan->setTitle('Bon plan');
 
         $gratuit = new Type();
-        $gratuit->setTitle('Gratuit');
+        $gratuit->setTitle('Réduction');
 
         $manager->persist($code);
         $manager->persist($bonPlan);
@@ -32,7 +32,7 @@ class LoadTypeData extends AbstractFixture implements OrderedFixtureInterface
 
         $this->addReference('code-promo', $code);
         $this->addReference('bon-plan', $bonPlan);
-        $this->addReference('gratuit', $gratuit);
+        $this->addReference('reduction', $gratuit);
     }
 
 

@@ -25,8 +25,39 @@ class DealHandler implements DealHandlerInterface{
 	    $this->formFactory = $formFactory;
 	    $this->categoryOptionField = $categoryOptionField;
 	    $this->repository = $this->em->getRepository($this->entityClass);
-	    $this->postConfig = array('user','content','medias','price','url','categories','lat','lng','address','types');
-	    $this->putConfig  = array('content','media','price','url','lat','lng','address','categories','types');
+	    $this->postConfig = array(
+	    	'user',
+	    	'content',
+	    	'medias',
+	    	'price',
+	    	'url',
+	    	'categories',
+	    	'lat',
+	    	'lng',
+	    	'address',
+	    	'type',
+	    	'promoCode',
+	    	'reduction',
+	    	'reductionType',
+	    	'title',
+	    	'expiration'
+	    );
+	    $this->putConfig  = array(
+	    	'content',
+	    	'media',
+	    	'price',
+	    	'url',
+	    	'lat',
+	    	'lng',
+	    	'address',
+	    	'categories',
+	    	'type',
+	    	'promoCode',
+	    	'reduction',
+	    	'reductionType',
+	    	'title',
+	    	'expiration'
+	    );
 	}
 
 	private function processForm(Deal $deal, Request $request, $method = "PUT"){
@@ -101,6 +132,36 @@ class DealHandler implements DealHandlerInterface{
 					'category' => $this->categoryOptionField->getCategoryField('medias'),
 					'options' => $this->categoryOptionField->getOptionsField('medias'),
 				);
+			}
+			
+			$type = $request->request->get('type');
+			if ($type !== null) {
+				switch ($type) {
+					case 'code-promo':
+
+						if (!array_key_exists('promoCode', $config)) {
+							$config['promoCode'] = array(
+								'category' => $this->categoryOptionField->getCategoryField('promoCode'),
+								'options' => $this->categoryOptionField->getOptionsField('promoCode'),
+							);
+						}
+
+						break;
+					case 'reduction':
+						if (!array_key_exists('reductionType', $config)) {
+							$config['reductionType'] = array(
+								'category' => $this->categoryOptionField->getCategoryField('reductionType'),
+								'options' => $this->categoryOptionField->getOptionsField('reductionType'),
+							);
+						}
+						if (!array_key_exists('reduction', $config)) {
+							$config['reduction'] = array(
+								'category' => $this->categoryOptionField->getCategoryField('reduction'),
+								'options' => $this->categoryOptionField->getOptionsField('reduction'),
+							);
+						}
+						break;
+				}
 			}
 		}
 

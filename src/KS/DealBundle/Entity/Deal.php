@@ -5,6 +5,7 @@ namespace KS\DealBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use KS\MediaBundle\Entity\Media as Media;
 use KS\UserBundle\Entity\User as User;
+use KS\DealBundle\Entity\Type as Type;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -40,6 +41,12 @@ class Deal implements ManyEntityInterface
      * @Expose()
      */
     protected $id;
+
+    /**
+     * @ORM\Column(type="string", length=160, nullable=true)
+     * @Expose()
+     */
+    protected $title;
 
     /**
      * @ORM\Column(type="string", length=160)
@@ -78,6 +85,25 @@ class Deal implements ManyEntityInterface
     protected $url;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Expose()
+     */
+    protected $promoCode;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Expose()
+     */
+    protected $reduction;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\Choice(choices = {"pourcent", "euros"})
+     * @Expose()
+     */
+    protected $reductionType;
+
+    /**
      * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="dealsShared")
      * @ORM\JoinTable(name="users_shared")
      * @ORM\JoinColumn(nullable=true)
@@ -98,10 +124,11 @@ class Deal implements ManyEntityInterface
     protected $categories;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Type", cascade={"persist"}, inversedBy="deals")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="KS\DealBundle\Entity\Type", inversedBy="deals", cascade={"persist"}) 
+     * @Assert\NotBlank()
+     * @Assert\Type(type="KS\DealBundle\Entity\Type")
      */
-    protected $types;
+    protected $type;
 
     /**
      * @ORM\ManyToMany(targetEntity="KS\UserBundle\Entity\User", cascade={"persist"}, inversedBy="dealsLikes")
@@ -141,6 +168,14 @@ class Deal implements ManyEntityInterface
      */
     protected $address;
 
+
+    /**
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Expose()
+     */
+    protected $expiration;
+
     /**
      * @var date $created
      *
@@ -148,7 +183,7 @@ class Deal implements ManyEntityInterface
      * @Gedmo\Timestampable(on="create")
      * @Expose()
      */
-    private $created;
+    protected $created;
 
     /**
      * @var date $updated
@@ -157,14 +192,14 @@ class Deal implements ManyEntityInterface
      * @Gedmo\Timestampable
      * @Expose()
      */
-    private $updated;
+    protected $updated;
 
     /**
      * @var date $deletedAt
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $deletedAt;
+    protected $deletedAt;
 
     public function __construct()
     {
@@ -555,39 +590,6 @@ class Deal implements ManyEntityInterface
     }
 
     /**
-     * Add types
-     *
-     * @param \KS\DealBundle\Entity\Type $types
-     * @return Deal
-     */
-    public function addType(\KS\DealBundle\Entity\Type $types)
-    {
-        $this->types[] = $types;
-
-        return $this;
-    }
-
-    /**
-     * Remove types
-     *
-     * @param \KS\DealBundle\Entity\Type $types
-     */
-    public function removeType(\KS\DealBundle\Entity\Type $types)
-    {
-        $this->types->removeElement($types);
-    }
-
-    /**
-     * Get types
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTypes()
-    {
-        return $this->types;
-    }
-
-    /**
      * Add usersLikes
      *
      * @param \KS\UserBundle\Entity\User $usersLikes
@@ -709,18 +711,197 @@ class Deal implements ManyEntityInterface
 
     /**
      * @VirtualProperty
-     * @SerializedName("types")
+     * @SerializedName("type")
      *
      */
     public function getTypesSerialize()
     {   
-        $types = $this->getTypes();
-        $array = array();
-        foreach ($types as $key => $type) {
-            array_push($array, $type->getTitle());
+        $type = $this->getType();
+        if($type instanceOf Type){
+            return $type->getSlug();
         }
 
-        return $array;
+        return $type;
     }
 
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("type_view")
+     *
+     */
+    public function getInfosTypeView()
+    {   
+        $type = $this->getType();
+
+        if($type instanceOf Type){
+            switch ($type->getSlug()) {
+                case 'code-promo':
+                    return array(
+                        'type' => 'code-promo',
+                        'sub_type' => '',
+                        'infos_view' => $this->getPromoCode()
+                    );
+                    break;
+                case 'reduction':
+                    return array(
+                        'type' => 'reduction',
+                        'sub_type' => $this->getReductionType(),
+                        'infos_view' => $this->getReduction()
+                    );
+                    break;
+                case 'bon-plan':
+                    return  array(
+                        'type' => 'reduction',
+                        'sub_type' => '',
+                        'infos_view' => $this->getPrice()
+                    );
+                    break;
+            }
+        }
+
+        return $this->getPrice();
+    }
+
+
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Deal
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+ 
+    /**
+     * Set type
+     *
+     * @param \KS\DealBundle\Entity\Type $type
+     * @return Deal
+     */
+    public function setType(\KS\DealBundle\Entity\Type $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+
+    /**
+     * Set promoCode
+     *
+     * @param string $promoCode
+     * @return Deal
+     */
+    public function setPromoCode($promoCode)
+    {
+        $this->promoCode = $promoCode;
+
+        return $this;
+    }
+
+    /**
+     * Get promoCode
+     *
+     * @return string 
+     */
+    public function getPromoCode()
+    {
+        return $this->promoCode;
+    }
+
+    /**
+     * Set reduction
+     *
+     * @param integer $reduction
+     * @return Deal
+     */
+    public function setReduction($reduction)
+    {
+        $this->reduction = $reduction;
+
+        return $this;
+    }
+
+    /**
+     * Get reduction
+     *
+     * @return integer 
+     */
+    public function getReduction()
+    {
+        return $this->reduction;
+    }
+
+    /**
+     * Set reductionType
+     *
+     * @param string $reductionType
+     * @return Deal
+     */
+    public function setReductionType($reductionType)
+    {
+        $this->reductionType = $reductionType;
+
+        return $this;
+    }
+
+    /**
+     * Get reductionType
+     *
+     * @return string 
+     */
+    public function getReductionType()
+    {
+        return $this->reductionType;
+    }
+
+    /**
+     * Set expiration
+     *
+     * @param \DateTime $expiration
+     * @return Deal
+     */
+    public function setExpiration($expiration)
+    {
+        $this->expiration = $expiration;
+
+        return $this;
+    }
+
+    /**
+     * Get expiration
+     *
+     * @return \DateTime 
+     */
+    public function getExpiration()
+    {
+        return $this->expiration;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \KS\DealBundle\Entity\Type 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }
