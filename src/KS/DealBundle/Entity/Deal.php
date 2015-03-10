@@ -735,24 +735,24 @@ class Deal implements ManyEntityInterface
         $type = $this->getType();
 
         if($type instanceOf Type){
+
+            $url = (isset())
+
             switch ($type->getSlug()) {
                 case 'code-promo':
                     return array(
-                        'type' => 'code-promo',
                         'sub_type' => '',
                         'infos_view' => $this->getPromoCode()
                     );
                     break;
                 case 'reduction':
                     return array(
-                        'type' => 'reduction',
                         'sub_type' => $this->getReductionType(),
                         'infos_view' => $this->getReduction()
                     );
                     break;
                 case 'bon-plan':
                     return  array(
-                        'type' => 'reduction',
                         'sub_type' => '',
                         'infos_view' => $this->getPrice()
                     );
