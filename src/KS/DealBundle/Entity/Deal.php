@@ -716,12 +716,7 @@ class Deal implements ManyEntityInterface
      */
     public function getTypesSerialize()
     {   
-        $type = $this->getType();
-        if($type instanceOf Type){
-            return $type->getSlug();
-        }
-
-        return $type;
+        return $this->getType()->getSlug();
     }
 
 

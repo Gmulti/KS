@@ -1,6 +1,15 @@
 services:
-    ksdeal.type.media_selector:
+    ksmedia.type.media_selector:
         class: KS\MediaBundle\Form\DataTransformer\MediaTransformerType
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type, alias: media_selector }
+
+    ksmedia.listener.imagelistener:
+        class: KS\MediaBundle\Listener\CacheImageListener
+        arguments: ["@liip_imagine.cache.manager","@liip_imagine.data.manager","@liip_imagine.filter.manager"]
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: preRemove }
+            - { name: doctrine.event_listener, event: postFlush }
+            - { name: doctrine.event_listener, event: onFlush }

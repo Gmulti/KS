@@ -16,6 +16,8 @@ use Hateoas\Configuration\Annotation as Hateoas;
 
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\SerializedName;
 
 /**
  * @ORM\Entity
@@ -45,18 +47,15 @@ class Media
 
     /**
      * @ORM\ManyToOne(targetEntity="KS\UserBundle\Entity\User", inversedBy="medias", cascade={"persist"})
-     * @Expose()
      */
     protected $user;
 
     /**
-     * @Expose()
      * @ORM\ManyToOne(targetEntity="KS\DealBundle\Entity\Deal", inversedBy="medias", cascade={"persist"})
      */
     protected $deal;
 
     /**
-     * @Expose()
      * @ORM\ManyToOne(targetEntity="KS\DealBundle\Entity\Comment", inversedBy="medias", cascade={"persist"})
      */
     protected $comment;
@@ -69,8 +68,21 @@ class Media
 
     /**
      * @ORM\Column(type="string")
+     * @Expose()
      */
     protected $path;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Expose()
+     */
+    protected $url;    
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     * @Expose()
+     */
+    protected $thumbnailsUrl;
 
     /**
      * @Assert\File(maxSize="6000000")
@@ -272,6 +284,7 @@ class Media
 
         if (null !== $this->file) {
             $this->path = sha1(uniqid(mt_rand(), true)). '.' .$this->file->getClientOriginalExtension();
+            $this->url  = $this->getWebPath();
         }
     }
 
@@ -408,4 +421,88 @@ class Media
     {
         return $this->comment;
     }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return Media
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string 
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set thumbnailsUrl
+     *
+     * @param array $thumbnailsUrl
+     * @return Media
+     */
+    public function setThumbnailsUrl($thumbnailsUrl)
+    {
+        $this->thumbnailsUrl = $thumbnailsUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get thumbnailsUrl
+     *
+     * @return array 
+     */
+    public function getThumbnailsUrl()
+    {
+        return $this->thumbnailsUrl;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("user")
+     *
+     */
+    public function getUserSerialize()
+    {   
+        return array(
+            'id' => $this->getUser()->getId(),
+            'username' => $this->getUser()->getUsername()
+        );
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("deal")
+     *
+     */
+    public function getDealSerialize()
+    {   
+        if(!empty($this->getDeal())){
+            return $this->getDeal()->getId();
+        }
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("comment")
+     *
+     */
+    public function getCommentSerialize()
+    {   
+        if(!empty($this->getComment())){
+            return $this->getComment()->getId();
+        }
+    }
+
 }
