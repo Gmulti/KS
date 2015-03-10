@@ -736,8 +736,6 @@ class Deal implements ManyEntityInterface
 
         if($type instanceOf Type){
 
-            $url = (isset())
-
             switch ($type->getSlug()) {
                 case 'code-promo':
                     return array(
