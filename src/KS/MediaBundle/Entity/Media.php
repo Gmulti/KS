@@ -491,6 +491,8 @@ class Media
         if(!empty($this->getDeal())){
             return $this->getDeal()->getId();
         }
+        
+        return null;
     }
 
     /**
@@ -503,6 +505,8 @@ class Media
         if(!empty($this->getComment())){
             return $this->getComment()->getId();
         }
+
+        return null;
     }
 
 }
