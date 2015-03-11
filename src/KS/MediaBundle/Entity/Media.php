@@ -487,9 +487,10 @@ class Media
      *
      */
     public function getDealSerialize()
-    {   
-        if(!empty($this->getDeal())){
-            return $this->getDeal()->getId();
+    {       
+        $deal = $this->getDeal();
+        if(!empty($deal)){
+            return $deal->getId();
         }
         
         return null;
@@ -502,8 +503,9 @@ class Media
      */
     public function getCommentSerialize()
     {   
-        if(!empty($this->getComment())){
-            return $this->getComment()->getId();
+        $comment = $this->getComment();
+        if(!empty($comment)){
+            return $comment->getId();
         }
 
         return null;
