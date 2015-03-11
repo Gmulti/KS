@@ -25,4 +25,5 @@ node_modules
 .sass_cache
 ngrok
 
+web/media/*
 src/KS/MediaBundle/Resources/public/
