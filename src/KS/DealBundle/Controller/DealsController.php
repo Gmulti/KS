@@ -95,6 +95,7 @@ class DealsController extends RestController
 
         $view = FOSView::create();
         $user = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+
         $request->request->set('user',$user);
         
         $newDeal = $this->container->get('ksdeal.handler.deal')->post(

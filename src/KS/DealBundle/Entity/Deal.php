@@ -209,6 +209,7 @@ class Deal implements ManyEntityInterface
         $this->medias = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->types = new ArrayCollection();
+        $this->nbUsersLikes = 0;
     }
    
 
@@ -679,6 +680,7 @@ class Deal implements ManyEntityInterface
     {   
         return count($this->getComments());
     }
+
 
     /**
      * @VirtualProperty
