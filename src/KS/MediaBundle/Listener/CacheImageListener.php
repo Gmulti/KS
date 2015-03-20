@@ -54,6 +54,9 @@ class CacheImageListener
 	public function postFlush(PostFlushEventArgs $args){
 		$thumbnailsUrl = array();
 
+		$em  = $args->getEntityManager();
+		$uow = $em->getUnitOfWork();
+
 		if (!empty($this->entities)) {
 			foreach ($this->entities as $entity) {
     			$medias = $entity->getMedias();
@@ -67,9 +70,11 @@ class CacheImageListener
 							}
 						}
 						$media->setThumbnailsUrl($thumbnailsUrl);
+						$em->persist($media);
 					}
 				}
         	}
+        	$em->flush();
 		}		
 	}
 

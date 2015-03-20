@@ -282,7 +282,7 @@ class Media
     public function preUpload()
     {
 
-        if (null !== $this->file) {
+        if (isset($this->file) && null !== $this->file) {
             $this->path = sha1(uniqid(mt_rand(), true)). '.' .$this->file->getClientOriginalExtension();
             $this->url  = $this->getWebPath();
         }
@@ -294,8 +294,10 @@ class Media
      */
     public function upload()
     {
-        $this->file->move($this->getUploadRootDir(), $this->path);
-        unset($this->file);
+        if(isset($this->file)){
+            $this->file->move($this->getUploadRootDir(), $this->path);
+            unset($this->file);
+        }
     }
 
     /**
