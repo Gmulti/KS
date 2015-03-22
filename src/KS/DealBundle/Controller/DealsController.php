@@ -38,6 +38,9 @@ class DealsController extends RestController
      * @QueryParam(name="limit", requirements="\d+", default="10", description="Limit deals")
      * @QueryParam(name="start_price", requirements="\d+", description="Price start deals")
      * @QueryParam(name="end_price", requirements="\d+", description="Price end deals")
+     * @QueryParam(name="lat", description="Latitude")
+     * @QueryParam(name="lng", description="Longitude")
+     * @QueryParam(name="distance", description="Distance geolocalisation")
      * @QueryParam(name="thumbnails", requirements="\d{1}", default="0")
      *
      */
@@ -193,6 +196,20 @@ class DealsController extends RestController
         if ($params->get('end_price') !== null) {
             $options['end_price'] = $params->get('end_price');
         }
+
+        if ($params->get('lat') !== null && $params->get('lng') !== null) {
+            $options['lat'] = $params->get('lat');
+            $options['lng'] = $params->get('lng');
+            if ($params->get('distance') !== null) {
+                $options['distance'] = $params->get('distance');
+            }
+            else{
+                $options['distance'] = 2000;
+            }
+        }
+
+       
+
 
         $data = $this->getDoctrine()->getManager()
             ->getRepository('KSDealBundle:Deal')

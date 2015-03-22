@@ -19,7 +19,7 @@ class MainController extends Controller
     public function indexAction()
     {
     	
-
+       
 //     	$user = new Client();
 //     	$user->addScope($scope);
 //     	$dm =$this->get('doctrine_mongodb')->getManager();
