@@ -106,6 +106,34 @@ class DealsControllerTest extends GeneralController
 
     }
 
+    public function testGetDealsWithStardAndEndPriceAndGeolocalisation()
+    {
+        fwrite(STDOUT, __METHOD__ . "\n");
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', 
+            '/api/v1/deals.json',
+            array(
+                'start_price' => 5,
+                'end_price'   => 20,
+                'lng' => '4.854994',
+                'lat' => '45.75537'
+            ),
+            array(),
+            self::$headers
+        );
+
+        $response = $client->getResponse();
+        $msg = json_decode($response->getContent(), true);
+
+        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
+        $this->assertEquals(200, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
+
+        $this->assertGreaterThanOrEqual(count($msg), 1);
+        $this->assertGreaterThanOrEqual(15, $msg[0]['price']);
+
+    }
+
     /**
      * @depends testGetDealsOffsetLimitDefault
      */

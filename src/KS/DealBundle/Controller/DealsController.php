@@ -40,8 +40,8 @@ class DealsController extends RestController
      * @QueryParam(name="end_price", requirements="\d+", description="Price end deals")
      * @QueryParam(name="lat", description="Latitude")
      * @QueryParam(name="lng", description="Longitude")
-     * @QueryParam(name="distance", description="Distance geolocalisation")
-     * @QueryParam(name="thumbnails", requirements="\d{1}", default="0")
+     * @QueryParam(name="distance", requirements="\d+", description="Distance geolocalisation")
+     * @QueryParam(name="content", description="Content deal")
      *
      */
     public function getDealsAction(ParamFetcher $params)
@@ -208,7 +208,10 @@ class DealsController extends RestController
             }
         }
 
-       
+        if ($params->get('content') !== null) {
+            $options['content'] = $params->get('content');
+        }
+
 
 
         $data = $this->getDoctrine()->getManager()

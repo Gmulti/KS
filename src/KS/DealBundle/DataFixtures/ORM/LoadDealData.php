@@ -21,6 +21,7 @@ class LoadDealData extends AbstractFixture implements OrderedFixtureInterface
         $deal->setContent('dummy deal');
         $deal->setPrice(10);
         $deal->setUser($this->getReference('user-test'));
+        $deal->setPromoCode("ABC_CODE_PROMO");
         $deal->addCategory($this->getReference('cat1'));
         $deal->setType($this->getReference('code-promo'));
 
@@ -38,15 +39,32 @@ class LoadDealData extends AbstractFixture implements OrderedFixtureInterface
         $dealGratuit = new Deal();
         $dealGratuit->setTitle('Title dummy deal gratuit');
         $dealGratuit->setContent('dummy deal gratuit');
-        $dealGratuit->setPrice(0);
+        $dealGratuit->setPrice(50);
         $dealGratuit->setUser($this->getReference('user-test'));
         $dealGratuit->addCategory($this->getReference('cat2'));
         $dealGratuit->setType($this->getReference('reduction'));
+        $dealGratuit->setReductionType('pourcent');
+        $dealGratuit->setReduction(10);
+
+
+        $dealLocalisation = new Deal();
+        $dealLocalisation->setTitle('Title dummy deal localisation');
+        $dealLocalisation->setContent('dummy deal localisation');
+        $dealLocalisation->setPrice(15);
+        $dealLocalisation->setUser($this->getReference('user-test'));
+        $dealLocalisation->addCategory($this->getReference('cat2'));
+        $dealLocalisation->setType($this->getReference('reduction'));
+        $dealLocalisation->setReductionType('euros');
+        $dealLocalisation->setReduction(5);
+        $dealLocalisation->setLng(4.854993);
+        $dealLocalisation->setLat(45.75537);
+
 
 
         $manager->persist($deal);
         $manager->persist($dealAdmin);
         $manager->persist($dealGratuit);
+        $manager->persist($dealLocalisation);
         $manager->flush();
 
         $this->addReference('deal-promo', $deal);

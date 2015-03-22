@@ -61,6 +61,12 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$qb->andWhere('d.price <= :end_price');
 				$qb->setParameter('end_price', $value);
 				break;
+			case 'content':
+				$value = strtoupper($value);
+				$qb->andWhere('upper(d.content) LIKE :content');
+				$qb->andWhere('upper(d.title) LIKE :content');	
+				$qb->setParameter('content', "%{$value}%");
+				break;
 		}
 
 		return $qb;
@@ -73,7 +79,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 
 		switch ($key) {
 			case 'start_price':
-				$sql .= "AND d.price >= ?";
+				$sql .= "AND d.price >= :start_price ";
 				break;
 			
 			case 'end_price':
@@ -82,7 +88,12 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 					return $qb;
 				}
 
-				$sql .= "AND d.price <= ?";
+				$sql .= "AND d.price <= :end_price ";
+				break;
+			case 'content':
+				$value = strtoupper($value);
+				$sql .= "AND d.content LIKE :content ";
+				$sql .= "AND d.title LIKE :content ";
 				break;
 		}
 
@@ -102,13 +113,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 			->setMaxResults($limit);
 
 		foreach ($options as $key => $value) {
-			switch ($key) {
-				case 'start_price':
-				case 'end_price':
-					$qb = $this->setParameter($qb, $value, $key);
-					break;
-				
-			}
+			$qb = $this->setParameter($qb, $value, $key);
 		}
 
 		return $qb->getQuery();
@@ -123,32 +128,36 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 		$rsm->addRootEntityFromClassMetadata('KS\DealBundle\Entity\Deal', 'd');
 		$sql = "SELECT * 
         	 FROM ks_deal d 
-        	 WHERE earth_box(ll_to_earth(?,?),?) @> ll_to_earth(d.lat, d.lng) ";
+        	 WHERE earth_box(ll_to_earth(:lat,:lng),:distance) @> ll_to_earth(d.lat, d.lng) ";
 
-       	$i = 4;
-       	$order = array();
+
     	foreach ($options as $key => $value) {
     		if (!in_array($key, array('distance', 'lat', 'lng'))) {
-    			$order[$i] = $value;
-				switch ($key) {
-					case 'start_price':
-					case 'end_price':
-						$sql = $this->setParameterLocalisation($sql, $value, $key);
-						break;
-				}
-				$i++;
+				$sql = $this->setParameterLocalisation($sql, $value, $key);
     		}
 		}
 
       
         $query = $this->_em->createNativeQuery($sql ,$rsm);
 
-        $query->setParameter(1, $options['lat']);
-        $query->setParameter(2, $options['lng']);
-        $query->setParameter(3, $options['distance']);
-        foreach ($order as $key => $value) {
-        	$query->setParameter($key, $value);	
-        }
+        $query->setParameter('lat', $options['lat']);
+        $query->setParameter('lng', $options['lng']);
+        $query->setParameter('distance', $options['distance']);
+
+        foreach ($options as $key => $value) {
+    		if (!in_array($key, array('distance', 'lat', 'lng'))) {
+				switch ($key) {
+					case 'content':
+						$query->setParameter($key, "%{$value}%");
+						break;
+					
+					default:
+						$query->setParameter($key, $value);
+						break;
+				}
+    		}
+		}
+
 
         return $query;
 

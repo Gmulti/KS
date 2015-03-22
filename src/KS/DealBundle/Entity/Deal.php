@@ -532,6 +532,7 @@ class Deal implements ManyEntityInterface
      */
     public function addUsersShared(\KS\UserBundle\Entity\User $usersShared)
     {
+        $this->setNbUsersShared($this->getNbUsersShared()+1);
         $this->usersShared[] = $usersShared;
 
         return $this;
@@ -544,6 +545,7 @@ class Deal implements ManyEntityInterface
      */
     public function removeUsersShared(\KS\UserBundle\Entity\User $usersShared)
     {
+         $this->setNbUsersShared($this->getNbUsersShared()-1);
         $this->usersShared->removeElement($usersShared);
     }
 
@@ -598,6 +600,7 @@ class Deal implements ManyEntityInterface
      */
     public function addUsersLike(\KS\UserBundle\Entity\User $usersLikes)
     {
+        $this->setNbUsersLikes($this->getNbUsersLikes()+1);
         $this->usersLikes[] = $usersLikes;
 
         return $this;
@@ -610,6 +613,7 @@ class Deal implements ManyEntityInterface
      */
     public function removeUsersLike(\KS\UserBundle\Entity\User $usersLikes)
     {
+        $this->setNbUsersLikes($this->getNbUsersLikes()-1);
         $this->usersLikes->removeElement($usersLikes);
     }
 
