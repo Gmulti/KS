@@ -40,7 +40,8 @@ class DealHandler implements DealHandlerInterface{
 	    	'reduction',
 	    	'reductionType',
 	    	'title',
-	    	'expiration'
+	    	'expiration',
+	    	'currency'
 	    );
 	    $this->putConfig  = array(
 	    	'content',
@@ -56,7 +57,8 @@ class DealHandler implements DealHandlerInterface{
 	    	'reduction',
 	    	'reductionType',
 	    	'title',
-	    	'expiration'
+	    	'expiration',
+	    	'currency'
 	    );
 	}
 

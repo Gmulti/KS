@@ -145,10 +145,16 @@ class Deal implements ManyEntityInterface
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     *
      * @Expose()
      */
     protected $price;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\Choice(choices = {"euro", "dollar"})
+     * @Expose()
+     */
+    protected $currency;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -902,5 +908,28 @@ class Deal implements ManyEntityInterface
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set currency
+     *
+     * @param string $currency
+     * @return Deal
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Get currency
+     *
+     * @return string 
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
     }
 }
