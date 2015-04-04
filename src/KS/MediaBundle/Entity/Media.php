@@ -80,6 +80,7 @@ class Media
 
     /**
      * @ORM\Column(type="array", nullable=true)
+     * @Expose()
      */
     protected $thumbnailsUrl;
 
@@ -497,24 +498,7 @@ class Media
         return null;
     }
 
-    /**
-     * @VirtualProperty
-     * @SerializedName("thumbnails_url")
-     *
-     */
-    public function getThumbnailsSerialize()
-    {       
-        $thumbnails = $this->getThumbnailsUrl();
-        $array = array();
-        if (!empty($thumbnails)) {
-            foreach ($thumbnails as $key => $value) {
-                $array[0][$key] = $value;
-            }
-            return $array;
-        }
-        
-        return null;
-    }
+
 
     /**
      * @VirtualProperty
