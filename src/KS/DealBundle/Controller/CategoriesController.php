@@ -92,7 +92,7 @@ class CategoriesController extends RestController
 
             $data = $this->getDoctrine()->getManager()
                         ->getRepository('KSDealBundle:Category')->buildTreeArrayCategory($data);
-
+            $this->sortTree($data);
         }
         else{
             $data = $this->getDoctrine()->getManager()
@@ -102,6 +102,19 @@ class CategoriesController extends RestController
         
 
         return $data;
+    }
+
+    private function sortTree( &$array )
+    {
+        if (!is_array($array)) {
+            return false;
+        }
+
+        sort($array);
+        foreach ($array as $k=>$v) {
+            $this->sortTree($array[$k]['children']);
+        }
+        return true;
     }
 
 }

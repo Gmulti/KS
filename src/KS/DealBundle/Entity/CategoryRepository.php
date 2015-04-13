@@ -64,6 +64,7 @@ class CategoryRepository extends NestedTreeRepository
         $build = function ($tree) use (&$build) {
             foreach ($tree as $node) {
 
+                $output[$node['id']]['id'] = $node['id']; 
                 $output[$node['id']]['slug'] = $node['slug']; 
                 $output[$node['id']]['title'] = $node['title']; 
                 if (count($node['__children']) > 0) {
@@ -74,7 +75,22 @@ class CategoryRepository extends NestedTreeRepository
             return $output;
         };
 
-        return $build($nestedTree);
+        $data = $build($nestedTree);
+        $this->sortTree($data);
+        return $data;
 	}
+
+  private function sortTree( &$array )
+    {
+        if (!is_array($array)) {
+            return false;
+        }
+
+        sort($array);
+        foreach ($array as $k=>$v) {
+            $this->sortTree($array[$k]['children']);
+        }
+        return true;
+    }
 
 }
