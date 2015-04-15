@@ -66,8 +66,6 @@ class DealHandler implements DealHandlerInterface{
 		
 		$form = $this->createForm($deal, $request, $method);
 	    $form->handleRequest($request);
-	    var_dump($this->getErrorMessages($form));
-	    die();
 
 	    if ($form->isValid()) {
 
@@ -90,7 +88,7 @@ class DealHandler implements DealHandlerInterface{
 	        return $deal;
 	    }
 
-		throw new InvalidFormException('Invalid submitted data', $form);
+		throw new InvalidFormException('Invalid submitted data', $this->getErrorMessages($form));
 	}
 
 	private function getErrorMessages(\Symfony\Component\Form\Form $form) {
