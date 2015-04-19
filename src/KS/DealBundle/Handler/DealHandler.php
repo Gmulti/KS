@@ -88,27 +88,7 @@ class DealHandler implements DealHandlerInterface{
 	        return $deal;
 	    }
 
-		throw new InvalidFormException('Invalid submitted data', $this->getErrorMessages($form));
-	}
-
-	private function getErrorMessages(\Symfony\Component\Form\Form $form) {
-	    $errors = array();
-
-	    foreach ($form->getErrors() as $key => $error) {
-	        if ($form->isRoot()) {
-	            $errors['#'][] = $error->getMessage();
-	        } else {
-	            $errors[] = $error->getMessage();
-	        }
-	    }
-
-	    foreach ($form->all() as $child) {
-	        if (!$child->isValid()) {
-	            $errors[$child->getName()] = $this->getErrorMessages($child);
-	        }
-	    }
-
-	    return $errors;
+		throw new InvalidFormException('Invalid submitted data', $form);
 	}
 
 	private function createForm(Deal $deal, Request $request, $method){
@@ -168,6 +148,14 @@ class DealHandler implements DealHandlerInterface{
 							);
 						}
 
+						foreach (array('reductionType', 'reduction') as $key => $value) {
+							if(array_key_exists($value, $config)){
+								$config[$value] = null;
+								$request->request->set($value, "");
+							}
+						}
+						
+
 						break;
 					case 'reduction':
 						if (!array_key_exists('reductionType', $config)) {
@@ -182,10 +170,24 @@ class DealHandler implements DealHandlerInterface{
 								'options' => $this->categoryOptionField->getOptionsField('reduction'),
 							);
 						}
+
+						if(array_key_exists('promoCode', $config)){
+							$config['promoCode'] = null;
+							$request->request->set("promoCode", "");
+						}
+						break;
+					case 'bon-plan':
+						foreach (array('reductionType', 'reduction', 'promoCode') as $key => $value) {
+							if(array_key_exists($value, $config)){
+								$config[$value] = null;
+								$request->request->set($value, "");
+							}
+						}
 						break;
 				}
 			}
 		}
+
 
 		$form = $this->formFactory->create(new DealType($config), $deal, array('method' => $method));
 

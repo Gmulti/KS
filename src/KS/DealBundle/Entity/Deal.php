@@ -98,7 +98,7 @@ class Deal implements ManyEntityInterface
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\Choice(choices = {"pourcent", "euros"})
+     * @Assert\Choice(choices = {"pourcent", "cash"})
      * @Expose()
      */
     protected $reductionType;
