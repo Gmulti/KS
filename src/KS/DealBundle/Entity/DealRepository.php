@@ -67,6 +67,10 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$qb->andWhere('upper(d.title) LIKE :content');	
 				$qb->setParameter('content', "%{$value}%");
 				break;
+			case 'date_offset':
+				$qb->andWhere('d.updated > :date');
+				$qb->setParameter('date', new \DateTime($value));
+				break;
 		}
 
 		return $qb;
@@ -94,6 +98,9 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$value = strtoupper($value);
 				$sql .= "AND d.content LIKE :content ";
 				$sql .= "AND d.title LIKE :content ";
+				break;
+			case 'date_offset':
+				$sql .= "AND d.updated > :date_offset ";
 				break;
 		}
 
@@ -137,6 +144,8 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
     		}
 		}
 
+		$sql .= "ORDER BY d.updated DESC";
+
       
         $query = $this->_em->createNativeQuery($sql ,$rsm);
 
@@ -149,6 +158,11 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				switch ($key) {
 					case 'content':
 						$query->setParameter($key, "%{$value}%");
+						break;
+
+					case 'date_offset':
+						$date = new \DateTime($value);
+						$query->setParameter($key, $date->format("Y-m-d H:i:s"));
 						break;
 					
 					default:

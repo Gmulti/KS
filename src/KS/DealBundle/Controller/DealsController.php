@@ -42,6 +42,7 @@ class DealsController extends RestController
      * @QueryParam(name="lng", description="Longitude")
      * @QueryParam(name="distance", requirements="\d+", description="Distance geolocalisation")
      * @QueryParam(name="content", description="Content deal")
+     * @QueryParam(name="date_offset", description="Date offset deal")
      *
      */
     public function getDealsAction(ParamFetcher $params)
@@ -211,7 +212,7 @@ class DealsController extends RestController
         if ($params->get('content') !== null) {
             $options['content'] = $params->get('content');
         }
-
+        $options['date_offset'] = $params->get('date_offset');
 
 
         $data = $this->getDoctrine()->getManager()
