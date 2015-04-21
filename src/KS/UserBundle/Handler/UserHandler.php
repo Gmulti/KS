@@ -91,4 +91,32 @@ class UserHandler implements UserHandlerInterface{
 
     	);
     }
+
+    public function forceDelete($username, $token){
+    	$user = $this->repository->findOneBy(array(
+    			'username' => $username,
+    			'tokenForceDelete' => $token
+    		)
+    	);
+    	$this->em->getFilters()->disable('softdeleteable');
+
+    	if(null !== $user){
+    		try {
+	    		$this->em->remove($user);
+    			$this->em->flush();
+
+	    	} catch (Exception $e) {
+	    		return array(
+	    			'error' => 'exception',
+	    			'error_description' => 'Delete error'
+	    		);
+	    	}
+    		
+    	}
+
+    	return array(
+    		'success' => 'delete_success',
+    		'success_description' => 'Delete user with success'
+    	);
+    }
 }

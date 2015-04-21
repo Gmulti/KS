@@ -83,6 +83,36 @@ class UsersRegisterController extends FOSRestController
 
     }
 
-  
+    /**
+     * Force delete User entity.
+     *
+     * @RequestParam(name="token", default="", description="Force token delete")
+     * @RequestParam(name="username", default="^\w+", description="Username")
+     *
+     * @Get("/users/delete/{username}/{token}")
+     *
+     */
+    public function deleteForceUserAction($username, $token){
+
+        $view = FOSView::create();
+
+        $deleteUser = $this->container->get('ksuser.handler.user')->forceDelete(
+            $username, $token 
+        );
+        
+        if(null !== $deleteUser){
+             $view = $this->view($deleteUser, 202);
+
+        }
+        else{
+            $error = array(
+                'error' => 'user_already_delete',
+                'error_description' => 'User have already delete'
+            );
+            $view->setStatusCode(404,$deleteUser);
+        }
+
+        return $this->handleView($view);
+    }  
 
 }

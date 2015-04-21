@@ -138,6 +138,11 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
     protected $birthday;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $tokenForceDelete;
+
+    /**
      * @var date $created
      *
      * @ORM\Column(type="datetime")
@@ -169,6 +174,7 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
         $this->subscribes = new ArrayCollection();
         $this->deals = new ArrayCollection();
         $this->dealsShared = new ArrayCollection();
+        $this->tokenForceDelete = md5(uniqid(mt_rand(), true));
         $this->enabled = true;
     }
 

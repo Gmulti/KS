@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;    
 use FOS\RestBundle\View\RouteRedirectView;                
 use FOS\RestBundle\View\View AS FOSView;
-use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -254,6 +253,7 @@ class UsersController extends RestController
 
         return $this->handleView($view);
     }
+
 
     
 }
