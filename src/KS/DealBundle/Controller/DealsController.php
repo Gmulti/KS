@@ -212,7 +212,10 @@ class DealsController extends RestController
         if ($params->get('content') !== null) {
             $options['content'] = $params->get('content');
         }
-        $options['date_offset'] = $params->get('date_offset');
+        
+        if(null != $params->get('date_offset')){
+            $options['date_offset'] = $params->get('date_offset');
+        }
 
 
         $data = $this->getDoctrine()->getManager()

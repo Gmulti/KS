@@ -45,6 +45,7 @@ class CategoryOptionField
             case 'promoCode':
             case 'reductionType':
             case 'reduction':
+            case 'currency':
                 $result = array(
                     'constraints' => array(
                         new NotBlank()
