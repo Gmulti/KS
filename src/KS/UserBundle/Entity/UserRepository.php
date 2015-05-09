@@ -16,7 +16,7 @@ use KS\DealBundle\Models\ManyRepositoryInterface;
 class UserRepository extends EntityRepository implements ManyRepositoryInterface
 {
 
-	public function findByIdOrSlug($value){
+	public function findByIdOrUsername($value){
 		$cast = (int)$value;
 
 		$qb = $this->_em->createQueryBuilder();

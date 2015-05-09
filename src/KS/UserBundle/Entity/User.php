@@ -764,4 +764,34 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
 
         return $array;
     }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("nb_deals")
+     *
+     */
+    public function getNbDeals(){
+        return count($this->getDeals());
+    }
+
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("nb_followers")
+     *
+     */
+    public function getNbFollowersView(){
+        return (null == $this->getNbFollowers()) ? 0 : $this->getNbFollowers();
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("nb_subscribes")
+     *
+     */
+    public function getNbSubscribesView(){
+        return (null == $this->getNbSubscribes()) ? 0 : $this->getNbSubscribes();
+    }
+
+
 }

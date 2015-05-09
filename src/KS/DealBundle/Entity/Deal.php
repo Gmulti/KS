@@ -787,9 +787,6 @@ class Deal implements ManyEntityInterface
         return $result;
     }
 
-
-
-
     /**
      * Set title
      *
