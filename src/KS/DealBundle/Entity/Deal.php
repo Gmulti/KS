@@ -768,6 +768,26 @@ class Deal implements ManyEntityInterface
         return $this->getPrice();
     }
 
+    /**
+     * @VirtualProperty
+     * @SerializedName("users_like")
+     *
+     */
+    public function getUsersLikesView()
+    {   
+        $usersLikes = $this->getUsersLikes();
+        $result = array();
+
+        if(null != $usersLikes){
+            foreach ($usersLikes as $key => $value) {
+                array_push($result, $value->getUsername());
+            }
+        }
+
+        return $result;
+    }
+
+
 
 
     /**
