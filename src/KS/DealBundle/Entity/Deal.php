@@ -152,6 +152,7 @@ class Deal implements ManyEntityInterface
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Assert\Choice(choices = {"euro", "dollar"})
+     * @Assert\NotBlank()
      * @Expose()
      */
     protected $currency;

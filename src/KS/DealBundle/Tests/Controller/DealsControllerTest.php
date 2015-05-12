@@ -166,7 +166,8 @@ class DealsControllerTest extends GeneralController
             '/api/v1/deals.json',
             array(
                 'content'  => 'Contenu test',
-                'type' => 'bon-plan'
+                'type' => 'bon-plan',
+                'currency' => 'dollar'
             ),
             array(),
             self::$headers
@@ -254,7 +255,8 @@ class DealsControllerTest extends GeneralController
                 'content'  => 'Contenu test',
                 'categories' => array('categorie-1'),
                 'type' => 'code-promo',
-                'promoCode' => 'MYPROMOCODE'
+                'promoCode' => 'MYPROMOCODE',
+                'currency' => 'euro'
             ),
             array(),
             self::$headers

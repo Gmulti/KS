@@ -45,7 +45,7 @@ class DealHandler implements DealHandlerInterface{
 	    );
 	    $this->putConfig  = array(
 	    	'content',
-	    	'media',
+	    	'medias',
 	    	'price',
 	    	'url',
 	    	'lat',

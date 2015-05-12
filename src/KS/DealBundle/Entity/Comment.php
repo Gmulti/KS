@@ -306,6 +306,7 @@ class Comment implements ManyEntityInterface
     public function addUsersLikesComment(\KS\UserBundle\Entity\User $usersLikesComment)
     {
         $this->usersLikesComment[] = $usersLikesComment;
+        $this->setNbUsersLikes($this->getNbUsersLikes()+1);
 
         return $this;
     }
@@ -318,6 +319,8 @@ class Comment implements ManyEntityInterface
     public function removeUsersLikesComment(\KS\UserBundle\Entity\User $usersLikesComment)
     {
         $this->usersLikesComment->removeElement($usersLikesComment);
+        $this->setNbUsersLikes($this->getNbUsersLikes()-1);
+        return $this;
     }
 
     /**

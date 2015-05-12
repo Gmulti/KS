@@ -97,7 +97,6 @@ class ManyHandler implements RelationManyHandlerInterface{
     private function addLikeDeal($deal, $user){
 
     	$deal->addUsersLike($user);
-        $deal->setNbUsersLikes($deal->getNbUsersLikes()+1);
 		$user->addDealsLike($deal);
 
     }
@@ -105,32 +104,27 @@ class ManyHandler implements RelationManyHandlerInterface{
     private function addCommentLike($comment, $user){
 
 		$comment->addUsersLikesComment($user);
-        $comment->setNbUsersLikes($comment->getNbUsersLikes()+1);
 		$user->addCommentsLike($comment);
 
     }
 
     private function addShareDeal($deal, $user){
 		$deal->addUsersShared($user);
-		$deal->setNbUsersLikes($deal->getNbUsersShared()+1);
 		$user->addDealsShared($deal);
     }
 
     private function removeLikeDeal($deal, $user){
 	    $deal->removeUsersLike($user);
-		$deal->setNbUsersLikes($deal->getNbUsersLikes()-1);
 		$user->removeDealsLike($deal);
     }
 
     private function removeCommentLike($comment, $user){
 		$comment->removeUsersLikesComment($user);
-        $comment->setNbUsersLikes($comment->getNbUsersLikes()-1);
         $user->removeCommentsLike($comment);
     }
 
     private function removeShareDeal($deal, $user){
 		$deal->removeUsersShared($user);
-		$deal->setNbUsersLikes($deal->getNbUsersShared()-1);
 		$user->removeDealsShared($deal);
     }
 
