@@ -98,6 +98,7 @@ class DealsController extends RestController
             $em = $this->getDoctrine()->getManager();
             $user = $em->getRepository('KSUserBundle:User')->findOneByUsername($username);
             $deal = $this->getAlreadyMany($deal, $user, new LikeDealManyType());
+            $deal = $this->getAlreadyMany($deal, $user, new ShareDealManyType());
 
             $view = $this->view($deal, 200);
         }
