@@ -20,7 +20,12 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController as RestController;
 
 use KS\DealBundle\Entity\Deal;
+use KS\UserBundle\Entity\User;
 use KS\DealBundle\Form\Type\DealType;
+use KS\DealBundle\Models\LikeDealManyType;
+use KS\DealBundle\Models\ShareDealManyType;
+use KS\DealBundle\Models\ManyEntityInterface;
+use KS\DealBundle\Models\ManyTypeInterface;
 use KS\MediaBundle\Entity\Media;
 
 
@@ -45,13 +50,23 @@ class DealsController extends RestController
      * @QueryParam(name="date_offset", description="Date offset deal")
      *
      */
-    public function getDealsAction(ParamFetcher $params)
+    public function getDealsAction(ParamFetcher $params, Request $request)
     {      
         $view = FOSView::create();
         
         $data = $this->getDealsWithParams($params);
 
         if ($data) {
+
+            $em = $this->getDoctrine()->getManager();
+            $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+            $user = $em->getRepository('KSUserBundle:User')->findOneByUsername($username);
+
+            foreach ($data as $key => $value) {                
+                $data[$key] = $this->getAlreadyMany($value, $user, new LikeDealManyType());
+                $data[$key] = $this->getAlreadyMany($value, $user, new ShareDealManyType());
+            }
+
             $view = $this->view($data, 200);
             $view->setData($data);
         }
@@ -73,11 +88,17 @@ class DealsController extends RestController
      *
      * @ParamConverter("deal")
      */
-    public function getDealAction(Deal $deal){
+    public function getDealAction(Deal $deal, Request $request){
 
         $view = FOSView::create();
 
         if ($deal) {
+            $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository('KSUserBundle:User')->findOneByUsername($username);
+            $deal = $this->getAlreadyMany($deal, $user, new LikeDealManyType());
+
             $view = $this->view($deal, 200);
         }
         else{
@@ -223,6 +244,31 @@ class DealsController extends RestController
             ->getDealsWithOptions($options, $limit, $offset);
 
         return $data;
+    }
+
+
+    private function getAlreadyMany(ManyEntityInterface $entityMany, User $user, ManyTypeInterface $typeMany){
+        $em = $this->getDoctrine()->getManager();
+        $result = $em->getRepository('KSDealBundle:Deal')->getManyByUser($entityMany, $user, $typeMany);
+
+        if ($typeMany instanceOf LikeDealManyType) {
+            if(null === $result){
+                $entityMany->setAlreadyLike(false);
+            }
+            else{
+                $entityMany->setAlreadyLike(true);
+            }
+        }
+        elseif ($typeMany instanceOf ShareDealManyType) {
+            if(null === $result){
+                $entityMany->setAlreadyShare(false);
+            }
+            else{
+                $entityMany->setAlreadyShare(true);
+            }
+        }
+
+        return $entityMany;
     }
 
 }

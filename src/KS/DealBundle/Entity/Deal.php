@@ -208,6 +208,13 @@ class Deal implements ManyEntityInterface
      */
     protected $deletedAt;
 
+
+    ////////////
+
+    protected $alreadyLike;
+    
+    protected $alreadyShare;
+
     public function __construct()
     {
         $this->usersShared = new ArrayCollection();
@@ -778,14 +785,40 @@ class Deal implements ManyEntityInterface
     {   
         $usersLikes = $this->getUsersLikes();
         $result = array();
-
+        $i = 0;
         if(null != $usersLikes){
             foreach ($usersLikes as $key => $value) {
+                if($i > 10){
+                    break;
+                }
                 array_push($result, $value->getUsername());
+                $i++;
             }
         }
 
         return $result;
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("already_like")
+     *
+     */
+    public function getAlreadyLikeView()
+    {   
+
+        return $this->getAlreadyLike();
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("already_share")
+     *
+     */
+    public function getAlreadyShareView()
+    {   
+
+        return $this->getAlreadyShare();
     }
 
     /**
@@ -949,5 +982,51 @@ class Deal implements ManyEntityInterface
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    /* 
+     * Set alreadyLike
+     *
+     * @param boolean $alreadyLike
+     * @return Deal
+     */
+    public function setAlreadyLike($alreadyLike)
+    {
+        $this->alreadyLike = $alreadyLike;
+
+        return $this;
+    }
+
+    /**
+     * Get alreadyLike
+     *
+     * @return boolean 
+     */
+    public function getAlreadyLike()
+    {
+        return $this->alreadyLike;
+    }
+
+    /* 
+     * Set alreadyShare
+     *
+     * @param boolean $alreadyShare
+     * @return Deal
+     */
+    public function setAlreadyShare($alreadyShare)
+    {
+        $this->alreadyShare = $alreadyShare;
+
+        return $this;
+    }
+
+    /**
+     * Get alreadyShare
+     *
+     * @return boolean 
+     */
+    public function getAlreadyShare()
+    {
+        return $this->alreadyShare;
     }
 }

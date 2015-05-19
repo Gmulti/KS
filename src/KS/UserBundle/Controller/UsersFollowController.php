@@ -40,21 +40,32 @@ class UsersFollowController extends FOSRestController
         $userRequest = $this->getDoctrine()->getManager()
                      ->getRepository('KSUserBundle:User')->findOneByUsername($username);
 
-        $userFollow = $this->container->get('ksuser.handler.userfollow')->post(
-            $userFollowed, $userRequest
-        );
-        
-        if(null !== $userFollow){
+        if($userRequest->getUsername() != $userFollowed->getUsername()){
+            $userFollow = $this->container->get('ksuser.handler.userfollow')->post(
+                $userFollowed, $userRequest
+            );
+            if(null !== $userFollow){
              $view = $this->view($userFollow, 200);
 
+            }
+            else{
+                $error = array(
+                  'error' => 'already_follow', 
+                  'error_description' => 'Already follow this user'
+                );
+                $view = $this->view($error, 404);
+            }
         }
-        else{
-            $error = array(
-              'error' => 'already_follow', 
-              'error_description' => 'Already follow this user'
-            );
-            $view = $this->view($error, 404);
-        }
+         else{
+                $error = array(
+                  'error' => 'not_auto_follow', 
+                  'error_description' => 'You can not auto follow'
+                );
+                $view = $this->view($error, 404);
+            }
+       
+        
+      
 
         return $this->handleView($view);  
     }

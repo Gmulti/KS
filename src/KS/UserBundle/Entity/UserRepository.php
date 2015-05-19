@@ -39,6 +39,18 @@ class UserRepository extends EntityRepository implements ManyRepositoryInterface
 				  ->getOneOrNullResult();
 	}
 
+	public function getDealsWithOptions($options, $limit, $offset){
+		$qb = $this->_em->createQueryBuilder();
+
+		$qb->select('u')
+			->from('KSUserBundle:User','u')
+			->setFirstResult($offset)
+			->setMaxResults($limit);
+
+		return $qb->getQuery()
+				  ->getResult();
+	}
+
   	public function getManyByUser(ManyEntityInterface $entityMany, User $user, ManyTypeInterface $typeMany){
 
   		$qb = $this->_em->createQueryBuilder();

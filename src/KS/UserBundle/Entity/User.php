@@ -166,6 +166,11 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
      */
     protected $deletedAt;
 
+
+    // //////
+
+    protected $alreadyFollow;
+
     public function __construct()
     {
         parent::__construct();
@@ -685,6 +690,25 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
     }
 
     /**
+     * Get alreadyFollow
+     *
+     */
+    public function getAlreadyFollow()
+    {
+        return $this->alreadyFollow;
+    }
+
+    /**
+     * Set alreadyFollow
+     *
+     */
+    public function setAlreadyFollow($alreadyFollow)
+    {
+        $this->alreadyFollow = $alreadyFollow;
+        return $this;
+    }
+
+    /**
      * @VirtualProperty
      * @SerializedName("nb_comments")
      *
@@ -758,8 +782,11 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
     public function getDealsSharedSerialize()
     {   
         $array = array();
-        for ($i=0; $i < 10; $i++) { 
-             array_push($array, $this->getDealsShared()->offsetGet($i));
+       
+        if(null != $this->getDealsShared()){
+            for ($i=0; $i < 10; $i++) { 
+                array_push($array, $this->getDealsShared()->offsetGet($i));
+            }
         }
 
         return $array;
@@ -791,6 +818,15 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
      */
     public function getNbSubscribesView(){
         return (null == $this->getNbSubscribes()) ? 0 : $this->getNbSubscribes();
+    }
+
+    /**
+     * @VirtualProperty
+     * @SerializedName("already_follow")
+     *
+     */
+    public function getAlreadyFollowView(){
+        return $this->alreadyFollow;
     }
 
 

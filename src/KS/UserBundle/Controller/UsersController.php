@@ -13,12 +13,17 @@ use FOS\RestBundle\Controller\Annotations\RequestParam;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;         
 use JMS\SecurityExtraBundle\Annotation\Secure;
+
+use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController as RestController;
 
 use KS\UserBundle\Entity\User;
+use KS\UserBundle\Models\FollowUserManyType;
+use KS\DealBundle\Models\ManyEntityInterface;
+use KS\DealBundle\Models\ManyTypeInterface;
 
 /**
  *
@@ -33,16 +38,24 @@ class UsersController extends RestController
      *
      * @return FOSView
      * @Route(requirements={"_format"="json|xml"})
+     *
+     * @QueryParam(name="offset", requirements="\d+", default="0", description="Offset users")
+     * @QueryParam(name="limit", requirements="\d+", default="10", description="Limit users")
+     *
      */
-	public function getUsersAction()
+	public function getUsersAction(ParamFetcher $params, Request $request)
     {	
         $view = FOSView::create();
-
-        $data = $this->getDoctrine()->getManager()
-            ->getRepository('KSUserBundle:User')
-            ->findAll();
+        $data = $this->getUsersWithOptions($params);
 
         if ($data) {
+            $em = $this->getDoctrine()->getManager();
+            $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+            $user = $em->getRepository('KSUserBundle:User')->findOneByUsername($username);
+
+            foreach ($data as $key => $value) {                
+                $data[$key] = $this->getAlreadyMany($value, $user, new FollowUserManyType());
+            }
         	$view = $this->view($data, 200);
         }
         else{
@@ -58,12 +71,19 @@ class UsersController extends RestController
      * @Route(requirements={"_format"="json|xml"})
      * @ParamConverter("user", options={"repository_method": "findByIdOrUsername" })
      */
-    public function getUserAction(User $user){
+    public function getUserAction(User $user, Request $request){
 
        
         $view = FOSView::create();
 
         if ($user) {
+
+            $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+
+            $em = $this->getDoctrine()->getManager();
+            $userRequest = $em->getRepository('KSUserBundle:User')->findOneByUsername($username);
+            $user = $this->getManyByUser($user, $userRequest, new FollowUserManyType());
+
             $view = $this->view($user, 200);
         }
         else{
@@ -252,6 +272,39 @@ class UsersController extends RestController
         }
 
         return $this->handleView($view);
+    }
+
+    private function getUsersWithOptions(ParamFetcher $params){
+
+        $offset = $params->get('offset');
+        $limit = $params->get('limit');
+        if($limit > 30){
+            $limit = 30;
+        }
+
+        $options = array();
+      
+        $data = $this->getDoctrine()->getManager()
+            ->getRepository('KSUserBundle:User')
+            ->getDealsWithOptions($options, $limit, $offset);
+
+        return $data;
+    }
+
+    private function getAlreadyMany(ManyEntityInterface $entityMany, User $user, ManyTypeInterface $typeMany){
+        $em = $this->getDoctrine()->getManager();
+        $result = $em->getRepository('KSUserBundle:User')->getManyByUser($entityMany, $user, $typeMany);
+
+        if ($typeMany instanceOf FollowUserManyType) {
+            if(null === $result){
+                $entityMany->setAlreadyFollow(false);
+            }
+            else{
+                $entityMany->setAlreadyFollow(true);
+            }
+        }
+
+        return $entityMany;
     }
 
 
