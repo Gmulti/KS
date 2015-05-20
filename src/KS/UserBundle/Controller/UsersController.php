@@ -82,7 +82,7 @@ class UsersController extends RestController
 
             $em = $this->getDoctrine()->getManager();
             $userRequest = $em->getRepository('KSUserBundle:User')->findOneByUsername($username);
-            $user = $this->getManyByUser($user, $userRequest, new FollowUserManyType());
+            $user = $this->getAlreadyMany($user, $userRequest, new FollowUserManyType());
 
             $view = $this->view($user, 200);
         }
