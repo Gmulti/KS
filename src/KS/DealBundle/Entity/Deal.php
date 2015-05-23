@@ -152,7 +152,6 @@ class Deal implements ManyEntityInterface
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Assert\Choice(choices = {"euro", "dollar"})
-     * @Assert\NotBlank()
      * @Expose()
      */
     protected $currency;
@@ -212,7 +211,7 @@ class Deal implements ManyEntityInterface
     ////////////
 
     protected $alreadyLike;
-    
+
     protected $alreadyShare;
 
     public function __construct()
@@ -223,7 +222,9 @@ class Deal implements ManyEntityInterface
         $this->medias = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->types = new ArrayCollection();
-        $this->nbUsersLikes = 0;
+        $this->nbUsersLikes  = 0;
+        $this->nbUsersShared = 0;
+        $this->price = 0;
     }
    
 

@@ -135,6 +135,8 @@ class DealHandler implements DealHandlerInterface{
 					'options' => $this->categoryOptionField->getOptionsField('medias'),
 				);
 			}
+
+
 			
 			$type = $request->request->get('type');
 			if ($type !== null) {
@@ -184,6 +186,22 @@ class DealHandler implements DealHandlerInterface{
 							}
 						}
 						break;
+				}
+			}
+
+			$price = $request->request->get('price');
+			if($price !== null && $price > 0){
+				if (!array_key_exists('currency', $config)) {
+					$config['currency'] = array(
+						'category' => $this->categoryOptionField->getCategoryField('currency'),
+						'options' => $this->categoryOptionField->getOptionsField('currency'),
+					);
+				}
+			}
+			else{
+				if (array_key_exists('currency', $config)) {
+					$config["currency"] = null;
+					$request->request->set("currency","");
 				}
 			}
 		}
