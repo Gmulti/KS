@@ -121,6 +121,10 @@ liip_imagine:
             quality: 75
             filters:
                 thumbnail: { size: [418, 418], mode: inset }
+        image_deal_large:
+            quality: 75
+            filters:
+                thumbnail: { size: [610, 610], mode: inset }
 
 nelmio_cors:
     defaults:

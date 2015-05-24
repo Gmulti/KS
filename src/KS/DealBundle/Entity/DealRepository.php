@@ -68,7 +68,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$qb->setParameter('content', "%{$value}%");
 				break;
 			case 'date_offset':
-				$qb->andWhere('d.updated > :date');
+				$qb->andWhere('d.created > :date');
 				$qb->setParameter('date', new \DateTime($value));
 				break;
 		}
@@ -100,7 +100,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$sql .= "AND d.title LIKE :content ";
 				break;
 			case 'date_offset':
-				$sql .= "AND d.updated > :date_offset ";
+				$sql .= "AND d.created > :date_offset ";
 				break;
 		}
 
@@ -115,7 +115,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 
 		$qb->select('d')
 			->from('KSDealBundle:Deal','d')
-			->orderBy('d.updated', 'DESC')
+			->orderBy('d.created', 'DESC')
 			->setFirstResult($offset)
 			->setMaxResults($limit);
 
@@ -144,7 +144,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
     		}
 		}
 
-		$sql .= "ORDER BY d.updated DESC";
+		$sql .= "ORDER BY d.created DESC";
 
       
         $query = $this->_em->createNativeQuery($sql ,$rsm);
