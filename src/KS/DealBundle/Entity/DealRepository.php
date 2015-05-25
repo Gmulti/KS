@@ -71,6 +71,9 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$qb->andWhere('d.created > :date');
 				$qb->setParameter('date', new \DateTime($value));
 				break;
+			case 'user_id':
+				$qb->andWhere('d.user = :user_id');
+				$qb->setParameter('user_id', $value);
 		}
 
 		return $qb;
@@ -101,6 +104,9 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				break;
 			case 'date_offset':
 				$sql .= "AND d.created > :date_offset ";
+				break;
+			case 'user_id':
+				$sql .= "AND d.user = :user_id ";
 				break;
 		}
 

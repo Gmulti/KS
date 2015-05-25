@@ -48,6 +48,7 @@ class DealsController extends RestController
      * @QueryParam(name="distance", requirements="\d+", description="Distance geolocalisation")
      * @QueryParam(name="content", description="Content deal")
      * @QueryParam(name="date_offset", description="Date offset deal")
+     * @QueryParam(name="user_id", description="User id who posted deal")
      *
      */
     public function getDealsAction(ParamFetcher $params, Request $request)
@@ -237,6 +238,10 @@ class DealsController extends RestController
         
         if(null != $params->get('date_offset')){
             $options['date_offset'] = $params->get('date_offset');
+        }
+
+        if(null != $params->get('user_id')){
+            $options['user_id'] = $params->get('user_id');
         }
 
 
