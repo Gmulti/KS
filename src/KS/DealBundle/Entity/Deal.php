@@ -194,7 +194,7 @@ class Deal implements ManyEntityInterface
     /**
      * @var date $updated
      *
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      * @Gedmo\Timestampable(on="change", field={"title", "content","price","reduction","reductionType"})
      * @Expose()
      */
