@@ -106,7 +106,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$sql .= "AND d.created > :date_offset ";
 				break;
 			case 'user_id':
-				$sql .= "AND d.user = :user_id ";
+				$sql .= "AND d.user_id = :user_id ";
 				break;
 		}
 
