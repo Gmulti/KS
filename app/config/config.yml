@@ -120,7 +120,7 @@ liip_imagine:
         image_deal:
             quality: 75
             filters:
-                thumbnail: { size: [418, 418], mode: inset }
+                thumbnail: { size: [302, 162], mode: inset }
         image_deal_large:
             quality: 75
             filters:
