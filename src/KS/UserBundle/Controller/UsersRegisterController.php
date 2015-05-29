@@ -42,7 +42,7 @@ class UsersRegisterController extends FOSRestController
      *
      * @return FOSView
      */
-    public function registerUsersAction(ParamFetcher $params)
+    public function registerUsersAction(ParamFetcher $params, Request $request)
     {
     	$view = FOSView::create();
 
@@ -59,9 +59,50 @@ class UsersRegisterController extends FOSRestController
 
         if (count($errors) == 0) {
             try {
+
                 $userManager = $this->container->get('fos_user.user_manager');
                 $userManager->updateUser($user);
                 $view->setStatusCode(200)->setData($user);
+
+                $url = $this->get('router')->generate('api_v1_users_delete_force_user', array(
+                        'username' => $user->getUsername(),
+                        'token'    => $user->getTokenForceDelete(),
+                        '_format'  => 'json'
+                    ),
+                    true
+                );
+
+                $nameFile = 'register.en.txt.twig';
+                $subject  = 'New account on Komunity Store';
+                if($request->headers->get('language')){
+                    switch ($request->headers->get('language')) {
+                        case 'en':
+                            $nameFile = 'register.en.txt.twig';
+                            $subject  = 'New account on Komunity Store';
+                            break;
+                        case 'fr':
+                            $nameFile = 'register.fr.txt.twig';
+                            $subject  = 'Nouveau compte sur Komunity Store';
+                            break;
+                        default:
+                            $nameFile = 'register.en.txt.twig';
+                            $subject  = 'New account on Komunity Store';
+                            break;
+                    }
+                }
+
+                $message = \Swift_Message::newInstance()
+                    ->setSubject($subject)
+                    ->setFrom('contact@komunitystore.com')
+                    ->setTo($user->getEmail())
+                    ->setBody($this->render('KSUserBundle:Email:' . $nameFile, array(
+                                'url_delete' => $url
+                            )
+                        )
+                    );
+
+                $this->container->get('mailer')->send($message);
+
             } catch (\Exception $e) {
                 $error = array(
                     'error' => 'user_already_exist',
@@ -101,13 +142,12 @@ class UsersRegisterController extends FOSRestController
         );
         
         if(null !== $deleteUser){
-             $view = $this->view($deleteUser, 202);
-
+            $view = $this->view($deleteUser, 202);
         }
         else{
             $error = array(
                 'error' => 'user_already_delete',
-                'error_description' => 'User have already delete'
+                'error_description' => $this->get('translator')->trans('user_already_delete')
             );
             $view->setStatusCode(404,$deleteUser);
         }

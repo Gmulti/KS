@@ -88,8 +88,8 @@ class UsersController extends RestController
         }
         else{
             $error = array(
-                'error' => 'not_found',
-                'error_description' => 'User not found'
+                'error' => 'user_not_found',
+                'error_description' => $this->get('translator')->trans('user_not_found')
             );
             $view->setStatusCode(404, $error);
         }

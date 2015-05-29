@@ -50,8 +50,8 @@ class UsersFollowController extends FOSRestController
             }
             else{
                 $error = array(
-                  'error' => 'already_follow', 
-                  'error_description' => 'Already follow this user'
+                  'error' => 'already_follow_user', 
+                  'error_description' => $this->get('translator')->trans('already_follow_user')
                 );
                 $view = $this->view($error, 404);
             }
@@ -59,7 +59,7 @@ class UsersFollowController extends FOSRestController
          else{
                 $error = array(
                   'error' => 'not_auto_follow', 
-                  'error_description' => 'You can not auto follow'
+                  'error_description' => $this->get('translator')->trans('not_auto_follow')
                 );
                 $view = $this->view($error, 404);
             }
@@ -96,15 +96,15 @@ class UsersFollowController extends FOSRestController
             else{
                 $error = array(
                   'error' => 'no_follow', 
-                  'error_description' => 'You not follow this user'
+                  'error_description' => $this->get('translator')->trans('no_follow_user')
                 );
                 $view = $this->view($error, 404);
             }
         }
         else{
             $error = array(
-              'error' => 'no_follow_yourself', 
-              'error_description' => 'You not follow yourself'
+              'error' => 'not_auto_follow', 
+              'error_description' => $this->get('translator')->trans('not_auto_follow')
             );
             $view = $this->view($error, 404);
         }

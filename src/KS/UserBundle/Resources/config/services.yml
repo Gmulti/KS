@@ -34,3 +34,11 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: form.type, alias: user_selector }
+    # ksuser.listener.register:
+    #     class: KS\UserBundle\Listener\RegisterListener
+    #     arguments:
+    #         - "@translator"
+    #         - "@mailer"
+    #         - "@router"
+    #     tags:
+    #         - { name: doctrine.event_listener, event: postPersist }

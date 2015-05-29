@@ -32,6 +32,24 @@ class OAuthListener implements ListenerInterface
             return;
         }
 
+        if($request->headers->has('language')){
+            switch ($request->headers->get('language')) {
+                case 'en':
+                    $request->setLocale('en');
+                    break;
+                case 'fr':
+                    $request->setLocale('fr');
+                    break;
+                default:
+                    $request->setLocale('en');
+                    break;
+            }
+        }
+        else{
+            $request->setLocale('en');
+        }
+
+
         $token = $matches[1];
 
         $token = $this->em->getRepository('KSServerBundle:AccessToken')->findOneByToken($token);

@@ -56,9 +56,8 @@ class DealsController extends RestController
         $view = FOSView::create();
         
         $data = $this->getDealsWithParams($params);
-
+        
         if ($data) {
-
             $em = $this->getDoctrine()->getManager();
             $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
             $user = $em->getRepository('KSUserBundle:User')->findOneByUsername($username);
@@ -74,8 +73,8 @@ class DealsController extends RestController
         else{
 
             $errors = array(
-                'error' => 'not_found',
-                'error_description' => 'No deals have found',
+                'error' => 'deals_not_found',
+                'error_description' => $this->get('translator')->trans('deals_not_found'),
             );
 
             $view = $this->view($errors, 404);
@@ -105,8 +104,8 @@ class DealsController extends RestController
         }
         else{
             $error = array(
-                'error' => 'not_found',
-                'error_description' => 'Deal not found'
+                'error' => 'deal_not_found',
+                'error_description' => $this->get('translator')->trans('deal_not_found')
             );
             $view = $this->view($error, 404);
         }
@@ -135,8 +134,8 @@ class DealsController extends RestController
         }
         else{
             $error = array(
-                'error' => 'error_deal', 
-                'error_description' => 'Error on data processing'
+                'error' => 'error_post_deal', 
+                'error_description' => $this->get('translator')->trans('error_data')
             );
             $view = $this->view($error, 404);
         }
@@ -166,8 +165,8 @@ class DealsController extends RestController
         }
         else{
             $error = array(
-                'error' => 'error_put', 
-                'error_description' => 'Error on data processing'
+                'error' => 'error_put_deal', 
+                'error_description' => $this->get('translator')->trans('error_data')
             );
 
             $view = $this->view($error, 404);

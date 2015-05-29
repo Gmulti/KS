@@ -709,6 +709,25 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
     }
 
     /**
+     * Get tokenForceDelete
+     *
+     */
+    public function getTokenForceDelete()
+    {
+        return $this->tokenForceDelete;
+    }
+
+    /**
+     * Set tokenForceDelete
+     *
+     */
+    public function setTokenForceDelete($tokenForceDelete)
+    {
+        $this->tokenForceDelete = $tokenForceDelete;
+        return $this;
+    }
+
+    /**
      * @VirtualProperty
      * @SerializedName("nb_comments")
      *

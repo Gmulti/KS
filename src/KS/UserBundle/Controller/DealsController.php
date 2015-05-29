@@ -37,7 +37,7 @@ class DealsController extends RestController
      *
      */
     public function getUserDealsAction(User $user, ParamFetcher $params){      
-       $view = FOSView::create();
+        $view = FOSView::create();
         
         $data = $this->getDealsWithParams($user, $params);
 
@@ -48,8 +48,8 @@ class DealsController extends RestController
         else{
 
             $errors = array(
-                'error' => 'not_found',
-                'error_description' => 'No deals have found',
+                'error' => 'deals_not_found',
+                'error_description' => $this->get('translator')->trans('deals_not_found'),
             );
             $view = $this->view($errors, 404);
         }
@@ -73,8 +73,8 @@ class DealsController extends RestController
         }
         else{
             $error = array(
-                'error' => 'not_found',
-                'error_description' => 'Deal not found'
+                'error' => 'deal_not_found',
+                'error_description' => $this->get('translator')->trans('deal_not_found')
             );
             $view = $this->view($error, 404);
         }

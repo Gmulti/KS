@@ -1,38 +1,38 @@
 <?xml version="1.0"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="fr" datatype="plaintext" original="file.ext">
+    <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="1">
                 <source>deals_not_found</source>
-                <target>Aucun deal n'a été trouvé</target>
+                <target>No deal was found</target>
             </trans-unit>
             <trans-unit id="2">
                 <source>deal_not_found</source>
-                <target>Deal non trouvé</target>
+                <target>Deal was not found</target>
             </trans-unit>
             <trans-unit id="3">
                 <source>error_data</source>
-                <target>Erreur durant la procédure</target>
+                <target>Error on data processing</target>
             </trans-unit>
             <trans-unit id="4">
                 <source>already_like_deal</source>
-                <target>Vous aimez déjà ce deal</target>
+                <target>You already like deal</target>
             </trans-unit>
             <trans-unit id="5">
                 <source>already_share_deal</source>
-                <target>Vous avez déjà partagé ce deal</target>
+                <target>You already share deal</target>
             </trans-unit>
             <trans-unit id="6">
                 <source>no_like_deal</source>
-                <target>Vous ne pouvez pas aimer ce deal</target>
+                <target>Do not like this deal</target>
             </trans-unit>
             <trans-unit id="7">
                 <source>no_likes</source>
-                <target>Pas de j'aime</target>
+                <target>No likes</target>
             </trans-unit>
             <trans-unit id="8">
                 <source>user_not_found</source>
-                <target>Utilisateur non trouvé</target>
+                <target>User not found</target>
             </trans-unit>
         </body>
     </file>

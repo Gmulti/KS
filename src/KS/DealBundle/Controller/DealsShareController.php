@@ -53,8 +53,8 @@ class DealsShareController extends RestController
         }
         else{
             $error = array(
-              'error' => 'already_share', 
-              'error_description' => 'Already share this deal'
+                'error' => 'already_share', 
+                'error_description' => $this->get('translator')->trans('already_share_deal')
             );
             $view = $this->view($error, 404);
         }

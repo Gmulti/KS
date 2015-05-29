@@ -54,7 +54,7 @@ class DealsLikeController extends RestController
         else{
              $errors = array(
                 'error' => 'already_like', 
-                'error_description' => 'You already like deal'
+                'error_description' => $this->get('translator')->trans('already_like_deal')
             );
             $view = $this->view($errors,404);
         }
@@ -84,8 +84,8 @@ class DealsLikeController extends RestController
         }
         else{
             $view = $this->view(array(
-                    'error' => 'no_like', 
-                    'error_description' => 'Do not like this deal'
+                    'error' => 'no_like_deal', 
+                    'error_description' => $this->get('translator')->trans('no_like_deal')
                 ),
                 404
             );
@@ -111,8 +111,8 @@ class DealsLikeController extends RestController
         }
         else{
             $view = $this->view(array(
-                    'error' => 'no_like', 
-                    'error_description' => 'No likes'
+                    'error' => 'no_likes', 
+                    'error_description' => $this->get('translator')->trans('no_likes')
                 ),
                 404
             );
