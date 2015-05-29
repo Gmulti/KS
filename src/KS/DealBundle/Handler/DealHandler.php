@@ -107,6 +107,9 @@ class DealHandler implements DealHandlerInterface{
 			}
 		}
 		else{
+			var_dump($request->files->get('medias'));
+			var_dump($request->request->get('content'));
+			die();
 			foreach ($request->request as $key => $value) {
 
 				if(in_array($key, $this->postConfig)){
