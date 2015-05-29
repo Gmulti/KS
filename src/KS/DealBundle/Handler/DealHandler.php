@@ -87,6 +87,7 @@ class DealHandler implements DealHandlerInterface{
 
 	        return $deal;
 	    }
+
 	    var_dump($this->getErrorMessages($form));
 	    die();
 		throw new InvalidFormException('Invalid submitted data', $this->getErrorMessages($form));
@@ -206,6 +207,9 @@ class DealHandler implements DealHandlerInterface{
 				}
 			}
 		}
+
+		var_dump($config);
+		die();
 
 
 		$form = $this->formFactory->create(new DealType($config), $deal, array('method' => $method));
