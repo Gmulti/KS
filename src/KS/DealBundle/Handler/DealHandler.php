@@ -87,10 +87,8 @@ class DealHandler implements DealHandlerInterface{
 
 	        return $deal;
 	    }
-
-	    var_dump($this->getErrorMessages($form));
-	    die();
-		throw new InvalidFormException('Invalid submitted data', $this->getErrorMessages($form));
+	    
+		throw new InvalidFormException('Invalid submitted data', $form);
 	}
 
 	private function createForm(Deal $deal, Request $request, $method){
@@ -107,9 +105,6 @@ class DealHandler implements DealHandlerInterface{
 			}
 		}
 		else{
-			var_dump($request->files->get('medias'));
-			var_dump($request->request->get('content'));
-			die();
 			foreach ($request->request as $key => $value) {
 
 				if(in_array($key, $this->postConfig)){
@@ -210,9 +205,6 @@ class DealHandler implements DealHandlerInterface{
 				}
 			}
 		}
-
-		var_dump($config);
-		die();
 
 
 		$form = $this->formFactory->create(new DealType($config), $deal, array('method' => $method));
