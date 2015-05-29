@@ -27,6 +27,7 @@ use KS\DealBundle\Models\ShareDealManyType;
 use KS\DealBundle\Models\ManyEntityInterface;
 use KS\DealBundle\Models\ManyTypeInterface;
 use KS\MediaBundle\Entity\Media;
+use KS\MediaBundle\Utils\ApiUploadedFile;
 
 
 /**
@@ -123,7 +124,19 @@ class DealsController extends RestController
         $user = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
 
         $request->request->set('user',$user);
-        
+
+        // var_dump($request->files);
+        if($request->request->has('medias_base64')){
+            $file = new ApiUploadedFile($request->request->get('medias_base64'));
+            $request->files->set('medias',array($file));
+            $request->request->remove('medias_base64');
+            // var_dump($request->request->get('medias_base64'));
+            //  var_dump($request->files);
+        }
+
+        //     var_dump($request->files);
+        // die();
+
         $newDeal = $this->container->get('ksdeal.handler.deal')->post(
             $request
         );
