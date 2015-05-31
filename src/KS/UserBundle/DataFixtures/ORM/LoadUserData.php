@@ -15,30 +15,30 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $userTest = new User();
-        $userTest->setEmail('test@ks.com');
-        $userTest->setUsername('test');
-        $userTest->setFirstname('de test');
-        $userTest->setLastname('Compte');
-        $userTest->setEnabled(true);
-        $userTest->setRoles(array('ROLE_USER'));
-        $userTest->setPlainPassword('test');
+        $user1 = new User();
+        $user1->setEmail('thomasdeneulin@gmail.com');
+        $user1->setUsername('Thomas');
+        $user1->setFirstname('Thomas');
+        $user1->setLastname('DENEULIN');
+        $user1->setEnabled(true);
+        $user1->setRoles(array('ROLE_ADMIN'));
+        $user1->setPlainPassword('titouner69');
 
-        $adminTest = new User();
-        $adminTest->setEmail('testadmin@ks.com');
-        $adminTest->setUsername('testadmin');
-        $adminTest->setFirstname('de test admin');
-        $adminTest->setLastname('Compte');
-        $adminTest->setEnabled(true);
-        $adminTest->setRoles(array('ROLE_ADMIN'));
-        $adminTest->setPlainPassword('testadmin');
+        $user2 = new User();
+        $user2->setEmail('nediug@hotmail.com');
+        $user2->setUsername('Guillaume');
+        $user2->setFirstname('Guillaume');
+        $user2->setLastname('DENEULIN');
+        $user2->setEnabled(true);
+        $user2->setRoles(array('ROLE_ADMIN'));
+        $user2->setPlainPassword('kstore!2015');
 
-        $manager->persist($userTest);
-        $manager->persist($adminTest);
+        $manager->persist($user1);
+        $manager->persist($user2);
         $manager->flush();
 
-        $this->addReference('user-test', $userTest);
-        $this->addReference('admin-test', $adminTest);
+        $this->addReference('admin-1', $userTest);
+        $this->addReference('admin-2', $user2);
     }
 
      /**

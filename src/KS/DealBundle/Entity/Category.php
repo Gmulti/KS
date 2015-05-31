@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as Serializer;
 use Hateoas\Configuration\Annotation as Hateoas;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Translatable\Translatable;
 
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\ExclusionPolicy;
@@ -24,7 +25,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
  * 
  * @ExclusionPolicy("all") 
  */
-class Category
+class Category implements Translatable
 {
 
     /**
@@ -119,6 +120,11 @@ class Category
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $deletedAt;
+
+    /**
+     * @Gedmo\Locale
+     */
+    private $locale;
 
     public function __construct(){
          $this->categories = new ArrayCollection();
@@ -433,5 +439,11 @@ class Category
     public function getRoot()
     {
         return $this->root;
+    }
+
+
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
     }
 }

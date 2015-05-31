@@ -87,7 +87,7 @@ class DealHandler implements DealHandlerInterface{
 
 	        return $deal;
 	    }
-	    
+
 		throw new InvalidFormException('Invalid submitted data', $form);
 	}
 
@@ -210,26 +210,6 @@ class DealHandler implements DealHandlerInterface{
 		$form = $this->formFactory->create(new DealType($config), $deal, array('method' => $method));
 
 		return $form;
-	}
-
-	private function getErrorMessages(\Symfony\Component\Form\Form $form) {
-	    $errors = array();
-
-	    foreach ($form->getErrors() as $key => $error) {
-	        if ($form->isRoot()) {
-	            $errors['#'][] = $error->getMessage();
-	        } else {
-	            $errors[] = $error->getMessage();
-	        }
-	    }
-
-	    foreach ($form->all() as $child) {
-	        if (!$child->isValid()) {
-	            $errors[$child->getName()] = $this->getErrorMessages($child);
-	        }
-	    }
-
-	    return $errors;
 	}
 
     public function put(Deal $deal, Request $request){

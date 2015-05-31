@@ -18,20 +18,7 @@ class MainController extends Controller
      */
     public function indexAction()
     {
-    	
-       
-//     	$user = new Client();
-//     	$user->addScope($scope);
-//     	$dm =$this->get('doctrine_mongodb')->getManager();
-//     	$dm->persist($user);
-// $dm->flush();
-       // $product = $this->get('doctrine_mongodb')
-       //  ->getRepository('KomunityStoreServerBundle:Client')
-       //  ->find("545fd8acc729ea5a080041aa");
-       //  var_dump($product);
-
-       //  die();
-        
+    	        
         return array();
     }
 }
