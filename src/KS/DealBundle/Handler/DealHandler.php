@@ -75,10 +75,15 @@ class DealHandler implements DealHandlerInterface{
 
 		        if($this->configFiles){
 		        	$medias = $deal->getMedias();
+		        	$i = 0;
 		           	foreach ($medias as $key => $media) {
+		           		if($i > 3){
+		           			break;
+		           		}
 		        		$media->setDeal($deal);
 		        		$media->setUser($deal->getUser());
 		        		$this->em->persist($media);
+		        		$i++;
 		        	}
 		        }
 	 		}

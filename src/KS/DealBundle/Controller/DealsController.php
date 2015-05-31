@@ -46,7 +46,7 @@ class DealsController extends RestController
      * @QueryParam(name="end_price", requirements="\d+", description="Price end deals")
      * @QueryParam(name="lat", description="Latitude")
      * @QueryParam(name="lng", description="Longitude")
-     * @QueryParam(name="distance", requirements="\d+", description="Distance geolocalisation")
+     * @QueryParam(name="distance", requirements="\d+", default="2000", description="Distance geolocalisation")
      * @QueryParam(name="content", description="Content deal")
      * @QueryParam(name="date_offset", description="Date offset deal")
      * @QueryParam(name="user_id", description="User id who posted deal")
@@ -125,18 +125,6 @@ class DealsController extends RestController
 
         $request->request->set('user',$user);
 
-        // var_dump($request->files);
-        if($request->request->has('medias_base64')){
-            $file = new ApiUploadedFile($request->request->get('medias_base64'));
-            $request->files->set('medias',array($file));
-            $request->request->remove('medias_base64');
-            // var_dump($request->request->get('medias_base64'));
-            //  var_dump($request->files);
-        }
-
-        //     var_dump($request->files);
-        // die();
-
         $newDeal = $this->container->get('ksdeal.handler.deal')->post(
             $request
         );
@@ -147,10 +135,11 @@ class DealsController extends RestController
         }
         else{
             $error = array(
-                'error' => 'error_post_deal', 
-                'error_description' => $this->get('translator')->trans('error_data')
+                'error' => 'no_access_deal', 
+                'error_description' => $this->get('translator')->trans('no_access_deal')
             );
-            $view = $this->view($error, 404);
+           
+            $view = $this->view($error, 401);
         }
 
         return $this->handleView($view);      
@@ -168,21 +157,31 @@ class DealsController extends RestController
     
         $view = FOSView::create();
 
-        $updateDeal = $this->container->get('ksdeal.handler.deal')->put(
-            $deal, $request 
-        );
+        if($this->container->get('ksuser.utils.usertoken')->isAccessToRequest($request, $deal->getUser())){
+            $updateDeal = $this->container->get('ksdeal.handler.deal')->put(
+                $deal, $request 
+            );
 
-        if(null !== $updateDeal){
-            $view = $this->view($updateDeal, 200);
+            if(null !== $updateDeal){
+                $view = $this->view($updateDeal, 200);
 
+            }
+            else{
+                $error = array(
+                    'error' => 'error_put_deal', 
+                    'error_description' => $this->get('translator')->trans('error_data')
+                );
+
+                $view = $this->view($error, 404);
+            }
         }
         else{
             $error = array(
-                'error' => 'error_put_deal', 
-                'error_description' => $this->get('translator')->trans('error_data')
+                'error' => 'no_access_deal', 
+                'error_description' => $this->get('translator')->trans('no_access_deal')
             );
-
-            $view = $this->view($error, 404);
+           
+            $view = $this->view($error, 401);
         }
 
         return $this->handleView($view);   
@@ -193,20 +192,29 @@ class DealsController extends RestController
      * @ParamConverter("deal")
      *
      */
-    public function deleteDealAction(Deal $deal){
+    public function deleteDealAction(Deal $deal, Request $request){
     
         $view = FOSView::create();
 
-        $deleteDeal = $this->container->get('ksdeal.handler.deal')->delete(
-            $deal 
-        );
-        
-        if(null !== $deleteDeal){
-             $view = $this->view($deleteDeal, 202);
+        if($this->container->get('ksuser.utils.usertoken')->isAccessToRequest($request, $deal->getUser())){
+            $deleteDeal = $this->container->get('ksdeal.handler.deal')->delete(
+                $deal 
+            );
+            
+            if(null !== $deleteDeal){
+                 $view = $this->view($deleteDeal, 202);
 
+            }
+            else{
+                $view = $this->view($deleteDeal, 404);
+            }
         }
         else{
-            $view = $this->view($deleteDeal, 404);
+            $view->setStatusCode(401,array(
+                    'error' => 'no_access_deal', 
+                    'error_description' => $this->get('translator')->trans('no_access_deal')
+                )
+            );
         }
 
         return $this->handleView($view);   
@@ -236,11 +244,10 @@ class DealsController extends RestController
         if ($params->get('lat') !== null && $params->get('lng') !== null) {
             $options['lat'] = $params->get('lat');
             $options['lng'] = $params->get('lng');
-            if ($params->get('distance') !== null) {
+            $distance = $params->get('distance');
+
+            if ($distance!== null && $distance < 50000) {
                 $options['distance'] = $params->get('distance');
-            }
-            else{
-                $options['distance'] = 2000;
             }
         }
 

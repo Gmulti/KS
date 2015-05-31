@@ -22,6 +22,10 @@
                 <source>subject_email</source>
                 <target>Nouveau compte Komunity Store</target>
             </trans-unit>
+            <trans-unit id="6">
+                <source>put_no_access_user</source>
+                <target>Vous n'etes pas autorisé à modifier cet utilisateur</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

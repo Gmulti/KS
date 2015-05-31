@@ -15,6 +15,7 @@ class CategoryOptionField
                 $result = 'user_selector';
                 break;
             case 'medias':
+            case 'mediaProfile':
                 $result = 'media_selector';
                 break;
             case 'categories':

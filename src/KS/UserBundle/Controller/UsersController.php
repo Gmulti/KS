@@ -105,7 +105,7 @@ class UsersController extends RestController
      * @ParamConverter("user", options={"repository_method": "findByIdOrUsername" })
      *
      */
-    public function putUserAction(User $user, Request $request){
+    public function putUserAction(Request $request, User $user){
     
         $view = FOSView::create();
 
@@ -119,19 +119,62 @@ class UsersController extends RestController
 
             }
             else{
-                $view->setStatusCode(404,array(
-                    'error' => 'error_put', 
-                    'error_description' => 'Erreur sur le traitement des données'
-                    )
+                $error = array(
+                    'error' => 'error_data', 
+                    'error_description' =>  $this->get('translator')->trans('error_data')
                 );
-            }
+
+                $view = $this->view($error, 404);
+            }   
         }
         else{
-            $view->setStatusCode(401,array(
-                'error' => 'no_access', 
-                'error_description' => 'Unauthorized update user'
-                )
+            $error = array(
+                'error' => 'put_no_access_user', 
+                'error_description' => $this->get('translator')->trans('put_no_access_user')
             );
+
+            $view = $this->view($error, 401);
+        }
+
+        return $this->handleView($view);   
+    }
+
+    /**
+     * Post user profile Image
+     *
+     * @return FOSView
+     * @ParamConverter("user", options={"repository_method": "findByIdOrUsername" })
+     *
+     */
+    public function postUserImageAction(Request $request, User $user){
+    
+        $view = FOSView::create();
+
+        if($this->container->get('ksuser.utils.usertoken')->isAccessToRequest($request, $user)){
+            $updateUser = $this->container->get('ksuser.handler.user')->postImage(
+                $user, $request, true
+            );
+
+            if(null !== $updateUser){
+                $view = $this->view($updateUser, 200);
+
+            }
+            else{
+                $error = array(
+                    'error' => 'error_data', 
+                    'error_description' =>  $this->get('translator')->trans('error_data')
+                );
+
+                $view = $this->view($error, 404);
+            }   
+        }
+        else{
+            $error = array(
+                'error' => 'put_no_access_user', 
+                'error_description' => $this->get('translator')->trans('put_no_access_user')
+            );
+
+            $view = $this->view($error, 401);
         }
 
         return $this->handleView($view);   

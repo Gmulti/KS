@@ -42,16 +42,22 @@ class MediaTransformer implements DataTransformerInterface
             return null;
         }
 
-        $medias = new \Doctrine\Common\Collections\ArrayCollection();
+        if($files instanceOf \Symfony\Component\HttpFoundation\File\UploadedFile){
+            $medias = new Media();
+            $medias->setFile($files);
+        }
+        else{
+            $medias = new \Doctrine\Common\Collections\ArrayCollection();
 
-        foreach ($files as $key => $file) {
-            if (!$file instanceOf UploadedFile) {
-                return null;
-            }
-            else{
-                $media = new Media();
-                $media->setFile($file);
-                $medias->add($media);
+            foreach ($files as $key => $file) {
+                if (!$file instanceOf UploadedFile) {
+                    return null;
+                }
+                else{
+                    $media = new Media();
+                    $media->setFile($file);
+                    $medias->add($media);
+                }
             }
         }
        

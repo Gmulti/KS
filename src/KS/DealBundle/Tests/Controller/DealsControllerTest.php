@@ -228,6 +228,7 @@ class DealsControllerTest extends GeneralController
         $this->assertEquals(202, $response->getStatusCode(), 'Erreur serveur, dumper [0]["message"]');
 
         $msg = json_decode($response->getContent(), true);
+
         $this->assertEquals($msg['success'], 'delete_success');
     }
 

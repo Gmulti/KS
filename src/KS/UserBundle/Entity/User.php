@@ -60,11 +60,18 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="user",  cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $medias;
+
+    /**
+     * @ORM\OneToOne(targetEntity="KS\MediaBundle\Entity\Media", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     * @Expose
+     */
+    protected $mediaProfile;
 
     /**
      * @ORM\ManyToMany(targetEntity="KS\DealBundle\Entity\Deal", cascade={"all"}, mappedBy="usersShared")
@@ -849,4 +856,27 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
     }
 
 
+
+    /**
+     * Set mediaProfile
+     *
+     * @param \KS\MediaBundle\Entity\Media $mediaProfile
+     * @return User
+     */
+    public function setMediaProfile(\KS\MediaBundle\Entity\Media $mediaProfile = null)
+    {
+        $this->mediaProfile = $mediaProfile;
+
+        return $this;
+    }
+
+    /**
+     * Get mediaProfile
+     *
+     * @return \KS\MediaBundle\Entity\Media 
+     */
+    public function getMediaProfile()
+    {
+        return $this->mediaProfile;
+    }
 }

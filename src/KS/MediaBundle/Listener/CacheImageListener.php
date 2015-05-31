@@ -44,11 +44,15 @@ class CacheImageListener
 
         foreach ($uow->getScheduledEntityInsertions() as $entity) {
 
-            if ($entity instanceOf Deal || $entity instanceOf Comment || $entity instanceOf User) {
+            if ($entity instanceOf Deal || 
+            	$entity instanceOf Comment || 
+            	$entity instanceOf User || 
+            	$entity instanceOf Media) {
 
                 $this->entities[] = $entity;
             }
         }
+
     }
 
 	public function postFlush(PostFlushEventArgs $args){
@@ -59,20 +63,33 @@ class CacheImageListener
 
 		if (!empty($this->entities)) {
 			foreach ($this->entities as $entity) {
-    			$medias = $entity->getMedias();
-				if(count($medias) > 0){
-					foreach ($medias as $key => $media) {
-						$path = $media->getPathImagine();
-						foreach ($this->thumbnails as $key => $thumb) {
-							$url = $this->resolveMedia($path,$thumb);
-							if(!empty($url)){
-								$thumbnailsUrl[$thumb] = $url;
+    			if(!$entity instanceOf Media){
+    				$medias = $entity->getMedias();
+					if(count($medias) > 0){
+						foreach ($medias as $key => $media) {
+							$path = $media->getPathImagine();
+							foreach ($this->thumbnails as $key => $thumb) {
+								$url = $this->resolveMedia($path,$thumb);
+								if(!empty($url)){
+									$thumbnailsUrl[$thumb] = $url;
+								}
 							}
+							$media->setThumbnailsUrl($thumbnailsUrl);
+							$em->persist($media);
 						}
-						$media->setThumbnailsUrl($thumbnailsUrl);
-						$em->persist($media);
 					}
-				}
+    			}
+    			else{
+    				$path = $entity->getPathImagine();
+					foreach ($this->thumbnails as $key => $thumb) {
+						$url = $this->resolveMedia($path,$thumb);
+						if(!empty($url)){
+							$thumbnailsUrl[$thumb] = $url;
+						}
+					}
+					$entity->setThumbnailsUrl($thumbnailsUrl);
+					$em->persist($entity);
+    			}
         	}
         	$em->flush();
 		}		
