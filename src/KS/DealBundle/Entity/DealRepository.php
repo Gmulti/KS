@@ -74,6 +74,10 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 			case 'user_id':
 				$qb->andWhere('d.user = :user_id');
 				$qb->setParameter('user_id', $value);
+				break;
+			case 'user':
+				$qb->setParameter('user', $value);
+				break;
 		}
 
 		return $qb;
@@ -121,6 +125,9 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 
 		$qb->select('d')
 			->from('KSDealBundle:Deal','d')
+		    ->join('d.user', 'u')
+		    ->join('u.followers', 'f')
+		    ->where('f.subscribedUser = :user')
 			->orderBy('d.created', 'DESC')
 			->setFirstResult($offset)
 			->setMaxResults($limit);
@@ -140,16 +147,17 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
   		$rsm = new ResultSetMappingBuilder($this->_em);
 		$rsm->addRootEntityFromClassMetadata('KS\DealBundle\Entity\Deal', 'd');
 		$sql = "SELECT * 
-        	 FROM ks_deal d 
+        	 FROM ks_deal d, ks_user u, ks_user_relation s
         	 WHERE earth_box(ll_to_earth(:lat,:lng),:distance) @> ll_to_earth(d.lat, d.lng) ";
-
 
     	foreach ($options as $key => $value) {
     		if (!in_array($key, array('distance', 'lat', 'lng'))) {
 				$sql = $this->setParameterLocalisation($sql, $value, $key);
     		}
 		}
-
+		$sql .= "AND d.user_id = u.id
+			     AND u.id = s.followeduser_id 
+				 AND s.subscribeduser_id = :user ";
 		$sql .= "ORDER BY d.created DESC";
 
       

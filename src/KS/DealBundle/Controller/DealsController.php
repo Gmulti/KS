@@ -54,14 +54,16 @@ class DealsController extends RestController
      */
     public function getDealsAction(ParamFetcher $params, Request $request)
     {      
-        $view = FOSView::create();
+        $view = FOSView::create(); 
+
+        $em = $this->getDoctrine()->getManager();
+        $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+        $user = $em->getRepository('KSUserBundle:User')->findOneByUsername($username);
         
-        $data = $this->getDealsWithParams($params);
+        $data = $this->getDealsWithParams($params, $user);
         
         if ($data) {
-            $em = $this->getDoctrine()->getManager();
-            $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
-            $user = $em->getRepository('KSUserBundle:User')->findOneByUsername($username);
+           
 
             foreach ($data as $key => $value) {                
                 $data[$key] = $this->getAlreadyMany($value, $user, new LikeDealManyType());
@@ -223,7 +225,7 @@ class DealsController extends RestController
    
 
 
-    private function getDealsWithParams(ParamFetcher $params){
+    private function getDealsWithParams(ParamFetcher $params, User $user){
 
         $offset = $params->get('offset');
         $limit = $params->get('limit');
@@ -231,7 +233,9 @@ class DealsController extends RestController
             $limit = 30;
         }
 
-        $options = array();
+        $options = array(
+            "user" => $user
+        );
 
         if($params->get('start_price') !== null){
             $options['start_price'] = $params->get('start_price');   
