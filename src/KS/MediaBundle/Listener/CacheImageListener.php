@@ -27,7 +27,9 @@ class CacheImageListener
 
 	protected $thumbnails = array(
 		'image_deal',
-		'user_profile_tile'
+		'image_deal_large',
+		'user_profile_tile',
+		'user_profile_tile_large'
 	);	
 
 	public function __construct($cacheManager, DataManager $dataManager, FilterManager $filterManager){

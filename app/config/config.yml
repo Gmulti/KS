@@ -114,15 +114,19 @@ sensio_framework_extra:
 liip_imagine:
     filter_sets:
         user_profile_tile:
-            quality: 75
+            quality: 90
             filters:
                 relative_resize: { widen: 50 }
+        user_profile_tile_large:
+            quality: 90
+            filters:
+                relative_resize: { widen: 150 }
         image_deal:
-            quality: 75
+            quality: 90
             filters:
                 thumbnail: { size: [302, 162], mode: inset }
         image_deal_large:
-            quality: 75
+            quality: 90
             filters:
                 thumbnail: { size: [610, 610], mode: inset }
 
