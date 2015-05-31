@@ -36,8 +36,8 @@ class LoadCategoryData extends AbstractFixture implements OrderedFixtureInterfac
         // $manager->persist($cat22);
         // $manager->flush();
 
-        $this->addReference('multimedia', $cat1);
-        $this->addReference('audiovisuel', $cat11);
+        // $this->addReference('multimedia', $cat1);
+        // $this->addReference('audiovisuel', $cat11);
         // $this->addReference('cat2', $cat2);
         // $this->addReference('cat22', $cat22);
     }
