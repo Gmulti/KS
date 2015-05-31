@@ -710,8 +710,8 @@ class Deal implements ManyEntityInterface
     {   
         return array(
             'id' => $this->getUser()->getID(),
-            'username' => $this->getUser()->getUsername()
-
+            'username' => $this->getUser()->getUsername(),
+            'media_profile' => $this->getUser()->getMediaProfile()
         );
     }
 
