@@ -12,10 +12,9 @@ class AdvertController extends Controller
 {
     /**
      * @Route("/")
-     * @Template()
      */
     public function indexAction()
     {
-        return array();
+        return $this->redirect('http://www.komunitystore.com');
     }
 }

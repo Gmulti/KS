@@ -12,13 +12,5 @@ use KS\PostBundle\Document\Post;
 
 class MainController extends Controller
 {
-    /**
-     * @Route("/", name="komunity_store_index")
-     * @Template()
-     */
-    public function indexAction()
-    {
-    	        
-        return array();
-    }
+	
 }
