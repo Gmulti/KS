@@ -47,6 +47,7 @@ class DealsController extends RestController
      * @QueryParam(name="lat", description="Latitude")
      * @QueryParam(name="lng", description="Longitude")
      * @QueryParam(name="distance", requirements="\d+", default="2000", description="Distance geolocalisation")
+     * @QueryParam(name="title", description="Title deal")
      * @QueryParam(name="content", description="Content deal")
      * @QueryParam(name="date_offset", description="Date offset deal")
      * @QueryParam(name="user_id", description="User id who posted deal")
@@ -233,9 +234,7 @@ class DealsController extends RestController
             $limit = 30;
         }
 
-        $options = array(
-            "user" => $user
-        );
+        $options = array();
 
         if($params->get('start_price') !== null){
             $options['start_price'] = $params->get('start_price');   
@@ -259,6 +258,10 @@ class DealsController extends RestController
             $options['content'] = $params->get('content');
         }
         
+        if ($params->get('title') !== null) {
+            $options['title'] = $params->get('title');
+        }
+        
         if(null != $params->get('date_offset')){
             $options['date_offset'] = $params->get('date_offset');
         }
@@ -267,6 +270,12 @@ class DealsController extends RestController
             $options['user_id'] = $params->get('user_id');
         }
 
+
+        if(count($options) === 0){
+            $options = array(
+                "user" => $user
+            );
+        }
 
         $data = $this->getDoctrine()->getManager()
             ->getRepository('KSDealBundle:Deal')

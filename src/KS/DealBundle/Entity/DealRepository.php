@@ -64,8 +64,12 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 			case 'content':
 				$value = strtoupper($value);
 				$qb->andWhere('upper(d.content) LIKE :content');
-				$qb->andWhere('upper(d.title) LIKE :content');	
 				$qb->setParameter('content', "%{$value}%");
+				break;
+			case 'title':
+				$value = strtoupper($value);
+				$qb->andWhere('upper(d.title) LIKE :title');
+				$qb->setParameter('title', "%{$value}%");
 				break;
 			case 'date_offset':
 				$qb->andWhere('d.created > :date');
@@ -102,9 +106,10 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$sql .= "AND d.price <= :end_price ";
 				break;
 			case 'content':
-				$value = strtoupper($value);
-				$sql .= "AND d.content LIKE :content ";
-				$sql .= "AND d.title LIKE :content ";
+				$sql .= "AND upper(d.content) LIKE :content ";
+				break;
+			case 'title':
+				$sql .= "AND upper(d.title) LIKE :content ";
 				break;
 			case 'date_offset':
 				$sql .= "AND d.created > :date_offset ";
@@ -123,15 +128,25 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
   	private function getDealsNoLocationWithOptions($options, $limit, $offset){
   		$qb = $this->_em->createQueryBuilder();
 
-		$qb->select('d')
-			->from('KSDealBundle:Deal','d')
-		    ->join('d.user', 'u')
-		    ->join('u.followers', 'f')
-		    ->where('f.subscribedUser = :user')
-			->orderBy('d.created', 'DESC')
-			->setFirstResult($offset)
-			->setMaxResults($limit);
-
+		
+		if(array_key_exists("user", $options)){
+			$qb->select('d')
+				->from('KSDealBundle:Deal','d')
+				->orderBy('d.created', 'DESC')
+		        ->join('d.user', 'u')
+		        ->join('u.followers', 'f')
+		        ->where('f.subscribedUser = :user')
+		        ->setFirstResult($offset)
+		        ->setMaxResults($limit);
+		}
+		else{
+			$qb->select('d')
+				->from('KSDealBundle:Deal','d')
+				->orderBy('d.created', 'DESC')
+		        ->setFirstResult($offset)
+		        ->setMaxResults($limit);
+		}
+	
 		foreach ($options as $key => $value) {
 			$qb = $this->setParameter($qb, $value, $key);
 		}
@@ -171,6 +186,8 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
     		if (!in_array($key, array('distance', 'lat', 'lng'))) {
 				switch ($key) {
 					case 'content':
+					case 'title':
+						$value = strtoupper($value);
 						$query->setParameter($key, "%{$value}%");
 						break;
 
@@ -178,7 +195,6 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 						$date = new \DateTime($value);
 						$query->setParameter($key, $date->format("Y-m-d H:i:s"));
 						break;
-					
 					default:
 						$query->setParameter($key, $value);
 						break;
