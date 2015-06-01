@@ -326,6 +326,7 @@ class UsersController extends RestController
         if($limit > 30){
             $limit = 30;
         }
+        var_dump("gogo");
 
         $options = array();
 
@@ -336,6 +337,8 @@ class UsersController extends RestController
         $data = $this->getDoctrine()->getManager()
             ->getRepository('KSUserBundle:User')
             ->getUsersWithOptions($options, $limit, $offset);
+        var_dump($data->getUsername());
+        die();
 
         return $data;
     }
