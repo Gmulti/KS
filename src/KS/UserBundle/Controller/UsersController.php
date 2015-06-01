@@ -47,6 +47,8 @@ class UsersController extends RestController
 	public function getUsersAction(ParamFetcher $params, Request $request)
     {	
         $view = FOSView::create();
+        var_dump("ok");
+        die();
         $data = $this->getUsersWithOptions($params);
 
         if ($data) {
