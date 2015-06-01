@@ -49,8 +49,7 @@ class UsersController extends RestController
         $view = FOSView::create();
 
         $data = $this->getUsersWithOptions($params);
-        var_dump("ok");
-        die();
+
         if ($data) {
             $em = $this->getDoctrine()->getManager();
             $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
