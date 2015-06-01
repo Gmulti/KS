@@ -39,7 +39,7 @@ class UserRepository extends EntityRepository implements ManyRepositoryInterface
 				  ->getOneOrNullResult();
 	}
 
-	public function getDealsWithOptions($options, $limit, $offset){
+	public function getUsersWithOptions($options, $limit, $offset){
 		$qb = $this->_em->createQueryBuilder();
 
 		$qb->select('u')
@@ -47,8 +47,28 @@ class UserRepository extends EntityRepository implements ManyRepositoryInterface
 			->setFirstResult($offset)
 			->setMaxResults($limit);
 
+		foreach ($options as $key => $value) {
+			$qb = $this->setParameter($qb, $value, $key);
+		}
+
 		return $qb->getQuery()
 				  ->getResult();
+	}
+
+	/*
+	 * Set parameter
+	 */
+	private function setParameter($qb, $value, $key){
+
+		switch ($key) {
+			case 'username':
+				$value = strtoupper($value);
+				$qb->andWhere('upper(u.username) LIKE :username');
+				$qb->setParameter('username', "%{$value}%");
+				break;
+		}
+
+		return $qb;
 	}
 
   	public function getManyByUser(ManyEntityInterface $entityMany, User $user, ManyTypeInterface $typeMany){

@@ -41,6 +41,7 @@ class UsersController extends RestController
      *
      * @QueryParam(name="offset", requirements="\d+", default="0", description="Offset users")
      * @QueryParam(name="limit", requirements="\d+", default="10", description="Limit users")
+     * @QueryParam(name="username", description="Username")
      *
      */
 	public function getUsersAction(ParamFetcher $params, Request $request)
@@ -326,10 +327,14 @@ class UsersController extends RestController
         }
 
         $options = array();
+
+        if($params->get('username')){
+            $options['username'] = $params->get('username');
+        }
       
         $data = $this->getDoctrine()->getManager()
             ->getRepository('KSUserBundle:User')
-            ->getDealsWithOptions($options, $limit, $offset);
+            ->getUsersWithOptions($options, $limit, $offset);
 
         return $data;
     }
