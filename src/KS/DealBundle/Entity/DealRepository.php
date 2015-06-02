@@ -63,17 +63,23 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				break;
 			case 'content':
 				$value = strtoupper($value);
-				$qb->andWhere('upper(d.content) LIKE :content');
+				$qb->orWhere('upper(d.content) LIKE :content');
 				$qb->setParameter('content', "%{$value}%");
 				break;
 			case 'title':
 				$value = strtoupper($value);
-				$qb->andWhere('upper(d.title) LIKE :title');
+				$qb->orWhere('upper(d.title) LIKE :title');
 				$qb->setParameter('title', "%{$value}%");
 				break;
 			case 'date_offset':
 				$qb->andWhere('d.created > :date');
-				$qb->setParameter('date', new \DateTime($value));
+				$date = new \DateTime($value);
+				$qb->setParameter('date', $date->format("Y-m-d H:i:s"));
+				break;
+			case 'date_offset_end':
+				$qb->andWhere('d.created < :date');
+				$date = new \DateTime($value);
+				$qb->setParameter('date', $date->format("Y-m-d H:i:s"));
 				break;
 			case 'user_id':
 				$qb->andWhere('d.user = :user_id');
@@ -81,6 +87,11 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				break;
 			case 'user':
 				$qb->setParameter('user', $value);
+				break;
+			case 'type':
+				$qb->join('d.type', 't');
+				$qb->andWhere('t.slug = :type');
+				$qb->setParameter('type', $value);
 				break;
 		}
 
@@ -106,16 +117,23 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$sql .= "AND d.price <= :end_price ";
 				break;
 			case 'content':
-				$sql .= "AND upper(d.content) LIKE :content ";
+				$sql .= "OR upper(d.content) LIKE :content ";
 				break;
 			case 'title':
-				$sql .= "AND upper(d.title) LIKE :content ";
+				$sql .= "OR upper(d.title) LIKE :content ";
 				break;
 			case 'date_offset':
 				$sql .= "AND d.created > :date_offset ";
 				break;
+			case 'date_offset_end':
+				$sql .= "AND d.created < :date_offset ";
+				break;
 			case 'user_id':
 				$sql .= "AND d.user_id = :user_id ";
+				break;
+			case 'type':
+				$sql .= "AND d.type_id = t.id ";
+				$sql .= "AND t.slug = :type ";
 				break;
 		}
 
@@ -165,7 +183,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
   		$rsm = new ResultSetMappingBuilder($this->_em);
 		$rsm->addRootEntityFromClassMetadata('KS\DealBundle\Entity\Deal', 'd');
 		$sql = "SELECT * 
-        	 FROM ks_deal d, ks_user u
+        	 FROM ks_deal d, ks_user u, ks_type t
         	 WHERE earth_box(ll_to_earth(:lat,:lng),:distance) @> ll_to_earth(d.lat, d.lng) ";
 
     	foreach ($options as $key => $value) {
@@ -173,7 +191,6 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$sql = $this->setParameterLocalisation($sql, $value, $key);
     		}
 		}
-		$sql .= "AND d.user_id != :user ";
 		$sql .= "ORDER BY d.created DESC";
       
         $query = $this->_em->createNativeQuery($sql ,$rsm);
@@ -192,6 +209,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 						break;
 
 					case 'date_offset':
+					case 'date_offset_end':
 						$date = new \DateTime($value);
 						$query->setParameter($key, $date->format("Y-m-d H:i:s"));
 						break;

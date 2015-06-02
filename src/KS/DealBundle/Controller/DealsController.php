@@ -50,6 +50,7 @@ class DealsController extends RestController
      * @QueryParam(name="title", description="Title deal")
      * @QueryParam(name="content", description="Content deal")
      * @QueryParam(name="date_offset", description="Date offset deal")
+     * @QueryParam(name="type", description="Type deal")
      * @QueryParam(name="user_id", description="User id who posted deal")
      *
      */
@@ -256,6 +257,10 @@ class DealsController extends RestController
 
         if ($params->get('content') !== null) {
             $options['content'] = $params->get('content');
+        } 
+
+        if ($params->get('type') !== null) {
+            $options['type'] = $params->get('type');
         }
         
         if ($params->get('title') !== null) {
@@ -271,7 +276,7 @@ class DealsController extends RestController
         }
 
 
-        if(count($options) === 0 || array_key_exists('lat', $options)){
+        if(count($options) === 0){
             $options["user"] = $user;
         }
 
