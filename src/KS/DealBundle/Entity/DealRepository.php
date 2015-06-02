@@ -128,6 +128,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
   	private function getDealsNoLocationWithOptions($options, $limit, $offset){
   		$qb = $this->_em->createQueryBuilder();
 
+
 		
 		if(array_key_exists("user", $options)){
 			$qb->select('d')
@@ -135,7 +136,9 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				->orderBy('d.created', 'DESC')
 		        ->join('d.user', 'u')
 		        ->join('u.followers', 'f')
+		        ->join('d.usersShared','us')
 		        ->where('f.subscribedUser = :user')
+		        ->orWhere('us.id = :user')
 		        ->setFirstResult($offset)
 		        ->setMaxResults($limit);
 		}
@@ -162,7 +165,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
   		$rsm = new ResultSetMappingBuilder($this->_em);
 		$rsm->addRootEntityFromClassMetadata('KS\DealBundle\Entity\Deal', 'd');
 		$sql = "SELECT * 
-        	 FROM ks_deal d, ks_user u, ks_user_relation s
+        	 FROM ks_deal d, ks_user u
         	 WHERE earth_box(ll_to_earth(:lat,:lng),:distance) @> ll_to_earth(d.lat, d.lng) ";
 
     	foreach ($options as $key => $value) {
@@ -170,11 +173,8 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$sql = $this->setParameterLocalisation($sql, $value, $key);
     		}
 		}
-		$sql .= "AND d.user_id = u.id
-			     AND u.id = s.followeduser_id 
-				 AND s.subscribeduser_id = :user ";
+		$sql .= "AND d.user_id != :user ";
 		$sql .= "ORDER BY d.created DESC";
-
       
         $query = $this->_em->createNativeQuery($sql ,$rsm);
 
@@ -201,7 +201,6 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				}
     		}
 		}
-
 
         return $query;
 

@@ -271,10 +271,8 @@ class DealsController extends RestController
         }
 
 
-        if(count($options) === 0){
-            $options = array(
-                "user" => $user
-            );
+        if(count($options) === 0 || array_key_exists('lat', $options)){
+            $options["user"] = $user;
         }
 
         $data = $this->getDoctrine()->getManager()

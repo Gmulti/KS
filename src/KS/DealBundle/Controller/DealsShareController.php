@@ -43,22 +43,65 @@ class DealsShareController extends RestController
         $user = $this->getDoctrine()->getManager()
                      ->getRepository('KSUserBundle:User')->findOneByUsername($username);
 
-        $shareDeal = $this->container->get('ksdeal.handler.sharedeal')->post(
-            $deal, $user
-        );
-        
-        if(null !== $shareDeal){
-             $view = $this->view($shareDeal, 200);
+        if($user->getUsername() !== $deal->getUser()->getUsername()){
+            $shareDeal = $this->container->get('ksdeal.handler.sharedeal')->post(
+                $deal, $user
+            );
+            
+            if(null !== $shareDeal){
+                 $view = $this->view($shareDeal, 200);
 
+            }
+            else{
+                $error = array(
+                    'error' => 'already_share', 
+                    'error_description' => $this->get('translator')->trans('already_share_deal')
+                );
+                $view = $this->view($error, 404);
+            }
         }
         else{
-            $error = array(
-                'error' => 'already_share', 
-                'error_description' => $this->get('translator')->trans('already_share_deal')
+             $error = array(
+                'error' => 'not_auto_share', 
+                'error_description' => $this->get('translator')->trans('not_auto_share')
             );
             $view = $this->view($error, 404);
         }
 
+        
+
         return $this->handleView($view);  
+    }
+
+    /**
+     * Unshare a Deal
+     * @ParamConverter("deal")
+     *
+     */
+    public function postUnshareAction(Deal $deal, Request $request){
+        $view = FOSView::create();
+        
+        $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+        $user = $this->getDoctrine()->getManager()
+                     ->getRepository('KSUserBundle:User')->findOneByUsername($username);
+
+        $dealDislike = $this->container->get('ksdeal.handler.sharedeal')->delete(
+            $deal, $user
+        );
+
+        if(null !== $dealDislike){
+             $view = $this->view($dealDislike, 202);
+
+        }
+        else{
+            $view = $this->view(array(
+                    'error' => 'no_share', 
+                    'error_description' => $this->get('translator')->trans('no_share')
+                ),
+                404
+            );
+        }
+
+        return $this->handleView($view);   
     }
 }

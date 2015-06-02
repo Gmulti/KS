@@ -39,6 +39,10 @@
                 <source>no_access_deal</source>
                 <target>You do not have rights to this deal</target>
             </trans-unit>
+            <trans-unit id="10">
+                <source>not_auto_share</source>
+                <target>You can not share your own deal</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
