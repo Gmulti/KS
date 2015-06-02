@@ -62,14 +62,10 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$qb->setParameter('end_price', $value);
 				break;
 			case 'content':
+			// case 'title':
 				$value = strtoupper($value);
-				$qb->orWhere('upper(d.content) LIKE :content');
+				$qb->andWhere('upper(d.content) LIKE :content OR upper(d.title) LIKE :content');
 				$qb->setParameter('content', "%{$value}%");
-				break;
-			case 'title':
-				$value = strtoupper($value);
-				$qb->orWhere('upper(d.title) LIKE :title');
-				$qb->setParameter('title', "%{$value}%");
 				break;
 			case 'date_offset':
 				$qb->andWhere('d.created > :date');
@@ -117,10 +113,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$sql .= "AND d.price <= :end_price ";
 				break;
 			case 'content':
-				$sql .= "OR upper(d.content) LIKE :content ";
-				break;
-			case 'title':
-				$sql .= "OR upper(d.title) LIKE :content ";
+				$sql .= "AND ( upper(d.content) LIKE :content OR upper(d.title) LIKE :content) ";
 				break;
 			case 'date_offset':
 				$sql .= "AND d.created > :date_offset ";
