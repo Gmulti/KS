@@ -85,22 +85,32 @@ class DealsShareController extends RestController
         $user = $this->getDoctrine()->getManager()
                      ->getRepository('KSUserBundle:User')->findOneByUsername($username);
 
-        $dealDislike = $this->container->get('ksdeal.handler.sharedeal')->delete(
-            $deal, $user
-        );
+        if($user->getUsername() !== $deal->getUser()->getUsername()){
+            $dealDislike = $this->container->get('ksdeal.handler.sharedeal')->delete(
+                $deal, $user
+            );
 
-        if(null !== $dealDislike){
-             $view = $this->view($dealDislike, 202);
+            if(null !== $dealDislike){
+                 $view = $this->view($dealDislike, 202);
 
+            }
+            else{
+                $view = $this->view(array(
+                        'error' => 'no_share', 
+                        'error_description' => $this->get('translator')->trans('no_share')
+                    ),
+                    404
+                );
+            }
         }
         else{
-            $view = $this->view(array(
-                    'error' => 'no_share', 
-                    'error_description' => $this->get('translator')->trans('no_share')
-                ),
-                404
+             $error = array(
+                'error' => 'not_auto_share', 
+                'error_description' => $this->get('translator')->trans('not_auto_share')
             );
+            $view = $this->view($error, 404);
         }
+        
 
         return $this->handleView($view);   
     }
