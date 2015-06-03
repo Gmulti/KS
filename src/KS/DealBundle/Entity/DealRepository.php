@@ -64,16 +64,25 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 			case 'content':
 			// case 'title':
 				$value = strtoupper($value);
-				$qb->andWhere('upper(d.content) LIKE :content OR upper(d.title) LIKE :content');
+				$qb->andWhere(
+					$qb->expr()->orX(
+						$qb->expr()->like('upper(d.content)',':content'),
+						$qb->expr()->like('upper(d.title)',':content')
+					)
+				);
 				$qb->setParameter('content', "%{$value}%");
 				break;
 			case 'date_offset':
-				$qb->andWhere('d.created > :date');
+				$qb->andWhere(
+					$qb->expr()->gt('d.created',':date')
+				);
 				$date = new \DateTime($value);
 				$qb->setParameter('date', $date->format("Y-m-d H:i:s"));
 				break;
 			case 'date_offset_end':
-				$qb->andWhere('d.created < :date');
+				$qb->andWhere(
+					$qb->expr()->lt('d.created',':date')
+				);
 				$date = new \DateTime($value);
 				$qb->setParameter('date', $date->format("Y-m-d H:i:s"));
 				break;
@@ -113,7 +122,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$sql .= "AND d.price <= :end_price ";
 				break;
 			case 'content':
-				$sql .= "AND ( upper(d.content) LIKE :content OR upper(d.title) LIKE :content) ";
+				$sql .= "AND (upper(d.content) LIKE :content OR upper(d.title) LIKE :content)";
 				break;
 			case 'date_offset':
 				$sql .= "AND d.created > :date_offset ";
@@ -138,18 +147,25 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 	 */
   	private function getDealsNoLocationWithOptions($options, $limit, $offset){
   		$qb = $this->_em->createQueryBuilder();
+  		$qbShared = $this->_em->createQueryBuilder();
 
-
-		
 		if(array_key_exists("user", $options)){
+
+			$qbShared->select('userGet.id')
+					->from('KSUserBundle:User', 'userGet')
+					->join('userGet.subscribes','subscribesGet')
+			        ->where('subscribesGet.followedUser = :user');
+
 			$qb->select('d')
 				->from('KSDealBundle:Deal','d')
 				->orderBy('d.created', 'DESC')
 		        ->join('d.user', 'u')
-		        ->join('u.followers', 'f')
-		        ->join('d.usersShared','us')
-		        ->where('f.subscribedUser = :user')
-		        ->orWhere('us.id = :user')
+		        ->join('u.subscribes', 's')
+		        ->leftJoin('d.usersShared','us')
+		        ->where($qb->expr()->orX(
+					$qb->expr()->eq('s.followedUser', ':user'),
+					$qb->expr()->in('us.id',$qbShared->getDQL())
+			    ))
 		        ->setFirstResult($offset)
 		        ->setMaxResults($limit);
 		}
@@ -191,7 +207,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
         $query->setParameter('lat', $options['lat']);
         $query->setParameter('lng', $options['lng']);
         $query->setParameter('distance', $options['distance']);
-
+        
         foreach ($options as $key => $value) {
     		if (!in_array($key, array('distance', 'lat', 'lng'))) {
 				switch ($key) {
@@ -212,6 +228,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				}
     		}
 		}
+		
 
         return $query;
 

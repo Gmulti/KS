@@ -291,7 +291,7 @@ class DealsController extends RestController
     private function getAlreadyMany(ManyEntityInterface $entityMany, User $user, ManyTypeInterface $typeMany){
         $em = $this->getDoctrine()->getManager();
         $result = $em->getRepository('KSDealBundle:Deal')->getManyByUser($entityMany, $user, $typeMany);
-
+  
         if ($typeMany instanceOf LikeDealManyType) {
             if(null === $result){
                 $entityMany->setAlreadyLike(false);
