@@ -202,13 +202,15 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$sql = $this->setParameterLocalisation($sql, $value, $key);
     		}
 		}
-		$sql .= "ORDER BY d.created DESC";
+		$sql .= "ORDER BY d.created DESC ";
+		$sql .= "LIMIT :limit ";
       
         $query = $this->_em->createNativeQuery($sql ,$rsm);
 
         $query->setParameter('lat', $options['lat']);
         $query->setParameter('lng', $options['lng']);
         $query->setParameter('distance', $options['distance']);
+        $query->setParameter('limit', $limit);
         
         foreach ($options as $key => $value) {
     		if (!in_array($key, array('distance', 'lat', 'lng'))) {
