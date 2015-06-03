@@ -57,7 +57,7 @@ class Deal implements ManyEntityInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="deal",  cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="deal",  cascade={"persist","remove"})
      * @ORM\JoinColumn(nullable=true)
      * @ORM\OrderBy({"updated" = "DESC"})
      * @Expose()

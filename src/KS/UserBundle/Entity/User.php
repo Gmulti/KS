@@ -60,14 +60,14 @@ class User extends BaseUser implements OAuth2UserInterface, ManyEntityInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="user",  cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="KS\MediaBundle\Entity\Media", mappedBy="user",  cascade={"persist","remove"})
      * @ORM\JoinColumn(nullable=true)
      * @ORM\OrderBy({"updated" = "DESC"})
      */
     protected $medias;
 
     /**
-     * @ORM\OneToOne(targetEntity="KS\MediaBundle\Entity\Media", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="KS\MediaBundle\Entity\Media", cascade={"persist","remove"})
      * @ORM\JoinColumn(nullable=true)
      * @Expose
      */
