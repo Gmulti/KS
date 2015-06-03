@@ -153,21 +153,23 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 
 			$qbShared->select('userGet.id')
 					->from('KSUserBundle:User', 'userGet')
-					->join('userGet.subscribes','subscribesGet')
-			        ->where('subscribesGet.followedUser = :user');
+					->join('userGet.followers','followersGet')
+			        ->where('followersGet.subscribedUser = :user');
 
 			$qb->select('d')
 				->from('KSDealBundle:Deal','d')
 				->orderBy('d.created', 'DESC')
 		        ->join('d.user', 'u')
-		        ->join('u.subscribes', 's')
+		        ->join('u.followers', 'f')
 		        ->leftJoin('d.usersShared','us')
 		        ->where($qb->expr()->orX(
-					$qb->expr()->eq('s.followedUser', ':user'),
+					$qb->expr()->eq('f.subscribedUser', ':user'),
 					$qb->expr()->in('us.id',$qbShared->getDQL())
 			    ))
 		        ->setFirstResult($offset)
 		        ->setMaxResults($limit);
+
+
 		}
 		else{
 			$qb->select('d')
@@ -180,7 +182,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 		foreach ($options as $key => $value) {
 			$qb = $this->setParameter($qb, $value, $key);
 		}
-
+		
 		return $qb->getQuery();
   	}
 
