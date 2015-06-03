@@ -159,12 +159,12 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 			$qb->select('d')
 				->from('KSDealBundle:Deal','d')
 				->orderBy('d.created', 'DESC')
-		        ->join('d.user', 'u')
-		        ->join('u.followers', 'f')
+		        ->leftJoin('d.user', 'u')
+		        ->leftJoin('u.followers', 'f')
 		        ->leftJoin('d.usersShared','us')
 		        ->where($qb->expr()->orX(
 					$qb->expr()->eq('f.subscribedUser', ':user'),
-					$qb->expr()->in('us.id',$qbShared->getDQL())
+					$qb->expr()->in('us.id', $qbShared->getDQL())
 			    ))
 		        ->setFirstResult($offset)
 		        ->setMaxResults($limit);
