@@ -253,6 +253,9 @@ class DealsController extends RestController
             if ($distance!== null && $distance < 50000) {
                 $options['distance'] = $params->get('distance');
             }
+            else{
+                $options['distance'] = 10000;
+            }
         }
 
         if ($params->get('content') !== null) {

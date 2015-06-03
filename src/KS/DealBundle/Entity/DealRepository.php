@@ -122,7 +122,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$sql .= "AND d.price <= :end_price ";
 				break;
 			case 'content':
-				$sql .= "AND (upper(d.content) LIKE :content OR upper(d.title) LIKE :content)";
+				$sql .= "AND (upper(d.content) LIKE :content OR upper(d.title) LIKE :content) ";
 				break;
 			case 'date_offset':
 				$sql .= "AND d.created > :date_offset ";
@@ -194,7 +194,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
   		$rsm = new ResultSetMappingBuilder($this->_em);
 		$rsm->addRootEntityFromClassMetadata('KS\DealBundle\Entity\Deal', 'd');
 		$sql = "SELECT * 
-        	 FROM ks_deal d, ks_user u, ks_type t
+        	 FROM ks_deal d
         	 WHERE earth_box(ll_to_earth(:lat,:lng),:distance) @> ll_to_earth(d.lat, d.lng) ";
 
     	foreach ($options as $key => $value) {
