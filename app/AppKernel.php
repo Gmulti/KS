@@ -44,7 +44,7 @@ class AppKernel extends Kernel
             new KS\MediaBundle\KSMediaBundle(),
             new KS\AdvertBundle\KSAdvertBundle(),
             new KS\ServerBundle\KSServerBundle(),
-            new KS\AdminBundle\KSAdminBundle(),
+            // new KS\AdminBundle\KSAdminBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
