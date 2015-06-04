@@ -1,7 +1,7 @@
-ks_admin:
-    resource: "@KSAdminBundle/Controller/"
-    type:     annotation
-    prefix:   /
+# ks_admin:
+#     resource: "@KSAdminBundle/Controller/"
+#     type:     annotation
+#     prefix:   /
 
 _ks_advert:
     resource: "@KSAdvertBundle/Controller/"
