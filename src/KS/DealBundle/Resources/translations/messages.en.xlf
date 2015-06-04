@@ -3,7 +3,7 @@
     <file source-language="en" datatype="plaintext" original="file.ext">
         <body>
             <trans-unit id="1">
-                <source>deals_not_found</source>
+                <source>deals_not_found</source> 
                 <target>No deal was found</target>
             </trans-unit>
             <trans-unit id="2">
