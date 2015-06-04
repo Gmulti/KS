@@ -34,9 +34,9 @@ class UsersRegisterController extends FOSRestController
      *
      * @param ParamFetcher $paramFetcher Paramfetcher
      *
-     * @RequestParam(name="username", requirements="^\w+", default="", description="Username")
+     * @RequestParam(name="username", default="", description="Username")
      * @RequestParam(name="email", requirements="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", default="", description="Email")
-     * @RequestParam(name="password", requirements="\w+", default="", description="Mot de passe")
+     * @RequestParam(name="password", default="", description="Mot de passe")
      *
      * @Post("/users/register")
      *
@@ -95,7 +95,7 @@ class UsersRegisterController extends FOSRestController
                     ->setSubject($subject)
                     ->setFrom('contact@komunitystore.com')
                     ->setTo($user->getEmail())
-                    ->setBody($this->render('KSUserBundle:Email:' . $nameFile, array(
+                    ->setBody($this->renderView('KSUserBundle:Email:' . $nameFile, array(
                                 'url_delete' => $url
                             )
                         )

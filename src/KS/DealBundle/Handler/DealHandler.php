@@ -66,7 +66,7 @@ class DealHandler implements DealHandlerInterface{
 		
 		$form = $this->createForm($deal, $request, $method);
 	    $form->handleRequest($request);
-
+	  
 	    if ($form->isValid()) {
 
 	 		if ($method !== "PUT") {

@@ -23,7 +23,7 @@
         "jms/security-extra-bundle": "dev-master",
         "friendsofsymfony/rest-bundle": "1.4.*",
         
-        "stof/doctrine-extensions-bundle": "dev-master",
+        "stof/doctrine-extensions-bundle": "1.1.0",
         "gedmo/doctrine-extensions":      "dev-master",
 
         "friendsofsymfony/elastica-bundle": "3.0.*@dev",
@@ -34,7 +34,9 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "willdurand/hateoas-bundle": "~0.4",
         "bshaffer/oauth2-server-bundle": "dev-master",
-        "nelmio/cors-bundle": "~1.4"
+        "nelmio/cors-bundle": "~1.4",
+        "sonata-project/admin-bundle": "^2.3",
+        "sonata-project/doctrine-orm-admin-bundle": "^2.3"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

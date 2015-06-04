@@ -42,6 +42,10 @@
                 <source>not_auto_share</source>
                 <target>Vous ne pouvez pas partager votre deal</target>
             </trans-unit>
+            <trans-unit id="11">
+                <source>delete_deal</source>
+                <target>Deal supprimé avec succès</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

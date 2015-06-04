@@ -1,0 +1,11 @@
+services:
+    ksadmin.admin.deal:
+        class: KS\AdminBundle\Admin\DealAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Deal, label: Deals }
+        arguments: [null, KS\DealBundle\Entity\Deal, KSAdminBundle:DealAdmin]
+    ksadmin.admin.user:
+        class: KS\AdminBundle\Admin\UserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: User, label: Users }
+        arguments: [null, KS\UserBundle\Entity\User, KSAdminBundle:UserAdmin]

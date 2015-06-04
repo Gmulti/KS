@@ -42,16 +42,8 @@ class DealsController extends RestController
      *
      * @QueryParam(name="offset", requirements="\d+", default="0", description="Offset deals")
      * @QueryParam(name="limit", requirements="\d+", default="10", description="Limit deals")
-     * @QueryParam(name="start_price", requirements="\d+", description="Price start deals")
-     * @QueryParam(name="end_price", requirements="\d+", description="Price end deals")
-     * @QueryParam(name="lat", description="Latitude")
-     * @QueryParam(name="lng", description="Longitude")
-     * @QueryParam(name="distance", requirements="\d+", default="2000", description="Distance geolocalisation")
-     * @QueryParam(name="title", description="Title deal")
-     * @QueryParam(name="content", description="Content deal")
      * @QueryParam(name="date_offset", description="Date offset deal")
-     * @QueryParam(name="type", description="Type deal")
-     * @QueryParam(name="user_id", description="User id who posted deal")
+     * @QueryParam(name="date_offset_end", description="Date offset deal")
      *
      */
     public function getDealsAction(ParamFetcher $params, Request $request)
@@ -206,11 +198,17 @@ class DealsController extends RestController
             );
             
             if(null !== $deleteDeal){
-                 $view = $this->view($deleteDeal, 202);
+                 $view = $this->view(array(
+                    'error' => 'delete_deal', 
+                    'error_description' => $this->get('translator')->trans('delete_deal')
+                ), 202);
 
             }
             else{
-                $view = $this->view($deleteDeal, 404);
+                $view = $this->view(array(
+                    'error' => 'deal_not_found', 
+                    'error_description' => $this->get('translator')->trans('deal_not_found')
+                ), 404);
             }
         }
         else{
@@ -224,18 +222,46 @@ class DealsController extends RestController
         return $this->handleView($view);   
     }
 
-   
+     private function getDealsWithParams(ParamFetcher $params, User $user = null){
 
+        $options = array();
 
-    private function getDealsWithParams(ParamFetcher $params, User $user){
+        if(null !== $user){
+            $options['user'] = $user;
+        }
 
         $offset = $params->get('offset');
         $limit = $params->get('limit');
         if($limit > 30){
             $limit = 30;
         }
+        
+        if(null != $params->get('date_offset')){
+            $options['date_offset'] = $params->get('date_offset');
+        }
+
+        if(null != $params->get('date_offset_end')){
+            $options['date_offset_end'] = $params->get('date_offset_end');
+        }
+
+        
+
+        $data = $this->getDoctrine()->getManager()
+            ->getRepository('KSDealBundle:Deal')
+            ->getDealsWithOptions($options, $limit, $offset);
+
+        return $data;
+    }
+
+    private function getDealsWithParamsSearch(ParamFetcher $params){
 
         $options = array();
+
+        $offset = $params->get('offset');
+        $limit = $params->get('limit');
+        if($limit > 30){
+            $limit = 30;
+        }
 
         if($params->get('start_price') !== null){
             $options['start_price'] = $params->get('start_price');   
@@ -274,20 +300,75 @@ class DealsController extends RestController
             $options['date_offset'] = $params->get('date_offset');
         }
 
+
+        if(null != $params->get('date_offset_end')){
+            $options['date_offset_end'] = $params->get('date_offset_end');
+        }
+
+
         if(null != $params->get('user_id')){
             $options['user_id'] = $params->get('user_id');
         }
 
-
-        if(count($options) === 0){
-            $options["user"] = $user;
-        }
+        
 
         $data = $this->getDoctrine()->getManager()
             ->getRepository('KSDealBundle:Deal')
             ->getDealsWithOptions($options, $limit, $offset);
 
         return $data;
+    }
+
+    /**
+     * Return deals list search
+     *
+     * @QueryParam(name="offset", requirements="\d+", default="0", description="Offset deals")
+     * @QueryParam(name="limit", requirements="\d+", default="10", description="Limit deals")
+     * @QueryParam(name="start_price", requirements="\d+", description="Price start deals")
+     * @QueryParam(name="end_price", requirements="\d+", description="Price end deals")
+     * @QueryParam(name="lat", description="Latitude")
+     * @QueryParam(name="lng", description="Longitude")
+     * @QueryParam(name="distance", requirements="\d+", default="2000", description="Distance geolocalisation")
+     * @QueryParam(name="title", description="Title deal")
+     * @QueryParam(name="content", description="Content deal")
+     * @QueryParam(name="date_offset", description="Date offset deal")
+     * @QueryParam(name="date_offset_end", description="Date offset deal")
+     * @QueryParam(name="type", description="Type deal")
+     * @QueryParam(name="user_id", description="User id who posted deal")
+     *
+     */
+    public function getSearchDealsAction(ParamFetcher $params, Request $request)
+    {      
+        $view = FOSView::create(); 
+
+        $em = $this->getDoctrine()->getManager();
+        $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
+        $user = $em->getRepository('KSUserBundle:User')->findOneByUsername($username);
+        
+        $data = $this->getDealsWithParamsSearch($params);
+        
+        if ($data) {
+           
+
+            foreach ($data as $key => $value) {                
+                $data[$key] = $this->getAlreadyMany($value, $user, new LikeDealManyType());
+                $data[$key] = $this->getAlreadyMany($value, $user, new ShareDealManyType());
+            }
+
+            $view = $this->view($data, 200);
+            $view->setData($data);
+        }
+        else{
+
+            $errors = array(
+                'error' => 'deals_not_found',
+                'error_description' => $this->get('translator')->trans('deals_not_found'),
+            );
+
+            $view = $this->view($errors, 404);
+        }
+
+        return $this->handleView($view);
     }
 
 
