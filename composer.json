@@ -35,8 +35,6 @@
         "willdurand/hateoas-bundle": "~0.4",
         "bshaffer/oauth2-server-bundle": "dev-master",
         "nelmio/cors-bundle": "~1.4"
-        // "sonata-project/admin-bundle": "^2.3",
-        // "sonata-project/doctrine-orm-admin-bundle": "^2.3"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
