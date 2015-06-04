@@ -26,6 +26,10 @@
                 <source>put_no_access_user</source>
                 <target>Vous n'etes pas autorisé à modifier cet utilisateur</target>
             </trans-unit>
+            <trans-unit id="7">
+                <source>users_not_found</source>
+                <target>Aucun utilisateur n'a été trouvé</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

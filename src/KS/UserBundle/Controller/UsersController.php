@@ -61,7 +61,11 @@ class UsersController extends RestController
         	$view = $this->view($data, 200);
         }
         else{
-            $view->setStatusCode(404);
+            $error = array(
+                'error' => 'users_not_found',
+                'error_description' => $this->get('translator')->trans('users_not_found')
+            );
+            $view->setStatusCode(404, $error);
         }
 
         return $this->handleView($view);
