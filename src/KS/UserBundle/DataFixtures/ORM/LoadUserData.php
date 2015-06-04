@@ -17,21 +17,21 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
     {
         $user1 = new User();
         $user1->setEmail('thomasdeneulin@gmail.com');
-        $user1->setUsername('Thomas');
+        $user1->setUsername('thomas');
         $user1->setFirstname('Thomas');
         $user1->setLastname('DENEULIN');
         $user1->setEnabled(true);
         $user1->setRoles(array('ROLE_ADMIN'));
-        $user1->setPlainPassword('titouner69');
+        $user1->setPlainPassword('thomas');
 
         $user2 = new User();
         $user2->setEmail('nediug@hotmail.com');
-        $user2->setUsername('Guillaume');
+        $user2->setUsername('guillaume');
         $user2->setFirstname('Guillaume');
         $user2->setLastname('DENEULIN');
         $user2->setEnabled(true);
         $user2->setRoles(array('ROLE_ADMIN'));
-        $user2->setPlainPassword('kstore!2015');
+        $user2->setPlainPassword('guillaume');
 
         $manager->persist($user1);
         $manager->persist($user2);

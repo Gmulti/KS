@@ -40,7 +40,8 @@ class ClientManager
     {
         $client = new Client();
         $client->setClientId($identifier);
-        $secret = $this->generateSecret();
+        // $secret = $this->generateSecret();
+        $secret = "jsz8bll8p6o0ocww8ssg4ccwcoowcw8"
         $client->setClientSecret($secret);
         $client->setRedirectUri($redirect_uris);
         $client->setGrantTypes($grant_types);
