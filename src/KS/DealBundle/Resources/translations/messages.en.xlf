@@ -8,7 +8,7 @@
             </trans-unit>
             <trans-unit id="2">
                 <source>deal_not_found</source>
-                <target>Deal was not found</target>
+                <target>Deal was not found</target> 
             </trans-unit>
             <trans-unit id="3">
                 <source>error_data</source>
