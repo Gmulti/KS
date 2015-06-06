@@ -32,12 +32,19 @@ class AppKernel extends Kernel
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
 
+            new Sonata\CoreBundle\SonataCoreBundle(),
+            new Sonata\BlockBundle\SonataBlockBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new Sonata\AdminBundle\SonataAdminBundle(),
+
             new KS\UserBundle\KSUserBundle(),
             new KS\DealBundle\KSDealBundle(),
             new KS\PageBundle\KSPageBundle(),
             new KS\MediaBundle\KSMediaBundle(),
             new KS\AdvertBundle\KSAdvertBundle(),
             new KS\ServerBundle\KSServerBundle(),
+            new KS\AdminBundle\KSAdminBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
