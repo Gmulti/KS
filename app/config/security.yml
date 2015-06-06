@@ -32,4 +32,5 @@ security:
 
     access_control:
         - { path: ^/api/v1, roles: ROLE_USER }
+        - { path: ^/admin, roles: ROLE_ADMIN }
 
