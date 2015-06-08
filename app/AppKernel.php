@@ -32,12 +32,6 @@ class AppKernel extends Kernel
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Nelmio\CorsBundle\NelmioCorsBundle(),
 
-            new Sonata\CoreBundle\SonataCoreBundle(),
-            new Sonata\BlockBundle\SonataBlockBundle(),
-            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
-            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
-            new Sonata\AdminBundle\SonataAdminBundle(),
-
             new KS\UserBundle\KSUserBundle(),
             new KS\DealBundle\KSDealBundle(),
             new KS\PageBundle\KSPageBundle(),

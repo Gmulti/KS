@@ -13,13 +13,6 @@ security:
             id: fos_user.user_provider.username
 
     firewalls:
-        main:
-            pattern: ^/
-            form_login:
-                provider: fos_userbundle
-                csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
-            logout:       true
-            anonymous:    true
 
         api:
             pattern:    ^/api/v1
@@ -34,6 +27,4 @@ security:
 
     access_control:
         - { path: ^/api/v1, roles: ROLE_USER }
-        - { path: ^/admin$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/, role: ROLE_ADMIN }
 
