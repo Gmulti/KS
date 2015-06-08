@@ -10,7 +10,7 @@ class AppKernel extends Kernel
         date_default_timezone_set( 'Europe/Paris' );
         parent::init();
     }
-    
+
     public function registerBundles()
     {
         $bundles = array(

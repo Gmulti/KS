@@ -12,5 +12,5 @@ use KS\PostBundle\Document\Post;
 
 class MainController extends Controller
 {
-	
+
 }

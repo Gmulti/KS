@@ -3,25 +3,6 @@ _ks_admin:
     type:     annotation
     prefix:   /
 
-_ks_advert:
-    resource: "@KSAdvertBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-_ks_media:
-    type:     rest
-    resource: KS\MediaBundle\Controller\MediasController
-    prefix: /api/public
-
-_ks_deal:
-    resource: "@KSDealBundle/Resources/config/routing.yml"
-    type: rest
-
-_ks_user:
-    resource: "@KSUserBundle/Resources/config/routing.yml"
-    type: rest
-
-
 oauth2_server:
     resource: "@OAuth2ServerBundle/Controller/"
     type:     annotation
@@ -40,4 +21,5 @@ _sonata_admin:
     prefix: /admin
 
 fos_user:
+    prefix: /admin
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
