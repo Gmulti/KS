@@ -36,8 +36,10 @@ class AccessToken extends AbstractToken implements AccessTokenInterface
      */
     public function getAccessToken($oauth_token)
     {
-        $accessToken = $this->em->getRepository('KSServerBundle:AccessToken')->find($oauth_token);
 
+        $accessToken = $this->em->getRepository('KSServerBundle:AccessToken')->findOneByToken($oauth_token);
+        // var_dump($accessToken);
+        // die();
         if (!$accessToken) {
             return null;
         }

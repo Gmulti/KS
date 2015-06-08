@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class AccessToken extends AbstractToken
 {
-    
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
