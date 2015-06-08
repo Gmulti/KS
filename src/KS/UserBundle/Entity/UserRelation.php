@@ -154,4 +154,8 @@ class UserRelation
     {
         return $this->subscribedUser;
     }
+
+    public function __toString(){
+        return "Subscribe : " . $this->getSubscribedUser()->getUsername() . " Follow : " . $this->getFollowedUser()->getUsername();
+    }
 }

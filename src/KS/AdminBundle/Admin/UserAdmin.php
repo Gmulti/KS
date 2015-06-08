@@ -14,27 +14,27 @@ class UserAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('username')
-            ->add('email')
             ->add('lastname')
             ->add('firstname')
-            ->add('created')
+            ->add('username')
+            ->add('subscribes')
         ;
     }
  
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('username')
+            ->add('created')
         ;
     }
  
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
+            ->add('lastname')
+            ->add('firstname')
             ->add('username')
-            ->add('email')
-            ->add('created')
+            ->add('subscribes')
         ;
     }
 }

@@ -9,3 +9,8 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: User, label: Users }
         arguments: [null, KS\UserBundle\Entity\User, KSAdminBundle:UserAdmin]
+    # ks.admin.userrelation:
+    #     class: KS\AdminBundle\Admin\UserRelationAdmin
+    #     tags:
+    #         - { name: sonata.admin, manager_type: orm, group: User relation, label: Users relation }
+    #     arguments: [null, KS\UserBundle\Entity\UserRelation, KSAdminBundle:UserRelationAdmin]
