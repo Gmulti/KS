@@ -24,13 +24,13 @@ use KS\DealBundle\Models\ManyEntityInterface;
 /**
  * @ORM\Table(name="ks_deal")
  * @ORM\Entity(repositoryClass="KS\DealBundle\Entity\DealRepository")
- * 
+ *
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  *
  * @Hateoas\Relation("user", href = "expr('users/' ~ object.getUser() )")
  * @Hateoas\Relation("comments", href = "expr('deals/' ~ object.getId() ~ '/comments')")
- * 
- * @ExclusionPolicy("all") 
+ *
+ * @ExclusionPolicy("all")
  */
 class Deal implements ManyEntityInterface
 {

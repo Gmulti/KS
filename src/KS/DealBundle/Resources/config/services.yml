@@ -11,21 +11,21 @@ services:
 
     ksdeal.handler.deallike:
         class: KS\DealBundle\Handler\ManyHandler
-        arguments: 
+        arguments:
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.deal.class%"
             - "%ksdeal.deallike.models%"
 
     ksdeal.handler.commentlike:
         class: KS\DealBundle\Handler\ManyHandler
-        arguments: 
+        arguments:
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.comment.class%"
             - "%ksdeal.commentlike.models%"
 
     ksdeal.handler.sharedeal:
         class: KS\DealBundle\Handler\ManyHandler
-        arguments: 
+        arguments:
             - "@doctrine.orm.entity_manager"
             - "%ksdeal.deal.class%"
             - "%ksdeal.dealshare.models%"

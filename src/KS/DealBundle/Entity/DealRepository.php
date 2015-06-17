@@ -16,14 +16,15 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 {
 
 	private $start_price;
-	
+
 	private $end_price;
+
 
 	/*
 	 * Get deals
 	 */
 	public function getDealsWithOptions($options, $limit = 0, $offset = 10)
-	{	
+	{
 		if (array_key_exists('start_price', $options)) {
 			$this->start_price = $options['start_price'];
 		}

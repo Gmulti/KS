@@ -50,7 +50,9 @@ class AccessToken extends AbstractToken implements AccessTokenInterface
         return array(
             'client_id' => $client->getClientId(),
             'access_token' => $accessToken->getToken(),
+            'token_type' => "Bearer",
             'user_id' => $accessToken->getUserId(),
+            'expires_in' => $accessToken->getExpires()->getTimestamp(),
             'expires' => $accessToken->getExpires()->getTimestamp(),
             'scope' => $accessToken->getScope()
         );
