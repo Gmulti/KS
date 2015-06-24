@@ -297,14 +297,14 @@ class UsersController extends RestController
      * @Post("/logout")
      *
      */
-    public function logoutAction(){
+    public function logoutAction(Request $request){
         $view = FOSView::create();
         
-        $token = $this->container->get('ksuser.utils.usertoken')->getAccessTokenByTokenRequest($this->getRequest());
+        $accessToken = $this->container->get('ksuser.utils.usertoken')->getAccessTokenByTokenRequest($request);
 
         $data = $this->getDoctrine()->getManager()
-            ->getRepository('KSServerBundle:AccessToken')
-            ->findOneByToken($token);
+                    ->getRepository('KSServerBundle:AccessToken')
+                    ->findOneByToken($accessToken->getToken());
 
 
         if ($data) {
