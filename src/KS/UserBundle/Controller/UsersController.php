@@ -55,7 +55,7 @@ class UsersController extends RestController
             $username = $this->container->get('ksuser.utils.usertoken')->getUsernameByTokenFromRequest($request);
             $user = $em->getRepository('KSUserBundle:User')->findOneByUsername($username);
 
-            foreach ($data as $key => $value) {                
+            foreach ($data as $key => $value) {
                 $data[$key] = $this->getAlreadyMany($value, $user, new FollowUserManyType());
             }
         	$view = $this->view($data, 200);
@@ -79,7 +79,6 @@ class UsersController extends RestController
      */
     public function getUserAction(User $user, Request $request){
 
-       
         $view = FOSView::create();
 
         if ($user) {
@@ -301,7 +300,7 @@ class UsersController extends RestController
     public function logoutAction(){
         $view = FOSView::create();
         
-        $token = $this->container->get('ksuser.utils.usertoken')->getAccessTokenFromRequest($this->getRequest());
+        $token = $this->container->get('ksuser.utils.usertoken')->getAccessTokenByTokenRequest($this->getRequest());
 
         $data = $this->getDoctrine()->getManager()
             ->getRepository('KSServerBundle:AccessToken')
@@ -314,10 +313,21 @@ class UsersController extends RestController
             $em->remove($data);
             $em->flush();
 
-            $view->setStatusCode(200);
+            $error = array(
+                'success' => 'success_logout',
+                'success_description' =>  $this->get('translator')->trans('success_logout')
+            );
+
+            $view = $this->view($error, 200);
+
         }
         else{
-            $view->setStatusCode(404);
+            $error = array(
+                'error' => 'error_logout',
+                'error_description' => $this->get('translator')->trans('error_logout')
+            );
+
+            $view = $this->view($error, 404);
         }
 
         return $this->handleView($view);
