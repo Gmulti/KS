@@ -45,7 +45,7 @@ class UserHandler implements UserHandlerInterface{
 
 
 	private function processForm(User $user, Request $request, $method = "PUT", $addImage = false){
-		
+
 		$form = $this->createForm($user, $request, $method, $addImage);
 	    $form->handleRequest($request);
 
@@ -68,7 +68,7 @@ class UserHandler implements UserHandlerInterface{
 		        		$i++;
 		        	}
 		        }
-		 		
+
 		        $this->em->persist($user);
 	 		}
 	 		elseif ($addImage) {
@@ -86,6 +86,9 @@ class UserHandler implements UserHandlerInterface{
 		 		
 		        $this->em->persist($user);
 	 		}
+            elseif ($method === "PUT"){
+                $this->em->persist($user);
+            }
 
 	        $this->em->flush();
 
