@@ -29,15 +29,16 @@ class CacheImageListener
 		'image_deal',
 		'image_deal_large',
 		'user_profile_tile',
-		'user_profile_tile_large'
-	);	
+		'user_profile_tile_large',
+        'user_profile_tile_desktop'
+	);
 
 	public function __construct($cacheManager, DataManager $dataManager, FilterManager $filterManager){
 		$this->cacheManager = $cacheManager;
 		$this->dataManager = $dataManager;
 		$this->filterManager = $filterManager;
 	}
-	
+
 	public function onFlush(OnFlushEventArgs $event){
         $this->entities = [];
 

@@ -68,8 +68,6 @@ class UserHandler implements UserHandlerInterface{
 		        		$i++;
 		        	}
 		        }
-
-		        $this->em->persist($user);
 	 		}
 	 		elseif ($addImage) {
 
@@ -83,13 +81,9 @@ class UserHandler implements UserHandlerInterface{
 		        		$this->em->persist($media);
 		        	}
 		        }
-		 		
-		        $this->em->persist($user);
 	 		}
-            elseif ($method === "PUT"){
-                $this->em->persist($user);
-            }
 
+            $this->em->persist($user);
 	        $this->em->flush();
 
 	        return $user;

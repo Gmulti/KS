@@ -121,6 +121,10 @@ liip_imagine:
             quality: 90
             filters:
                 relative_resize: { widen: 150 }
+        user_profile_tile_desktop:
+            quality: 90
+            filters:
+                thumbnail: { size: [110, 110], mode: outbound }
         image_deal:
             quality: 90
             filters:
