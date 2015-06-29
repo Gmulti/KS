@@ -133,23 +133,24 @@ liip_imagine:
             quality: 90
             filters:
                 thumbnail: { size: [610, 610], mode: inset }
+        image_deal_desktop:
+            quality: 90
+            filters:
+                thumbnail: { size: [304, 162], mode: inset }
 
 nelmio_cors:
     defaults:
-        allow_credentials: true
         allow_origin: ['*']
         allow_headers: ['*']
         allow_methods: ['POST', 'PUT', 'GET', 'DELETE','OPTIONS']
         max_age: 3600
     paths:
         '^/':
-            allow_credentials: true
             allow_origin: ['*']
             allow_headers: ['*']
             allow_methods: ['POST', 'PUT', 'GET', 'DELETE','OPTIONS']
             max_age: 3600
         '^/api':
-            allow_credentials: true
             allow_origin: ['*']
             allow_headers: ['*']
             allow_methods: ['POST', 'PUT', 'GET', 'DELETE','OPTIONS']

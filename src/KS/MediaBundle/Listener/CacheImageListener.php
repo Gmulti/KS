@@ -30,7 +30,8 @@ class CacheImageListener
 		'image_deal_large',
 		'user_profile_tile',
 		'user_profile_tile_large',
-        'user_profile_tile_desktop'
+        'user_profile_tile_desktop',
+        'image_deal_desktop'
 	);
 
 	public function __construct($cacheManager, DataManager $dataManager, FilterManager $filterManager){
