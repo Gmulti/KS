@@ -204,7 +204,7 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
     		}
 		}
 
-		$sql .= "AND d.deletedat = '' ";
+		// $sql .= "AND d.deletedat = '' ";
 		$sql .= "ORDER BY d.created DESC ";
 		$sql .= "LIMIT :limit ";
       
