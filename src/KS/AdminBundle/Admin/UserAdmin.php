@@ -14,6 +14,7 @@ class UserAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('id')
             ->add('lastname')
             ->add('firstname')
             ->add('username')
@@ -31,6 +32,7 @@ class UserAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
+            ->addIdentifier('id')
             ->add('lastname')
             ->add('firstname')
             ->add('username')
