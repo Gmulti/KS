@@ -203,6 +203,8 @@ class DealRepository extends EntityRepository implements ManyRepositoryInterface
 				$sql = $this->setParameterLocalisation($sql, $value, $key);
     		}
 		}
+
+		$sql .= "AND d.deletedAt = '' ";
 		$sql .= "ORDER BY d.created DESC ";
 		$sql .= "LIMIT :limit ";
       
