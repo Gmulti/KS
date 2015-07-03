@@ -128,15 +128,11 @@ liip_imagine:
         image_deal:
             quality: 90
             filters:
-                thumbnail: { size: [302, 162], mode: inset }
+                thumbnail: { size: [302, 302], mode: inset }
         image_deal_large:
             quality: 90
             filters:
                 thumbnail: { size: [610, 610], mode: inset }
-        image_deal_desktop:
-            quality: 90
-            filters:
-                thumbnail: { size: [304, 162], mode: inset }
 
 nelmio_cors:
     defaults:

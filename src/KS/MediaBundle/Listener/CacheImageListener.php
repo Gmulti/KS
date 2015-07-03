@@ -26,9 +26,9 @@ class CacheImageListener
 	protected $entities;
 
 	protected $thumbnails = array(
-		'image_deal',
+		// 'image_deal',
 		'image_deal_large',
-		'user_profile_tile',
+		// 'user_profile_tile',
 		'user_profile_tile_large',
         'user_profile_tile_desktop',
         'image_deal_desktop'
